@@ -40,26 +40,46 @@
 // This function sets the coordinates of the 2D vector (pResult) to 0
 void Vector2DZero(Vector2D* pResult) {
 
+	if (pResult != NULL) {
+		pResult->x = 0;
+		pResult->y = 0;
+	}
 }
 
 // This function sets the coordinates of the 2D vector (pResult) to x & y
 void Vector2DSet(Vector2D* pResult, float x, float y) {
 
+	if (pResult != NULL) {
+		pResult->x = x;
+		pResult->y = y;
+	}
 }
 
 // In this function, pResult will be set to the opposite of pVec0 (e.g. x = -x & y = -y)
 void Vector2DNeg(Vector2D* pResult, const Vector2D* pVec0) {
 
+	if (pResult != NULL && pVec0 != NULL) {
+		pResult->x = (pVec0->x * -1);
+		pResult->y = (pVec0->y * -1);
+	}
 }
 
 // In this function, pResult will be the sum of pVec0 and pVec1 (x result = x0 + x1)
 void Vector2DAdd(Vector2D* pResult, const Vector2D* pVec0, const Vector2D* pVec1) {
 
+	if (pResult != NULL && pVec0 != NULL && pVec1 != NULL) {
+		pResult->x = (pVec0->x + pVec1->x);
+		pResult->y = (pVec0->y + pVec1->y);
+	}
 }
 
 // In this function, pResult will be the difference between pVec0 and pVec1 (specifically, pVec0 - pVec1)
 void Vector2DSub(Vector2D* pResult, const Vector2D* pVec0, const Vector2D* pVec1) {
 
+	if (pResult != NULL && pVec0 != NULL && pVec1 != NULL) {
+		pResult->x = (pVec0->x - pVec1->x);
+		pResult->y = (pVec0->y - pVec1->y);
+	}
 }
 
 // In this function, pResult will be the unit vector of pVec0
@@ -70,7 +90,10 @@ void Vector2DNormalize(Vector2D* pResult, const Vector2D* pVec0) {
 
 // In this function, pResult will be the vector pVec0 scaled by the value 'scale'
 void Vector2DScale(Vector2D* pResult, const Vector2D* pVec0, float scale) {
+	//use the scale add function for this (the math library)
+	//semi-implicit Euler method, dynamics
 
+	//Vector2DScaleAdd();
 }
 
 // In this function, pResult will be the vector pVec0 scaled by 'scale' and added to pVec1
