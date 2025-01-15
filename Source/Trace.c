@@ -53,9 +53,7 @@ void TraceInit()
 	// https://msdn.microsoft.com/query/dev14.query?appId=Dev14IDEF1&l=EN-US&k=k(stdio%2Ffopen_s);k(fopen_s);k(DevLang-C%2B%2B);k(TargetOS-Windows)&rd=true
 	
 	// traceFile = NULL;
-
-	errno_t err;
-	err = fopen_s(&traceFile, traceFileName, "wt");
+	errno_t err = fopen_s(&traceFile, traceFileName, "wt");
 
 	// Error handling (implementation details to be determined by the student):
 	// https://msdn.microsoft.com/en-us/library/9t0e6085.aspx
