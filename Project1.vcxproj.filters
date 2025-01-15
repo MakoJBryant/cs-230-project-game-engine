@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{bf940092-8822-47de-b285-e425e668e2aa}</UniqueIdentifier>
+      <Extensions>.c;.cpp</Extensions>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{507264d8-e713-48b2-b74f-5339f6eac237}</UniqueIdentifier>
+      <Extensions>.c;.cpp</Extensions>
+    </Filter>
+    <Filter Include="Engine\Framework">
+      <UniqueIdentifier>{75d7c494-0021-4bcf-a044-510f49057494}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Systems">
+      <UniqueIdentifier>{7ada4fdf-0917-4e35-b199-293f5c01be20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scenes">
+      <UniqueIdentifier>{b21aeb27-8bbc-4b9f-8158-4fd317c8475d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Systems\Platform">
+      <UniqueIdentifier>{7c3cd12a-fbd3-4ac2-9297-ede3b752738b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Systems\Scene">
+      <UniqueIdentifier>{e0d6e42a-fd0a-45b3-9de0-c9fbd0000804}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Stub.c">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main.c">
+      <Filter>Engine\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\stdafx.c">
+      <Filter>Engine\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Engine.c">
+      <Filter>Engine\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Trace.c">
+      <Filter>Engine\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StubSystem.c">
+      <Filter>Engine\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DemoScene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlatformSystem.c">
+      <Filter>Engine\Systems\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneSystem.c">
+      <Filter>Engine\Systems\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.c">
+      <Filter>Engine\Systems\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\StubScene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Level1Scene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Level2Scene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stream.c">
+      <Filter>Engine\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vector2D.c">
+      <Filter>Engine\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SandboxScene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Stub.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\stdafx.h">
+      <Filter>Engine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\targetver.h">
+      <Filter>Engine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BaseSystem.h">
+      <Filter>Engine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Engine.h">
+      <Filter>Engine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Trace.h">
+      <Filter>Engine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StubSystem.h">
+      <Filter>Engine\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DemoScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlatformSystem.h">
+      <Filter>Engine\Systems\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneSystem.h">
+      <Filter>Engine\Systems\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Engine\Systems\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\StubScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level1Scene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level2Scene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stream.h">
+      <Filter>Engine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vector2D.h">
+      <Filter>Engine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SandboxScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
