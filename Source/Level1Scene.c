@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level1Scene.h"
+#include "Stream.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -62,7 +63,7 @@ static Level1Scene instance =
 	{ "Level1", Level1SceneLoad, Level1SceneInit, Level1SceneUpdate, Level1SceneRender, Level1SceneExit, Level1SceneUnload },
 
 	// Initialize any scene-specific variables:
-
+	0 // numLives
 };
 
 //------------------------------------------------------------------------------
@@ -84,6 +85,18 @@ const Scene* Level1SceneGetInstance(void)
 // Load any resources used by the scene.
 static void Level1SceneLoad(void)
 {
+	// StreamOpen will check if filePath is valid for us.
+	const char* filePath = "Data/Level1_Lives.txt";
+	Stream fileStream = StreamOpen(filePath);
+
+	// We check if fileStream is valid here.
+	if (fileStream != NULL) {
+		instance.numLives = StreamReadInt(fileStream);
+		StreamClose(fileStream);
+	} 
+	else {
+		TraceMessage("Error: fileStream for %s is NULL", filePath);
+	}
 }
 
 // Initialize the entities and variables used by the scene.
