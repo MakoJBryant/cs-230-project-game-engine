@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	StubSystem.c
-// Author(s):	Doug Schilling (dschilling), Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (0068410)
 // Project:		Project 0
 // Course:		CS230S25
 //
