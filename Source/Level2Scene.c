@@ -105,6 +105,19 @@ static void Level2SceneLoad(void)
 // Initialize the entities and variables used by the scene.
 static void Level2SceneInit()
 {
+	// Open file path and save to Stream type variable.
+	const char* filePath = "Data/Level2_Health.txt";
+	Stream fileStream = StreamOpen(filePath);
+
+	if (fileStream != NULL) {
+		// Read initial value for numHealth into variable.
+		instance.numHealth = StreamReadInt(fileStream);
+		StreamClose(fileStream);
+	}
+	else {
+		// If NULL, send an error message.
+		TraceMessage("Error: fileStream for %s is NULL", filePath);
+	}
 }
 
 // Update the the variables used by the scene.
