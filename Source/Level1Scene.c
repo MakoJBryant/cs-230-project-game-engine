@@ -85,17 +85,17 @@ const Scene* Level1SceneGetInstance(void)
 // Load any resources used by the scene.
 static void Level1SceneLoad(void)
 {
-	// StreamOpen will check if filePath is valid for us.
+	// Open file path and save to Stream type variable.
 	const char* filePath = "Data/Level1_Lives.txt";
 	Stream fileStream = StreamOpen(filePath);
 
-	// We check if fileStream is valid here.
 	if (fileStream != NULL) {
+		// Read initial value for numLives into variable.
 		instance.numLives = StreamReadInt(fileStream);
 		StreamClose(fileStream);
 	} 
 	else {
-		// If NULL, send an error message to TraceMessage.
+		// If NULL, send an error message.
 		TraceMessage("Error: fileStream for %s is NULL", filePath);
 	}
 }

@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level2Scene.h"
+#include "Stream.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -29,6 +30,8 @@ typedef struct Level2Scene
 	Scene	base;
 
 	// Add any scene-specific variables second.
+	int numLives;
+	int numHealth;
 
 } Level2Scene;
 
@@ -61,6 +64,8 @@ static Level2Scene instance =
 	{ "Stub", Level2SceneLoad, Level2SceneInit, Level2SceneUpdate, Level2SceneRender, Level2SceneExit, Level2SceneUnload },
 
 	// Initialize any scene-specific variables:
+	0, // numLives
+	0 // numHealth
 };
 
 //------------------------------------------------------------------------------
@@ -82,6 +87,19 @@ const Scene* Level2SceneGetInstance(void)
 // Load any resources used by the scene.
 static void Level2SceneLoad(void)
 {
+	// Open file path and save to Stream type variable.
+	const char* filePath = "Data/Level2_Lives.txt";
+	Stream fileStream = StreamOpen(filePath);
+
+	if (fileStream != NULL) {
+		// Read initial value for numLives into variable.
+		instance.numLives = StreamReadInt(fileStream);
+		StreamClose(fileStream);
+	}
+	else {
+		// If NULL, send an error message.
+		TraceMessage("Error: fileStream for %s is NULL", filePath);
+	}
 }
 
 // Initialize the entities and variables used by the scene.
