@@ -95,6 +95,7 @@ static void Level1SceneLoad(void)
 		StreamClose(fileStream);
 	} 
 	else {
+		// If NULL, send an error message to TraceMessage.
 		TraceMessage("Error: fileStream for %s is NULL", filePath);
 	}
 }
@@ -112,9 +113,10 @@ static void Level1SceneUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	// NOTE: This call causes the engine to exit immediately.  Make sure to remove
-	//   it when you are ready to test out a new scene.
-	SceneSystemSetNext(NULL);
+	instance.numLives -= 1;
+	if (instance.numLives <= 0) {
+		SceneSystemSetNext("Level2");
+	}
 }
 
 // Render any objects associated with the scene.
