@@ -124,13 +124,15 @@ void Vector2DScaleSub(Vector2D* pResult, const Vector2D* pVec0, float scale, con
 
 // This function returns the length of the vector pVec0
 float Vector2DLength(const Vector2D* pVec0) {
-
+	// Length: scalar = sqrt(LengthSquared(v0))
+	return sqrt(Vector2DSquareLength(pVec0));
 }
 
 // This function returns the square of pVec0's length.
 // NOTE: The square root function must NOT be called by this function.
 float Vector2DSquareLength(const Vector2D* pVec0) {
-
+	// LengthSquared: scalar = v0.x^2 + v0.y^2
+	return (pVec0->x * pVec0->x) + (pVec0->y * pVec0->y);
 }
 
 // This function returns the distance between two points.
