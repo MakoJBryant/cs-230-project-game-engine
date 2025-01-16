@@ -106,20 +106,20 @@ void Vector2DNormalize(Vector2D* pResult, const Vector2D* pVec0) {
 
 // In this function, pResult will be the vector pVec0 scaled by the value 'scale'
 void Vector2DScale(Vector2D* pResult, const Vector2D* pVec0, float scale) {
-	//use the scale add function for this (the math library)
-	//semi-implicit Euler method, dynamics
-
-	//Vector2DScaleAdd();
+	pResult->x = (pVec0->x * scale);
+	pResult->y = (pVec0->y * scale);
 }
 
 // In this function, pResult will be the vector pVec0 scaled by 'scale' and added to pVec1
 void Vector2DScaleAdd(Vector2D* pResult, const Vector2D* pVec0, float scale, const Vector2D* pVec1) {
-
+	pResult->x = (pVec0->x * scale) + pVec1->x;
+	pResult->y = (pVec0->y * scale) + pVec1->y;
 }
 
 // In this function, pResult will be the vector pVec0 scaled by 'scale' and pVec1 will be subtracted from it
 void Vector2DScaleSub(Vector2D* pResult, const Vector2D* pVec0, float scale, const Vector2D* pVec1) {
-
+	pResult->x = (pVec0->x * scale) - pVec1->x;
+	pResult->y = (pVec0->y * scale) - pVec1->y;
 }
 
 // This function returns the length of the vector pVec0
