@@ -12,6 +12,7 @@
 #include "stdafx.h"
 
 #include "Vector2D.h"
+#include <math.h> // For sqrt()
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -41,8 +42,8 @@
 void Vector2DZero(Vector2D* pResult) {
 
 	if (pResult != NULL) {
-		pResult->x = 0;
-		pResult->y = 0;
+		pResult->x = 0.0f;
+		pResult->y = 0.0f;
 	}
 }
 
@@ -86,6 +87,21 @@ void Vector2DSub(Vector2D* pResult, const Vector2D* pVec0, const Vector2D* pVec1
 // (NOTE: Care must be taken when pResult = pVec0!)
 void Vector2DNormalize(Vector2D* pResult, const Vector2D* pVec0) {
 
+	// Vector magnitude formula.
+	float xSquared = pVec0->x * pVec0->x;
+	float ySquared = pVec0->y * pVec0->y;
+	float magnitude = sqrt(xSquared + ySquared);
+
+	if (magnitude > 0.0f) {
+		// Normalize vector (same direction, magnitude of one).
+		pResult->x = pVec0->x / magnitude;
+		pResult->y = pVec0->y / magnitude;
+	}
+	else {
+		// Zero out vector.
+		pResult->x = 0.0f;
+		pResult->y = 0.0f;
+	}
 }
 
 // In this function, pResult will be the vector pVec0 scaled by the value 'scale'
