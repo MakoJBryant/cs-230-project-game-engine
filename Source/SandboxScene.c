@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "SandboxScene.h"
+#include "Vector2D.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -50,6 +51,9 @@ static void SandboxSceneUpdate(float dt);
 static void SandboxSceneExit(void);
 static void SandboxSceneUnload(void);
 static void SandboxSceneRender(void);
+
+static void SandboxSceneTraceFloat(const char* text, float f);
+static void SandboxSceneTraceVector(const char* text, const Vector2D* v);
 
 //------------------------------------------------------------------------------
 // Instance Variable:
@@ -117,3 +121,16 @@ static void SandboxSceneUnload(void)
 {
 }
 
+// Writes float values to the trace file.
+static void SandboxSceneTraceFloat(const char* text, float f)
+{
+	// The trace message should be formatted as "Vector Test: %s = %f"
+	TraceMessage("Vector Test: %s = %f", f);
+}
+
+// Writes Vector2D values to the trace file.
+static void SandboxSceneTraceVector(const char* text, const Vector2D* v)
+{
+	// The trace message should be formatted as "Vector Test: %s = [%f, %f]"
+	TraceMessage("Vector Test: %s = [%f, %f]", v);
+}
