@@ -108,46 +108,62 @@ static void SandboxSceneUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	// NOTE: This call causes the engine to exit immediately.  Make sure to remove
-	//   it when you are ready to test out a new scene.
-	SceneSystemSetNext(NULL);
-
 	Stream file = StreamOpen(traceFileName);
 
 	// If the stream was opened successfully.
-	if ( file == 0) {
+	if (file != NULL) {
 
 		// Create a single Vector2D variable for tests
 		Vector2D v = { 4.0f, 3.0f };
-
 		Vector2DZero(&v);
-		TraceMessage("Vector2DZero: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DZero = [%f, %f]", v.x, v.y);
 		Vector2DSet(&v, 1.5f, 1.0f);
-		TraceMessage("Vector2DSet: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DSet = [%f, %f]", v.x, v.y);
 		Vector2DNeg(&v, &v);
-		TraceMessage("Vector2DNeg: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DNeg = [%f, %f]", v.x, v.y);
 		Vector2DAdd(&v, &v, &v);
-		TraceMessage("Vector2DAdd: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DAdd = [%f, %f]", v.x, v.y);
 		Vector2DSub(&v, &v, &v);
-		TraceMessage("Vector2DSub: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DSub = [%f, %f]", v.x, v.y);
 		StreamReadVector2D(file, &v);
-		TraceMessage("StreamReadVector2D: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: StreamReadVector2D = [%f, %f]", v.x, v.y);
 		Vector2DNormalize(&v, &v);
-		TraceMessage("Vector2DNormalize: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DNormalize = [%f, %f]", v.x, v.y);
 		float scale = StreamReadFloat(file);
-		TraceMessage("StreamReadFloat: (%f)\n", scale);
+		TraceMessage("Vector Test: StreamReadFloat = %f", scale);
 		Vector2DScale(&v, &v, scale);
-		TraceMessage("Vector2DScale: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DScale = [%f, %f]", v.x, v.y);
 		Vector2DScaleAdd(&v, &v, scale, &v);
-		TraceMessage("Vector2DScaleAdd: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DScaleAdd = [%f, %f]", v.x, v.y);
 		Vector2DScaleSub(&v, &v, scale, &v);
-		TraceMessage("Vector2DScaleSub: (%f, %f)\n", v.x, v.y);
-		Vector2DLength(&v);
-		TraceMessage("Vector2DLength: (%f, %f)\n", v.x, v.y);
-		Vector2DSquareLength(&v);
-		TraceMessage("Vector2DSquareLength: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DScaleSub = [%f, %f]", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DLength = %f", Vector2DLength(&v));
+		TraceMessage("Vector Test: Vector2DSquareLength = %f", Vector2DSquareLength(&v));
 
+		Vector2D v2 = { 3.0f, 4.0f };
+		StreamReadVector2D(file, &v);
+		TraceMessage("Vector Test: StreamReadVector2D = [%f, %f]", v.x, v.y);
+		StreamReadVector2D(file, &v2);
+		TraceMessage("Vector Test: StreamReadVector2D = [%f, %f]", v2.x, v2.y);
+		TraceMessage("Vector Test: Vector2DDistance = %f", Vector2DDistance(&v, &v2));
+		TraceMessage("Vector Test: Vector2DSquareDistance = %f", Vector2DSquareDistance(&v, &v2));
+		TraceMessage("Vector Test: Vector2DDotProduct = %f", Vector2DDotProduct(&v, &v2));
 
+		float angle = StreamReadFloat(file);
+		TraceMessage("Vector Test: StreamReadFloat = %f", angle);
+		Vector2DFromAngleDeg(&v, angle);
+		TraceMessage("Vector Test: Vector2DFromAngleDeg = [%f, %f]", v.x, v.y);
+		angle = StreamReadFloat(file);
+		TraceMessage("Vector Test: StreamReadFloat = %f", angle);
+		Vector2DFromAngleRad(&v, angle);
+		TraceMessage("Vector Test: Vector2DFromAngleRad = [%f, %f]", v.x, v.y);
+		TraceMessage("Vector Test: Vector2DToAngleRad = %f", Vector2DToAngleRad(&v));
+
+		StreamClose(&file);
+
+		// NOTE: This call causes the engine to exit immediately.  Make sure to remove
+		//   it when you are ready to test out a new scene.
+		SceneSystemSetNext(NULL);
 	}
 	else {
 		printf("The file 'VectorTests.txt' was not opened\n");
