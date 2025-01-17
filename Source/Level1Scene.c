@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level1Scene.h"
+#include "Level2Scene.h"
 #include "Stream.h"
 
 //------------------------------------------------------------------------------
@@ -115,7 +116,7 @@ static void Level1SceneUpdate(float dt)
 
 	instance.numLives -= 1;
 	if (instance.numLives <= 0) {
-		SceneSystemSetNext("Level2");
+		SceneSystemSetNext(Level2SceneGetInstance());
 	}
 }
 

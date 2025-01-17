@@ -14,6 +14,7 @@
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level2Scene.h"
+#include "SandboxScene.h"
 #include "Stream.h"
 
 //------------------------------------------------------------------------------
@@ -61,7 +62,7 @@ static void Level2SceneRender(void);
 static Level2Scene instance =
 {
 	// Initialize the base structure:
-	{ "Stub", Level2SceneLoad, Level2SceneInit, Level2SceneUpdate, Level2SceneRender, Level2SceneExit, Level2SceneUnload },
+	{ "Level2", Level2SceneLoad, Level2SceneInit, Level2SceneUpdate, Level2SceneRender, Level2SceneExit, Level2SceneUnload },
 
 	// Initialize any scene-specific variables:
 	0, // numLives
@@ -143,7 +144,7 @@ static void Level2SceneUpdate(float dt)
 		}
 		else {
 			// Change scene to "Sandbox".
-			SceneSystemSetNext("Sandbox");
+			SceneSystemSetNext(SandboxSceneGetInstance());
 
 		}
 	}
