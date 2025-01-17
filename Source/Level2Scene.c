@@ -132,21 +132,17 @@ static void Level2SceneUpdate(float dt)
 
 	// NOTE: This call causes the engine to exit immediately.  Make sure to remove
 	//   it when you are ready to test out a new scene.
-	SceneSystemSetNext(NULL);
+	//SceneSystemSetNext(NULL);
 
 	instance.numHealth -= 1;
 	if (instance.numHealth <= 0) {
 
 		instance.numLives -= 1;
 		if (instance.numLives > 0) {
-			// Restart scene.
-			SceneSystemRestart();
-
+			SceneRestart();
 		}
 		else {
-			// Change scene to "Sandbox".
 			SceneSystemSetNext(SandboxSceneGetInstance());
-
 		}
 	}
 }
