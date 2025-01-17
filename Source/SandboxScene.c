@@ -57,10 +57,10 @@ static void SandboxSceneExit(void);
 static void SandboxSceneUnload(void);
 static void SandboxSceneRender(void);
 
-/*
+
 static void SandboxSceneTraceFloat(const char* text, float f);
 static void SandboxSceneTraceVector(const char* text, const Vector2D* v);
-*/
+
 
 //------------------------------------------------------------------------------
 // Instance Variable:
@@ -113,51 +113,49 @@ static void SandboxSceneUpdate(float dt)
 	// If the stream was opened successfully.
 	if (file != NULL) {
 
-		// Create a single Vector2D variable for tests
+		// Run tests
 		Vector2D v = { 4.0f, 3.0f };
 		Vector2DZero(&v);
-		TraceMessage("Vector Test: Vector2DZero = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DZero", &v);
 		Vector2DSet(&v, 1.5f, 1.0f);
-		TraceMessage("Vector Test: Vector2DSet = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DSet", &v);
 		Vector2DNeg(&v, &v);
-		TraceMessage("Vector Test: Vector2DNeg = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DNeg", &v);
 		Vector2DAdd(&v, &v, &v);
-		TraceMessage("Vector Test: Vector2DAdd = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DAdd", &v);
 		Vector2DSub(&v, &v, &v);
-		TraceMessage("Vector Test: Vector2DSub = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DSub", &v);
 		StreamReadVector2D(file, &v);
-		TraceMessage("Vector Test: StreamReadVector2D = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("StreamReadVector2D", &v);
 		Vector2DNormalize(&v, &v);
-		TraceMessage("Vector Test: Vector2DNormalize = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DNormalize", &v);
 		float scale = StreamReadFloat(file);
-		TraceMessage("Vector Test: StreamReadFloat = %f", scale);
+		SandboxSceneTraceFloat("StreamReadFloat", scale);
 		Vector2DScale(&v, &v, scale);
-		TraceMessage("Vector Test: Vector2DScale = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DScale", &v);
 		Vector2DScaleAdd(&v, &v, scale, &v);
-		TraceMessage("Vector Test: Vector2DScaleAdd = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DScaleAdd", &v);
 		Vector2DScaleSub(&v, &v, scale, &v);
-		TraceMessage("Vector Test: Vector2DScaleSub = [%f, %f]", v.x, v.y);
-		TraceMessage("Vector Test: Vector2DLength = %f", Vector2DLength(&v));
-		TraceMessage("Vector Test: Vector2DSquareLength = %f", Vector2DSquareLength(&v));
-
+		SandboxSceneTraceVector("Vector2DScaleSub", &v);
+		SandboxSceneTraceFloat("Vector2DLength", Vector2DLength(&v));
+		SandboxSceneTraceFloat("Vector2DSquareLength", Vector2DSquareLength(&v));
 		Vector2D v2 = { 3.0f, 4.0f };
 		StreamReadVector2D(file, &v);
-		TraceMessage("Vector Test: StreamReadVector2D = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("StreamReadVector2D", &v);
 		StreamReadVector2D(file, &v2);
-		TraceMessage("Vector Test: StreamReadVector2D = [%f, %f]", v2.x, v2.y);
-		TraceMessage("Vector Test: Vector2DDistance = %f", Vector2DDistance(&v, &v2));
-		TraceMessage("Vector Test: Vector2DSquareDistance = %f", Vector2DSquareDistance(&v, &v2));
-		TraceMessage("Vector Test: Vector2DDotProduct = %f", Vector2DDotProduct(&v, &v2));
-
+		SandboxSceneTraceVector("StreamReadVector2D", &v2);
+		SandboxSceneTraceFloat("Vector2DDistance", Vector2DDistance(&v, &v2));
+		SandboxSceneTraceFloat("Vector2DSquareDistance", Vector2DSquareDistance(&v, &v2));
+		SandboxSceneTraceFloat("Vector2DDotProduct", Vector2DDotProduct(&v, &v2));
 		float angle = StreamReadFloat(file);
-		TraceMessage("Vector Test: StreamReadFloat = %f", angle);
+		SandboxSceneTraceFloat("StreamReadFloat", angle);
 		Vector2DFromAngleDeg(&v, angle);
-		TraceMessage("Vector Test: Vector2DFromAngleDeg = [%f, %f]", v.x, v.y);
+		SandboxSceneTraceVector("Vector2DFromAngleDeg", &v);
 		angle = StreamReadFloat(file);
-		TraceMessage("Vector Test: StreamReadFloat = %f", angle);
+		SandboxSceneTraceFloat("StreamReadFloat", angle);
 		Vector2DFromAngleRad(&v, angle);
-		TraceMessage("Vector Test: Vector2DFromAngleRad = [%f, %f]", v.x, v.y);
-		TraceMessage("Vector Test: Vector2DToAngleRad = %f", Vector2DToAngleRad(&v));
+		SandboxSceneTraceVector("Vector2DFromAngleRad", &v);
+		SandboxSceneTraceFloat("Vector2DToAngleRad", Vector2DToAngleRad(&v));
 
 		StreamClose(&file);
 
@@ -185,7 +183,7 @@ static void SandboxSceneUnload(void)
 {
 }
 
-/*
+
 // Writes float values to the trace file.
 static void SandboxSceneTraceFloat(const char* text, float f)
 {
@@ -199,4 +197,4 @@ static void SandboxSceneTraceVector(const char* text, const Vector2D* v)
 	// The trace message should be formatted as "Vector Test: %s = [%f, %f]"
 	TraceMessage("Vector Test: %s = [%f, %f]", text, v->x, v->y);
 }
-*/
+
