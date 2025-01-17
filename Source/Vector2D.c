@@ -168,16 +168,16 @@ void Vector2DFromAngleDeg(Vector2D* pResult, float angle) {
 
 	float radians = (angle * (float)M_PI) / 180.0f;
 
-	pResult->x = cos(radians);
-	pResult->y = sin(radians);
+	pResult->x = cosf(radians);
+	pResult->y = sinf(radians);
 }
 
 // This function computes the coordinates of the unit vector represented by the angle "angle", which is in Radians.
 // HINT: x = cos(angle), y = sin(angle).
 void Vector2DFromAngleRad(Vector2D* pResult, float angle) {
 
-	pResult->x = cos(angle);
-	pResult->y = sin(angle);
+	pResult->x = cosf(angle);
+	pResult->y = sinf(angle);
 }
 
 // This function computes the angle, in radians, of the specified vector.

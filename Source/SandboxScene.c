@@ -109,41 +109,40 @@ static void SandboxSceneUpdate(float dt)
 	//   it when you are ready to test out a new scene.
 	SceneSystemSetNext(NULL);
 
-	// Open the file, “Data/VectorTests.txt”, using StreamOpen()
-	errno_t err = StreamOpen(&traceFile, traceFileName, "wt");
+	Stream file = StreamOpen(&traceFile);
 
 	// If the stream was opened successfully.
-	if (err == 0) {
+	if ( file == 0) {
 
 		// Create a single Vector2D variable for tests
 		Vector2D v = { 4.0f, 3.0f };
 
 		Vector2DZero(&v);
-		StreamWrite(traceFile, "Vector2DZero: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DZero: (%f, %f)\n", v.x, v.y);
 		Vector2DSet(&v, 1.5f, 1.0f);
-		StreamWrite(traceFile, "Vector2DSet: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DSet: (%f, %f)\n", v.x, v.y);
 		Vector2DNeg(&v, &v);
-		StreamWrite(traceFile, "Vector2DNeg: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DNeg: (%f, %f)\n", v.x, v.y);
 		Vector2DAdd(&v, &v, &v);
-		StreamWrite(traceFile, "Vector2DAdd: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DAdd: (%f, %f)\n", v.x, v.y);
 		Vector2DSub(&v, &v, &v);
-		StreamWrite(traceFile, "Vector2DSub: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DSub: (%f, %f)\n", v.x, v.y);
 		StreamReadVector2D(&traceFile, &v);
-		StreamWrite(traceFile, "StreamReadVector2D: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "StreamReadVector2D: (%f, %f)\n", v.x, v.y);
 		Vector2DNormalize(&v, &v);
-		StreamWrite(traceFile, "Vector2DNormalize: (%f, %f)\n", v.x, v.y);
-		float scale = StreamReadFloat(&traceFile);
-		StreamWrite(traceFile, "StreamReadFloat: (%f)\n", scale);
+		StreamWrite(file, "Vector2DNormalize: (%f, %f)\n", v.x, v.y);
+		float scale = StreamReadFloat(&file);
+		StreamWrite(file, "StreamReadFloat: (%f)\n", scale);
 		Vector2DScale(&v, &v, scale);
-		StreamWrite(traceFile, "Vector2DScale: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DScale: (%f, %f)\n", v.x, v.y);
 		Vector2DScaleAdd(&v, &v, scale, &v);
-		StreamWrite(traceFile, "Vector2DScaleAdd: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DScaleAdd: (%f, %f)\n", v.x, v.y);
 		Vector2DScaleSub(&v, &v, scale, &v);
-		StreamWrite(traceFile, "Vector2DScaleSub: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DScaleSub: (%f, %f)\n", v.x, v.y);
 		Vector2DLength(&v);
-		StreamWrite(traceFile, "Vector2DLength: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DLength: (%f, %f)\n", v.x, v.y);
 		Vector2DSquareLength(&v);
-		StreamWrite(traceFile, "Vector2DSquareLength: (%f, %f)\n", v.x, v.y);
+		StreamWrite(file, "Vector2DSquareLength: (%f, %f)\n", v.x, v.y);
 
 
 	}
