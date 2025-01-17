@@ -14,6 +14,7 @@
 #include <string.h>
 
 #include "Stream.h"
+#include "Trace.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -160,7 +161,7 @@ void StreamReadVector2D(Stream stream, Vector2D* vector) {
 //	 stream = The file stream to be closed.
 void StreamClose(Stream* stream) {
 	if (stream != NULL) {
-		fclose(stream);
+		fclose(*stream);
 		stream = NULL; // Avoid dangling pointers.
 	}
 }

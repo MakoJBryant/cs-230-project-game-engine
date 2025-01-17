@@ -46,7 +46,10 @@ typedef struct Scene Scene;
 //------------------------------------------------------------------------------
 // Public Functions:
 //------------------------------------------------------------------------------
-
+// Get the instance of the Demo Scene.
+// Returns:
+//	 Pointer to the base Scene structure for this derived Scene.
+const Scene* Level1SceneGetInstance(void);
 
 //------------------------------------------------------------------------------
 

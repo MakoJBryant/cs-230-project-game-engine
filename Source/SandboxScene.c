@@ -16,6 +16,7 @@
 #include "SandboxScene.h"
 #include "Vector2D.h"
 #include "Stream.h"
+#include "Trace.h"
 
 
 //------------------------------------------------------------------------------
@@ -56,8 +57,10 @@ static void SandboxSceneExit(void);
 static void SandboxSceneUnload(void);
 static void SandboxSceneRender(void);
 
+/*
 static void SandboxSceneTraceFloat(const char* text, float f);
 static void SandboxSceneTraceVector(const char* text, const Vector2D* v);
+*/
 
 //------------------------------------------------------------------------------
 // Instance Variable:
@@ -109,7 +112,7 @@ static void SandboxSceneUpdate(float dt)
 	//   it when you are ready to test out a new scene.
 	SceneSystemSetNext(NULL);
 
-	Stream file = StreamOpen(&traceFile);
+	Stream file = StreamOpen(traceFileName);
 
 	// If the stream was opened successfully.
 	if ( file == 0) {
@@ -118,31 +121,31 @@ static void SandboxSceneUpdate(float dt)
 		Vector2D v = { 4.0f, 3.0f };
 
 		Vector2DZero(&v);
-		StreamWrite(file, "Vector2DZero: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DZero: (%f, %f)\n", v.x, v.y);
 		Vector2DSet(&v, 1.5f, 1.0f);
-		StreamWrite(file, "Vector2DSet: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DSet: (%f, %f)\n", v.x, v.y);
 		Vector2DNeg(&v, &v);
-		StreamWrite(file, "Vector2DNeg: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DNeg: (%f, %f)\n", v.x, v.y);
 		Vector2DAdd(&v, &v, &v);
-		StreamWrite(file, "Vector2DAdd: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DAdd: (%f, %f)\n", v.x, v.y);
 		Vector2DSub(&v, &v, &v);
-		StreamWrite(file, "Vector2DSub: (%f, %f)\n", v.x, v.y);
-		StreamReadVector2D(&traceFile, &v);
-		StreamWrite(file, "StreamReadVector2D: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DSub: (%f, %f)\n", v.x, v.y);
+		StreamReadVector2D(file, &v);
+		TraceMessage("StreamReadVector2D: (%f, %f)\n", v.x, v.y);
 		Vector2DNormalize(&v, &v);
-		StreamWrite(file, "Vector2DNormalize: (%f, %f)\n", v.x, v.y);
-		float scale = StreamReadFloat(&file);
-		StreamWrite(file, "StreamReadFloat: (%f)\n", scale);
+		TraceMessage("Vector2DNormalize: (%f, %f)\n", v.x, v.y);
+		float scale = StreamReadFloat(file);
+		TraceMessage("StreamReadFloat: (%f)\n", scale);
 		Vector2DScale(&v, &v, scale);
-		StreamWrite(file, "Vector2DScale: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DScale: (%f, %f)\n", v.x, v.y);
 		Vector2DScaleAdd(&v, &v, scale, &v);
-		StreamWrite(file, "Vector2DScaleAdd: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DScaleAdd: (%f, %f)\n", v.x, v.y);
 		Vector2DScaleSub(&v, &v, scale, &v);
-		StreamWrite(file, "Vector2DScaleSub: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DScaleSub: (%f, %f)\n", v.x, v.y);
 		Vector2DLength(&v);
-		StreamWrite(file, "Vector2DLength: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DLength: (%f, %f)\n", v.x, v.y);
 		Vector2DSquareLength(&v);
-		StreamWrite(file, "Vector2DSquareLength: (%f, %f)\n", v.x, v.y);
+		TraceMessage("Vector2DSquareLength: (%f, %f)\n", v.x, v.y);
 
 
 	}
@@ -166,16 +169,18 @@ static void SandboxSceneUnload(void)
 {
 }
 
+/*
 // Writes float values to the trace file.
 static void SandboxSceneTraceFloat(const char* text, float f)
 {
 	// The trace message should be formatted as "Vector Test: %s = %f"
-	TraceMessage("Vector Test: %s = %f", f);
+	TraceMessage("Vector Test: %s = %f", text, f);
 }
 
 // Writes Vector2D values to the trace file.
 static void SandboxSceneTraceVector(const char* text, const Vector2D* v)
 {
 	// The trace message should be formatted as "Vector Test: %s = [%f, %f]"
-	TraceMessage("Vector Test: %s = [%f, %f]", v);
+	TraceMessage("Vector Test: %s = [%f, %f]", text, v->x, v->y);
 }
+*/

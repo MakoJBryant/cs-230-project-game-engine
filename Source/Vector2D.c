@@ -91,7 +91,7 @@ void Vector2DNormalize(Vector2D* pResult, const Vector2D* pVec0) {
 	// Vector magnitude formula.
 	float xSquared = pVec0->x * pVec0->x;
 	float ySquared = pVec0->y * pVec0->y;
-	float magnitude = sqrt(xSquared + ySquared);
+	float magnitude = sqrtf(xSquared + ySquared);
 
 	if (magnitude > 0.0f) {
 		// Normalize vector (same direction, magnitude of one).
@@ -126,7 +126,7 @@ void Vector2DScaleSub(Vector2D* pResult, const Vector2D* pVec0, float scale, con
 // This function returns the length of the vector pVec0
 float Vector2DLength(const Vector2D* pVec0) {
 	// Length: scalar = sqrt(LengthSquared(v0))
-	return sqrt(Vector2DSquareLength(pVec0));
+	return sqrtf(Vector2DSquareLength(pVec0));
 }
 
 // This function returns the square of pVec0's length.
@@ -139,7 +139,7 @@ float Vector2DSquareLength(const Vector2D* pVec0) {
 // This function returns the distance between two points.
 float Vector2DDistance(const Vector2D* pVec0, const Vector2D* pVec1) {
 	// Calls SquareDistance to get the sqrt actual distance.
-	return sqrt(Vector2DSquareDistance(pVec0, pVec1));
+	return sqrtf(Vector2DSquareDistance(pVec0, pVec1));
 }
 
 // This function returns the distance squared between two points.

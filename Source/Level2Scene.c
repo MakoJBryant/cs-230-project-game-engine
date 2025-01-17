@@ -16,6 +16,7 @@
 #include "Level2Scene.h"
 #include "SandboxScene.h"
 #include "Stream.h"
+#include "Trace.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -95,7 +96,7 @@ static void Level2SceneLoad(void)
 	if (fileStream != NULL) {
 		// Read initial value for numLives into variable.
 		instance.numLives = StreamReadInt(fileStream);
-		StreamClose(fileStream);
+		StreamClose(&fileStream);
 	}
 	else {
 		// If NULL, send an error message.
@@ -113,7 +114,7 @@ static void Level2SceneInit()
 	if (fileStream != NULL) {
 		// Read initial value for numHealth into variable.
 		instance.numHealth = StreamReadInt(fileStream);
-		StreamClose(fileStream);
+		StreamClose(&fileStream);
 	}
 	else {
 		// If NULL, send an error message.

@@ -19,6 +19,7 @@
 #include "SceneSystem.h"
 #include "StubScene.h"
 #include "Trace.h"
+#include "Level1Scene.h"
 
 //------------------------------------------------------------------------------
 // Libraries
