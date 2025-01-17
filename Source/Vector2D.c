@@ -13,7 +13,7 @@
 
 #include "Vector2D.h"
 #define _USE_MATH_DEFINES // For M_PI
-#include <math.h> // For sqrt(), cos, sin
+#include <math.h> // For sqrt(), cos, sin, atan2f
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -165,10 +165,9 @@ float Vector2DDotProduct(const Vector2D* pVec0, const Vector2D* pVec1) {
 //   #define _USE_MATH_DEFINES
 //   #include <math.h>
 void Vector2DFromAngleDeg(Vector2D* pResult, float angle) {
-	//    radians = (angle * M_PI) / 180.0f
+
 	float radians = (angle * (float)M_PI) / 180.0f;
 
-	// Assign the x and y-coordinates for the unit vector.
 	pResult->x = cos(radians);
 	pResult->y = sin(radians);
 }
@@ -177,6 +176,8 @@ void Vector2DFromAngleDeg(Vector2D* pResult, float angle) {
 // HINT: x = cos(angle), y = sin(angle).
 void Vector2DFromAngleRad(Vector2D* pResult, float angle) {
 
+	pResult->x = cos(angle);
+	pResult->y = sin(angle);
 }
 
 // This function computes the angle, in radians, of the specified vector.
@@ -184,6 +185,12 @@ void Vector2DFromAngleRad(Vector2D* pResult, float angle) {
 // NOTE: If the pointer is NULL, then return 0.0f.
 float Vector2DToAngleRad(const Vector2D* pVec) {
 
+	if (pVec != NULL) {
+		// Return angle (in radians) of the given vector.
+		return atan2f(pVec->y, pVec->x);
+	}
+	// else
+	return 0.0f;
 }
 
 //------------------------------------------------------------------------------
