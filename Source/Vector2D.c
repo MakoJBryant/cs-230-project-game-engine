@@ -12,7 +12,8 @@
 #include "stdafx.h"
 
 #include "Vector2D.h"
-#include <math.h> // For sqrt()
+#define _USE_MATH_DEFINES // For M_PI
+#include <math.h> // For sqrt(), cos, sin
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -153,7 +154,8 @@ float Vector2DSquareDistance(const Vector2D* pVec0, const Vector2D* pVec1) {
 
 // This function returns the dot product between pVec0 and pVec1
 float Vector2DDotProduct(const Vector2D* pVec0, const Vector2D* pVec1) {
-
+	// DotProduct: scalar = (v1.x * v0.x) + (v1.y * v0.y)
+	return (pVec1->x * pVec0->x) + (pVec1->y * pVec0->y);
 }
 
 // This function computes the coordinates of the unit vector represented by the angle "angle", which is in Degrees.
@@ -163,7 +165,12 @@ float Vector2DDotProduct(const Vector2D* pVec0, const Vector2D* pVec1) {
 //   #define _USE_MATH_DEFINES
 //   #include <math.h>
 void Vector2DFromAngleDeg(Vector2D* pResult, float angle) {
+	//    radians = (angle * M_PI) / 180.0f
+	float radians = (angle * (float)M_PI) / 180.0f;
 
+	// Assign the x and y-coordinates for the unit vector.
+	pResult->x = cos(radians);
+	pResult->y = sin(radians);
 }
 
 // This function computes the coordinates of the unit vector represented by the angle "angle", which is in Radians.
