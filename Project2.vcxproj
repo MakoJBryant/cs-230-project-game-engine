@@ -84,13 +84,11 @@
     <LinkIncremental>true</LinkIncremental>
     <ExternalIncludePath>$(ProjectDir)\DGL\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
     <LibraryPath>$(ProjectDir)\DGL\lib\$(Platform);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <IntDir>$(Platform)\$(Configuration)\IntDir\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <ExternalIncludePath>$(ProjectDir)\DGL\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath);</ExternalIncludePath>
     <LibraryPath>$(ProjectDir)\DGL\lib\$(Platform);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <IntDir>$(Platform)\$(Configuration)\IntDir\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -175,7 +173,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine.c" />
+    <ClCompile Include="Source\Entity.c" />
+    <ClCompile Include="Source\EntityFactory.c" />
     <ClCompile Include="Source\Main.c" />
+    <ClCompile Include="Source\Mesh.c" />
+    <ClCompile Include="Source\Physics.c" />
     <ClCompile Include="Source\PlatformSystem.c" />
     <ClCompile Include="Source\SandboxScene.c" />
     <ClCompile Include="Source\Scene.c" />
@@ -183,6 +185,8 @@
     <ClCompile Include="Source\Level1Scene.c" />
     <ClCompile Include="Source\Level2Scene.c" />
     <ClCompile Include="Source\SceneSystem.c" />
+    <ClCompile Include="Source\Sprite.c" />
+    <ClCompile Include="Source\SpriteSource.c" />
     <ClCompile Include="Source\stdafx.c">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -194,10 +198,15 @@
     <ClCompile Include="Source\StubScene.c" />
     <ClCompile Include="Source\StubSystem.c" />
     <ClCompile Include="Source\Trace.c" />
+    <ClCompile Include="Source\Transform.c" />
     <ClCompile Include="Source\Vector2D.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Engine.h" />
+    <ClInclude Include="Source\Entity.h" />
+    <ClInclude Include="Source\EntityFactory.h" />
+    <ClInclude Include="Source\Mesh.h" />
+    <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\PlatformSystem.h" />
     <ClInclude Include="Source\SandboxScene.h" />
     <ClInclude Include="Source\Scene.h" />
@@ -205,6 +214,8 @@
     <ClInclude Include="Source\Level1Scene.h" />
     <ClInclude Include="Source\Level2Scene.h" />
     <ClInclude Include="Source\SceneSystem.h" />
+    <ClInclude Include="Source\Sprite.h" />
+    <ClInclude Include="Source\SpriteSource.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Stream.h" />
     <ClInclude Include="Source\Stub.h" />
@@ -213,6 +224,7 @@
     <ClInclude Include="Source\StubSystem.h" />
     <ClInclude Include="Source\targetver.h" />
     <ClInclude Include="Source\Trace.h" />
+    <ClInclude Include="Source\Transform.h" />
     <ClInclude Include="Source\Vector2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -24,6 +24,21 @@
     <Filter Include="Engine\Systems\Scene">
       <UniqueIdentifier>{e0d6e42a-fd0a-45b3-9de0-c9fbd0000804}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Entities">
+      <UniqueIdentifier>{dade5477-4a1d-4d33-9828-ebbbb305ac9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Entities\Components">
+      <UniqueIdentifier>{a76e4157-524c-43f4-b3e1-0f11e95068d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Entities\Components\Transform">
+      <UniqueIdentifier>{6f727ba4-d023-4caf-b871-8c2f332d60f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Entities\Components\Graphics">
+      <UniqueIdentifier>{0da7190c-243d-4c02-96f4-8dde8393f001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Entities\Components\Physics">
+      <UniqueIdentifier>{6e2eed11-ee6f-4196-bf98-c00c7335610f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Stub.c">
@@ -73,6 +88,27 @@
     </ClCompile>
     <ClCompile Include="Source\SandboxScene.c">
       <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Entity.c">
+      <Filter>Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Transform.c">
+      <Filter>Engine\Entities\Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Physics.c">
+      <Filter>Engine\Entities\Components\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Sprite.c">
+      <Filter>Engine\Entities\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SpriteSource.c">
+      <Filter>Engine\Entities\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mesh.c">
+      <Filter>Engine\Entities\Components\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntityFactory.c">
+      <Filter>Engine\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +162,27 @@
     </ClInclude>
     <ClInclude Include="Source\SandboxScene.h">
       <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Entity.h">
+      <Filter>Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Transform.h">
+      <Filter>Engine\Entities\Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Physics.h">
+      <Filter>Engine\Entities\Components\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sprite.h">
+      <Filter>Engine\Entities\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SpriteSource.h">
+      <Filter>Engine\Entities\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>Engine\Entities\Components\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityFactory.h">
+      <Filter>Engine\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
