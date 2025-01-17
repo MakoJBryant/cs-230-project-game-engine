@@ -1,0 +1,77 @@
+Engine: Init
+PlatformSystem: Init
+SceneSystem: Init
+Engine: Update
+Level1: Load
+Level1: Init
+Level1: Update
+Engine: Render
+Level1: Render
+Engine: Update
+Level1: Update
+Engine: Render
+Level1: Render
+Engine: Update
+Level1: Update
+Engine: Render
+Level1: Render
+Engine: Update
+Level1: Exit
+Level1: Unload
+Level2: Load
+Level2: Init
+Level2: Update
+Engine: Render
+Level2: Render
+Engine: Update
+Level2: Update
+Engine: Render
+Level2: Render
+Engine: Update
+Level2: Exit
+Level2: Init
+Level2: Update
+Engine: Render
+Level2: Render
+Engine: Update
+Level2: Update
+Engine: Render
+Level2: Render
+Engine: Update
+Level2: Exit
+Level2: Unload
+Sandbox: Load
+Sandbox: Init
+Sandbox: Update
+Vector Test: Vector2DZero = [0.000000, 0.000000]
+Vector Test: Vector2DSet = [1.500000, 1.000000]
+Vector Test: Vector2DNeg = [-1.500000, -1.000000]
+Vector Test: Vector2DAdd = [-3.000000, -2.000000]
+Vector Test: Vector2DSub = [0.000000, 0.000000]
+Vector Test: StreamReadVector2D = [4.000000, 3.000000]
+Vector Test: Vector2DNormalize = [0.800000, 0.600000]
+Vector Test: StreamReadFloat = 5.000000
+Vector Test: Vector2DScale = [4.000000, 3.000000]
+Vector Test: Vector2DScaleAdd = [24.000000, 18.000000]
+Vector Test: Vector2DScaleSub = [96.000000, 72.000000]
+Vector Test: Vector2DLength = 120.000000
+Vector Test: Vector2DSquareLength = 14400.000000
+Vector Test: StreamReadVector2D = [-1.000000, 1.000000]
+Vector Test: StreamReadVector2D = [3.000000, 4.000000]
+Vector Test: Vector2DDistance = 5.000000
+Vector Test: Vector2DSquareDistance = 25.000000
+Vector Test: Vector2DDotProduct = 1.000000
+Vector Test: StreamReadFloat = -135.000000
+Vector Test: Vector2DFromAngleDeg = [-0.707107, -0.707107]
+Vector Test: StreamReadFloat = 0.785398
+Vector Test: Vector2DFromAngleRad = [0.707107, 0.707107]
+Vector Test: Vector2DToAngleRad = 0.785398
+Engine: Render
+Sandbox: Render
+Engine: Update
+Sandbox: Exit
+Sandbox: Unload
+Engine: Render
+Engine: Exit
+SceneSystem: Exit
+PlatformSystem: Exit

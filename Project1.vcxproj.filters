@@ -59,6 +59,21 @@
     <ClCompile Include="Source\StubScene.c">
       <Filter>Game\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Level1Scene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Level2Scene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stream.c">
+      <Filter>Engine\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Vector2D.c">
+      <Filter>Engine\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SandboxScene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Stub.h">
@@ -95,6 +110,21 @@
       <Filter>Engine\Systems\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\StubScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level1Scene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Level2Scene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stream.h">
+      <Filter>Engine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vector2D.h">
+      <Filter>Engine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SandboxScene.h">
       <Filter>Game\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
