@@ -61,11 +61,13 @@ Mesh* MeshCreate()
 {
 	Mesh* newMesh = (Mesh*) calloc(1, sizeof(Mesh));
 
-	if (newMesh != NULL) {
-		return newMesh;
+	if (newMesh == NULL) {
+		TraceMessage("Graphics: MeshCreate() FAILED.");
+		return NULL;
 	}
 
-	return NULL;
+	TraceMessage("Graphics: MeshCreate() SUCCESS.");
+	return newMesh;
 }
 
 // Build a quadrilateral mesh and store it in the specified Mesh object.
