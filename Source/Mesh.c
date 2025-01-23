@@ -11,6 +11,8 @@
 
 #include "stdafx.h"
 #include "Mesh.h"
+#include "DGL.h" // DGL_Mesh, DGL_DrawMode
+#include "Trace.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -19,6 +21,18 @@
 //------------------------------------------------------------------------------
 // Private Structures:
 //------------------------------------------------------------------------------
+
+typedef struct Mesh
+{
+	// The name of the Mesh.  This will be used later in the semester.
+	char name[32];
+
+	// Pointer to the DGL_Mesh resource.
+	const DGL_Mesh* meshResource;
+
+	// The draw mode to use when rendering the mesh (Usually "DGL_DM_TRIANGLELIST").
+	DGL_DrawMode drawMode;
+} Mesh;
 
 //------------------------------------------------------------------------------
 // Public Variables:
@@ -35,14 +49,22 @@
 //------------------------------------------------------------------------------
 // Public Functions:
 //------------------------------------------------------------------------------
+
 // Dynamically allocate a new Mesh object but leave it empty.
 // (Hint: Use calloc() to ensure that all member variables are initialized to 0.)
+// https://www.geeksforgeeks.org/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/
 // Returns:
 //	 If the mesh was created successfully,
 //	   then return a pointer to the created Mesh,
 //	   else return NULL.
 Mesh* MeshCreate()
 {
+	Mesh* newMesh = (Mesh*) calloc(1, sizeof(Mesh));
+
+	if (newMesh != NULL) {
+		return newMesh;
+	}
+
 	return NULL;
 }
 
