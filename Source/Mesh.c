@@ -124,7 +124,14 @@ void MeshRender(const Mesh* mesh)
 //   mesh = Pointer to the Mesh pointer.
 void MeshFree(Mesh** mesh)
 {
-	UNREFERENCED_PARAMETER(mesh);
+	// Must dereference the (pointer to the pointer) before you can access the (pointer).
+	DGL_Graphics_FreeMesh(&(*mesh)->meshResource);
+
+	if (*mesh != NULL) {
+		free(*mesh);
+	}
+	
+	*mesh = NULL;
 }
 
 //------------------------------------------------------------------------------

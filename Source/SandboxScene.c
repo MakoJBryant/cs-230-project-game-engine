@@ -180,10 +180,10 @@ static void SandboxSceneUpdate(float dt)
 
 
 		///* My tests:
-		MeshCreate();
+		Mesh* newMesh = MeshCreate();
+		
 
-
-
+		MeshFree(&newMesh);
 		//*/
 
 		StreamClose(&file);
