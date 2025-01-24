@@ -178,10 +178,10 @@ static void SandboxSceneUpdate(float dt)
 		
 		SandboxSceneTraceFloat("Vector2DToAngleRad", Vector2DToAngleRad(&v));
 
-
 		///* My tests:
 		Mesh* newMesh = MeshCreate();
-		
+
+		MeshBuildQuad(newMesh, 10.0f, 10.0f, 1.0f, 1.0f, "newMesh");
 
 		MeshFree(&newMesh);
 		//*/

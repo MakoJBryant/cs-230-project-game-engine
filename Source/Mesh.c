@@ -12,7 +12,8 @@
 #include "stdafx.h"
 #include "Mesh.h"
 #include "DGL.h" // DGL_Mesh, DGL_DrawMode
-#include "Trace.h"
+#include "Trace.h" // TraceMessage()
+#include <Assert.h> // assert()
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -62,7 +63,7 @@ Mesh* MeshCreate()
 	Mesh* newMesh = (Mesh*) calloc(1, sizeof(Mesh));
 
 	if (newMesh == NULL) {
-		TraceMessage("Graphics: MeshCreate() FAILED.");
+		TraceMessage("Graphics: MeshCreate() FAILED, newMesh is NULL.");
 		return NULL;
 	}
 
@@ -84,12 +85,27 @@ Mesh* MeshCreate()
 //	 name = A name for the mesh.
 void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, float vSize, const char* name)
 {
-	UNREFERENCED_PARAMETER(mesh);
-	UNREFERENCED_PARAMETER(name);
-	UNREFERENCED_PARAMETER(uSize);
-	UNREFERENCED_PARAMETER(vSize);
-	UNREFERENCED_PARAMETER(xHalfSize);
-	UNREFERENCED_PARAMETER(yHalfSize);
+	// Settings.
+	mesh->drawMode = DGL_DM_TRIANGLELIST;
+	strcpy_s(mesh->name, _countof(mesh->name), name);
+
+	// Informing the library that we're about to start adding triangles.
+	DGL_Graphics_StartMesh();
+
+	// Each Vector: Position, Color, UV.
+	DGL_Graphics_AddTriangle(
+		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &(DGL_Color){ 1.0f, 0.0f, 0.0f, 1.0f }, &(DGL_Vec2){  0.0f, vSize }, // red
+		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &(DGL_Color){ 0.0f, 1.0f, 0.0f, 1.0f }, &(DGL_Vec2){ uSize,  0.0f }, // green
+		&(DGL_Vec2){  xHalfSize, -yHalfSize }, &(DGL_Color){ 0.0f, 0.0f, 1.0f, 1.0f }, &(DGL_Vec2){ uSize, vSize }); // blue
+	DGL_Graphics_AddTriangle(
+		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &(DGL_Color){ 1.0f, 0.0f, 0.0f, 1.0f }, &(DGL_Vec2){  0.0f, vSize }, // red
+		&(DGL_Vec2){ -xHalfSize,  yHalfSize }, &(DGL_Color){ 0.0f, 1.0f, 0.0f, 1.0f }, &(DGL_Vec2){  0.0f,  0.0f }, // green
+		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &(DGL_Color){ 0.0f, 0.0f, 1.0f, 1.0f }, &(DGL_Vec2){ uSize,  0.0f }); // blue
+
+	// Save the mesh (list of triangles).
+	mesh->meshResource = DGL_Graphics_EndMesh();
+	assert(mesh && "Graphics: Failed to create mesh!");
+
 }
 
 // Build a "spaceship" mesh and store it in the specified Mesh object.
