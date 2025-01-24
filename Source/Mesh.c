@@ -66,7 +66,6 @@ Mesh* MeshCreate()
 		return NULL;
 	}
 
-	TraceMessage("Graphics: MeshCreate() SUCCESS.");
 	return newMesh;
 }
 
@@ -124,14 +123,14 @@ void MeshRender(const Mesh* mesh)
 //   mesh = Pointer to the Mesh pointer.
 void MeshFree(Mesh** mesh)
 {
-	// Must dereference the (pointer to the pointer) before you can access the (pointer).
-	DGL_Graphics_FreeMesh(&(*mesh)->meshResource);
-
 	if (*mesh != NULL) {
+
+		// Must dereference the (pointer to the pointer) before you can access the (pointer).
+		DGL_Graphics_FreeMesh(&(*mesh)->meshResource);
+
 		free(*mesh);
+		*mesh = NULL;
 	}
-	
-	*mesh = NULL;
 }
 
 //------------------------------------------------------------------------------
