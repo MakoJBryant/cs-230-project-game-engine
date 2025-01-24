@@ -10,7 +10,10 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include "DGL.h" // Vector2D
+
 #include "Transform.h"
+#include "Trace.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -19,6 +22,20 @@
 //------------------------------------------------------------------------------
 // Private Structures:
 //------------------------------------------------------------------------------
+
+typedef struct Transform
+{
+	// The translation (or world position) of an entity.
+	Vector2D	translation;
+
+	// The rotation (or orientation) of an entity (in radians).
+	float	rotation;
+
+	// The scale (or size) of an entity.
+	// (Hint: This should be initialized to (1, 1).)
+	Vector2D	scale;
+
+} Transform;
 
 //------------------------------------------------------------------------------
 // Public Variables:
@@ -35,6 +52,7 @@
 //------------------------------------------------------------------------------
 // Public Functions:
 //------------------------------------------------------------------------------
+
 // Dynamically allocate a new Transform component.
 // (Hint: Use calloc() to ensure that all member variables are initialized to 0.)
 // (Hint: You must initialize the scale values to non-zero values.)
@@ -44,7 +62,18 @@
 //	   else return NULL.
 Transform* TransformCreate(void)
 {
-	return NULL;
+	// malloc writes garbage for init, calloc writes 0's for init.
+	Transform* newTransform = (Transform*)calloc(1, sizeof(Transform));
+
+	if (newTransform == NULL) {
+		TraceMessage("Transform: TransformCreate() memory allocation FAILED.");
+		return NULL;
+	}
+
+	newTransform->scale.x = 1;
+	newTransform->scale.y = 1;
+
+	return newTransform;
 }
 
 // Free the memory associated with a Transform component.

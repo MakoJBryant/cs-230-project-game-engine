@@ -126,9 +126,9 @@ static void Level1SceneUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	instance.numLives -= 1;
+	//instance.numLives -= 1;
 	if (instance.numLives <= 0) {
-		//SceneSystemSetNext(Level2SceneGetInstance());
+		SceneSystemSetNext(Level2SceneGetInstance());
 	}
 }
 
