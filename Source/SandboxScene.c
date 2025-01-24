@@ -18,9 +18,6 @@
 #include "Stream.h"
 #include "Trace.h"
 
-// Includes for Tests, delete later.
-#include "Mesh.h"
-
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
@@ -177,14 +174,6 @@ static void SandboxSceneUpdate(float dt)
 		SandboxSceneTraceVector("Vector2DFromAngleRad", &v);
 		
 		SandboxSceneTraceFloat("Vector2DToAngleRad", Vector2DToAngleRad(&v));
-
-		///* My tests:
-		Mesh* newMesh = MeshCreate();
-
-		MeshBuildQuad(newMesh, 10.0f, 10.0f, 1.0f, 1.0f, "newMesh");
-
-		MeshFree(&newMesh);
-		//*/
 
 		StreamClose(&file);
 

@@ -10,8 +10,9 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include "DGL.h"
+
 #include "Mesh.h"
-#include "DGL.h" // DGL_Mesh, DGL_DrawMode
 #include "Trace.h" // TraceMessage()
 #include <Assert.h> // assert()
 
@@ -60,14 +61,14 @@ typedef struct Mesh
 //	   else return NULL.
 Mesh* MeshCreate()
 {
-	Mesh* newMesh = (Mesh*) calloc(1, sizeof(Mesh));
+	Mesh* mesh = (Mesh*) calloc(1, sizeof(Mesh));
 
-	if (newMesh == NULL) {
+	if (mesh == NULL) {
 		TraceMessage("Graphics: MeshCreate() FAILED, newMesh is NULL.");
 		return NULL;
 	}
 
-	return newMesh;
+	return mesh;
 }
 
 // Build a quadrilateral mesh and store it in the specified Mesh object.
@@ -85,22 +86,40 @@ Mesh* MeshCreate()
 //	 name = A name for the mesh.
 void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, float vSize, const char* name)
 {
+
+	if (mesh == NULL) {
+		TraceMessage("Graphics: MeshBuildQuad() FAILED, mesh is NULL.");
+		return;
+	}
+
 	// Settings.
 	mesh->drawMode = DGL_DM_TRIANGLELIST;
 	strcpy_s(mesh->name, _countof(mesh->name), name);
+	/*DEMO*/ DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
+	/*DEMO*/ DGL_Graphics_SetTexture(NULL);
+	/*DEMO*/ DGL_Graphics_SetCB_Alpha(1.0f);
+	/*DEMO*/ DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	/*DEMO*/ static const DGL_Vec2 posColored = { -200.f, 200.f };
+	/*DEMO*/ static const DGL_Vec2 scaleColored = { 100.f, 100.f };
+	/*DEMO*/ DGL_Graphics_SetCB_TransformData(&posColored, &scaleColored, 0.f);
+
+	// Set the color of the created mesh.
+	static const DGL_Color DGL_Color_Red = { 1.0f, 0.0f, 0.0f, 1.0f };
+	static const DGL_Color DGL_Color_Green = { 0.0f, 1.0f, 0.0f, 1.0f };
+	static const DGL_Color DGL_Color_Blue = { 0.0f, 0.0f, 1.0f, 1.0f };
 
 	// Informing the library that we're about to start adding triangles.
 	DGL_Graphics_StartMesh();
 
 	// Each Vector: Position, Color, UV.
 	DGL_Graphics_AddTriangle(
-		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &(DGL_Color){ 1.0f, 0.0f, 0.0f, 1.0f }, &(DGL_Vec2){  0.0f, vSize }, // red
-		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &(DGL_Color){ 0.0f, 1.0f, 0.0f, 1.0f }, &(DGL_Vec2){ uSize,  0.0f }, // green
-		&(DGL_Vec2){  xHalfSize, -yHalfSize }, &(DGL_Color){ 0.0f, 0.0f, 1.0f, 1.0f }, &(DGL_Vec2){ uSize, vSize }); // blue
+		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){  0.0f, vSize },
+		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){ uSize,  0.0f },
+		&(DGL_Vec2){  xHalfSize, -yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){ uSize, vSize });
 	DGL_Graphics_AddTriangle(
-		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &(DGL_Color){ 1.0f, 0.0f, 0.0f, 1.0f }, &(DGL_Vec2){  0.0f, vSize }, // red
-		&(DGL_Vec2){ -xHalfSize,  yHalfSize }, &(DGL_Color){ 0.0f, 1.0f, 0.0f, 1.0f }, &(DGL_Vec2){  0.0f,  0.0f }, // green
-		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &(DGL_Color){ 0.0f, 0.0f, 1.0f, 1.0f }, &(DGL_Vec2){ uSize,  0.0f }); // blue
+		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){  0.0f, vSize },
+		&(DGL_Vec2){ -xHalfSize,  yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){  0.0f,  0.0f },
+		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){ uSize,  0.0f });
 
 	// Save the mesh (list of triangles).
 	mesh->meshResource = DGL_Graphics_EndMesh();
@@ -128,7 +147,12 @@ void MeshBuildSpaceship(Mesh* mesh)
 //   mesh = Pointer to a Mesh to be rendered.
 void MeshRender(const Mesh* mesh)
 {
-	UNREFERENCED_PARAMETER(mesh);
+	if (mesh == NULL) {
+		TraceMessage("Graphics: MeshRender() FAILED.");
+		return;
+	}
+
+	DGL_Graphics_DrawMesh(mesh->meshResource, mesh->drawMode);
 }
 
 // Free the memory associated with a mesh.
@@ -139,14 +163,16 @@ void MeshRender(const Mesh* mesh)
 //   mesh = Pointer to the Mesh pointer.
 void MeshFree(Mesh** mesh)
 {
-	if (*mesh != NULL) {
-
-		// Must dereference the (pointer to the pointer) before you can access the (pointer).
-		DGL_Graphics_FreeMesh(&(*mesh)->meshResource);
-
-		free(*mesh);
-		*mesh = NULL;
+	if (mesh == NULL) {
+		TraceMessage("Graphics: MeshFree() FAILED.");
+		return;
 	}
+
+	// Must dereference the (pointer to the pointer) before you can access the (pointer).
+	DGL_Graphics_FreeMesh(&(*mesh)->meshResource);
+
+	free(*mesh);
+	*mesh = NULL;
 }
 
 //------------------------------------------------------------------------------

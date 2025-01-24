@@ -10,13 +10,16 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include "DGL.h"
 
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
-#include "Stream.h"
-#include "Trace.h"
+
+#include "Stream.h" // Read numLives from file.
+#include "Trace.h" // TraceMessage.
+#include "Mesh.h" // For testing mesh functions.
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -33,6 +36,7 @@ typedef struct Level1Scene
 
 	// Add any scene-specific variables second.
 	int numLives;
+	Mesh* newMesh;
 
 } Level1Scene;
 
@@ -66,6 +70,7 @@ static Level1Scene instance =
 
 	// Initialize any scene-specific variables:
 	0 // numLives
+	,NULL // newMesh
 };
 
 //------------------------------------------------------------------------------
@@ -91,20 +96,26 @@ static void Level1SceneLoad(void)
 	const char* filePath = "Data/Level1_Lives.txt";
 	Stream fileStream = StreamOpen(filePath);
 
-	if (fileStream != NULL) {
-		// Read initial value for numLives into variable.
-		instance.numLives = StreamReadInt(fileStream);
-		StreamClose(&fileStream);
-	} 
-	else {
-		// If NULL, send an error message.
+	if (fileStream == NULL) {
 		TraceMessage("Error: fileStream for %s is NULL", filePath);
 	}
+
+	// Read initial value for numLives into variable.
+	instance.numLives = StreamReadInt(fileStream);
+	StreamClose(&fileStream);
+
+	// Create Test Mesh.
+	instance.newMesh = MeshCreate();
+	MeshBuildQuad(instance.newMesh, 1.0f, 1.0f, 1.0f, 1.0f, "newMesh");
 }
 
 // Initialize the entities and variables used by the scene.
 static void Level1SceneInit()
 {
+
+	// TODO: Set the background color and blend mode.
+	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 }
 
 // Update the the variables used by the scene.
@@ -117,13 +128,16 @@ static void Level1SceneUpdate(float dt)
 
 	instance.numLives -= 1;
 	if (instance.numLives <= 0) {
-		SceneSystemSetNext(Level2SceneGetInstance());
+		//SceneSystemSetNext(Level2SceneGetInstance());
 	}
 }
 
 // Render any objects associated with the scene.
 void Level1SceneRender(void)
 {
+	// Render Mesh Tests.
+	MeshRender(instance.newMesh);
+
 }
 
 // Free any objects associated with the scene.
@@ -134,5 +148,6 @@ static void Level1SceneExit()
 // Unload any resources used by the scene.
 static void Level1SceneUnload(void)
 {
+	MeshFree(&instance.newMesh);
 }
 
