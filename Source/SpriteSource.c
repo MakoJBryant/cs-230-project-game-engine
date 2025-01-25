@@ -12,6 +12,9 @@
 #include "stdafx.h"
 #include "SpriteSource.h"
 
+#include "DGL.h"
+#include "Trace.h"
+
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
@@ -19,6 +22,18 @@
 //------------------------------------------------------------------------------
 // Private Structures:
 //------------------------------------------------------------------------------
+
+typedef struct SpriteSource
+{
+	// The dimensions of the sprite sheet.
+	// (Hint: These should be initialized to (1, 1).)
+	int	numRows;
+	int	numCols;
+
+	// Pointer to a texture resource created using the DigiPen Graphics Library (DGL).
+	const DGL_Texture* texture;
+
+} SpriteSource;
 
 //------------------------------------------------------------------------------
 // Public Variables:
@@ -45,7 +60,17 @@
 //	   else return NULL.
 SpriteSource* SpriteSourceCreate()
 {
-	return NULL;
+	SpriteSource* newSpriteSource = (SpriteSource*)calloc(1, sizeof(SpriteSource));
+
+	if (newSpriteSource == NULL) {
+		TraceMessage("Graphics: SpriteSourceCreate() memory allocation FAILED.");
+		return NULL;
+	}
+
+	newSpriteSource->numRows = 1;
+	newSpriteSource->numCols = 1;
+
+	return newSpriteSource;
 }
 
 // Free the memory associated with a SpriteSource object.
@@ -56,7 +81,16 @@ SpriteSource* SpriteSourceCreate()
 //	 spriteSource = Pointer to the SpriteSource pointer.
 void SpriteSourceFree(SpriteSource** spriteSource)
 {
-	UNREFERENCED_PARAMETER(spriteSource);
+	if (spriteSource == NULL) {
+		TraceMessage("Graphics: SpriteSourceFree() FAILED.");
+		return;
+	}
+
+	// Must dereference the (pointer to the pointer) before you can access the (pointer).
+	DGL_Graphics_FreeTexture(&(*spriteSource)->texture);
+
+	free(*spriteSource);
+	*spriteSource = NULL;
 }
 
 // Load a texture from a file (may be an Col x Row sprite sheet).
@@ -69,10 +103,28 @@ void SpriteSourceFree(SpriteSource** spriteSource)
 //	 textureName = The name of the texture to be loaded.
 void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRows, const char* textureName)
 {
-	UNREFERENCED_PARAMETER(numCols);
-	UNREFERENCED_PARAMETER(numRows);
-	UNREFERENCED_PARAMETER(spriteSource);
-	UNREFERENCED_PARAMETER(textureName);
+	// Validate arguments passed.
+	if (spriteSource == NULL || textureName == NULL) {
+		TraceMessage("Graphics: SpriteSourceLoadTexture arguments invalid.");
+		return;
+	}
+
+	// Create file path from textureName.
+	char fullFilePath[256];
+	strcpy_s(fullFilePath, _countof(fullFilePath), "Assets/");
+	strcat_s(fullFilePath, _countof(fullFilePath), textureName);
+	TraceMessage("Graphics: Created %s texture file path", fullFilePath);
+
+	// Load texture from file path.
+	spriteSource->texture = DGL_Graphics_LoadTexture(fullFilePath);
+	if (spriteSource->texture == NULL) {
+		TraceMessage("Graphics: SpriteSourceLoadTexture failed to load texture.");
+		return;
+	}
+
+	// Assign spritesheet/texture a number of rows and columns.
+	spriteSource->numRows = numRows;
+	spriteSource->numCols = numCols;
 }
 
 // Returns the maximum number of frames possible, given the dimensions of the sprite sheet.

@@ -128,7 +128,7 @@ void SpriteRender(const Sprite* sprite, Transform* transform)
 	// Set transparency (range 0.0f – 1.0f)
 	DGL_Graphics_SetCB_Alpha(sprite->alpha);
 	// Set blend color (RGBA, A = “strength” of blend)
-	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0, 0.0f });
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 1.0f, 0.0f, 0.0, 0.0f }); // RED
 	
 	// Render the mesh (list of triangles)
 	MeshRender(sprite->mesh);
