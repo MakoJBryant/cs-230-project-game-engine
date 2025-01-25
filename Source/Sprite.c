@@ -20,6 +20,22 @@
 // Private Structures:
 //------------------------------------------------------------------------------
 
+typedef struct Sprite
+{
+	// The frame currently being displayed (for sprite sheets).
+	unsigned int frameIndex;
+
+	// The alpha transparency to use when drawing the sprite.
+	float alpha;
+
+	// The sprite source used when drawing (NULL = simple colored mesh).
+	const SpriteSource* spriteSource;
+
+	// The mesh used to draw the sprite.
+	const Mesh* mesh;
+
+} Sprite;
+
 //------------------------------------------------------------------------------
 // Public Variables:
 //------------------------------------------------------------------------------
@@ -45,7 +61,16 @@
 //	   else return NULL.
 Sprite* SpriteCreate(void)
 {
-	return NULL;
+	Sprite* newSprite = (Transform*)calloc(1, sizeof(Sprite));
+
+	if (newSprite == NULL) {
+		TraceMessage("Graphics: SpriteCreate() memory allocation FAILED.");
+		return NULL;
+	}
+
+	newSprite->alpha = 1.0f;
+
+	return newSprite;
 }
 
 // Free the memory associated with a Sprite component.

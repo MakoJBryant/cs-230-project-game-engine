@@ -111,7 +111,6 @@ const Vector2D* TransformGetTranslation(const Transform* transform)
 	if (transform == NULL) {
 		return NULL;
 	}
-
 	return &transform->translation;
 }
 
@@ -127,7 +126,6 @@ float TransformGetRotation(const Transform* transform)
 	if (transform == NULL) {
 		return 0.0f;
 	}
-
 	return transform->rotation;
 }
 
