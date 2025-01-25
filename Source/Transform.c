@@ -108,8 +108,11 @@ void TransformRead(Transform* transform, Stream stream)
 //		else return a NULL pointer.
 const Vector2D* TransformGetTranslation(const Transform* transform)
 {
-	UNREFERENCED_PARAMETER(transform);
-	return NULL;
+	if (transform == NULL) {
+		return NULL;
+	}
+
+	return &transform->translation;
 }
 
 // Get the rotation value of a Transform component.
@@ -121,8 +124,11 @@ const Vector2D* TransformGetTranslation(const Transform* transform)
 //		else return 0.0f.
 float TransformGetRotation(const Transform* transform)
 {
-	UNREFERENCED_PARAMETER(transform);
-	return 0.0f;
+	if (transform == NULL) {
+		return 0.0f;
+	}
+
+	return transform->rotation;
 }
 
 // Get the scale of a Transform component.
@@ -134,8 +140,11 @@ float TransformGetRotation(const Transform* transform)
 //		else return a NULL pointer.
 const Vector2D* TransformGetScale(const Transform* transform)
 {
-	UNREFERENCED_PARAMETER(transform);
-	return NULL;
+	if (transform == NULL) {
+		return NULL;
+	}
+
+	return &transform->scale;
 }
 
 // Set the translation of a Transform component.
