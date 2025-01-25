@@ -21,6 +21,7 @@
 #include "Trace.h" // TraceMessage.
 #include "Mesh.h" // For testing mesh functions.
 #include "Transform.h"
+#include "Sprite.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -109,7 +110,6 @@ static void Level1SceneLoad(void)
 	instance.newMesh = MeshCreate();
 	MeshBuildQuad(instance.newMesh, 1.0f, 1.0f, 1.0f, 1.0f, "newMesh");
 
-	TransformCreate();
 
 }
 

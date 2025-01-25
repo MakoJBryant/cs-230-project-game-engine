@@ -11,9 +11,12 @@
 
 #include "stdafx.h"
 #include "Sprite.h"
+#include "DGL.h"
 
 #include "Trace.h"
 #include "Mesh.h"
+#include "SpriteSource.h"
+#include "Transform.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -107,6 +110,27 @@ void SpriteRender(const Sprite* sprite, Transform* transform)
 	if (sprite == NULL || transform == NULL) {
 		return;
 	}
+
+	if (sprite->spriteSource != NULL) {
+		// Prepare to render a textured sprite
+		DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
+		// Set texture and texture offsets
+		SpriteSourceSetTexture(sprite->spriteSource);
+		SpriteSourceSetTextureOffset(sprite->spriteSource, sprite->frameIndex);
+	} 
+	else {
+		// Prepare to render an untextured sprite
+		DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
+	}
+
+	// Set position, scale, and rotation for the sprite
+	DGL_Graphics_SetCB_TransformData(TransformGetTranslation(transform), TransformGetScale(transform), TransformGetRotation(transform));
+	// Set transparency (range 0.0f – 1.0f)
+	DGL_Graphics_SetCB_Alpha(sprite->alpha);
+	// Set blend color (RGBA, A = “strength” of blend)
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0, 0.0f });
+	
+	// Render the mesh (list of triangles)
 	MeshRender(sprite->mesh);
 }
 
