@@ -79,7 +79,8 @@ Sprite* SpriteCreate(void)
 //	 sprite = Pointer to the Sprite pointer.
 void SpriteFree(Sprite** sprite)
 {
-	UNREFERENCED_PARAMETER(sprite);
+	free(*sprite);
+	*sprite = NULL;
 }
 
 // Read the properties of a Sprite component from a file.
