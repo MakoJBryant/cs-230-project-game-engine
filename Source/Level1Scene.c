@@ -20,6 +20,7 @@
 #include "Stream.h" // Read numLives from file.
 #include "Trace.h" // TraceMessage.
 #include "Mesh.h" // For testing mesh functions.
+#include "Transform.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -107,6 +108,9 @@ static void Level1SceneLoad(void)
 	// Create Test Mesh.
 	instance.newMesh = MeshCreate();
 	MeshBuildQuad(instance.newMesh, 1.0f, 1.0f, 1.0f, 1.0f, "newMesh");
+
+	TransformCreate();
+
 }
 
 // Initialize the entities and variables used by the scene.

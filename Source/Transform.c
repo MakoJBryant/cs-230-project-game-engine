@@ -82,7 +82,8 @@ Transform* TransformCreate(void)
 //	 transform = Pointer to the Transform pointer.
 void TransformFree(Transform** transform)
 {
-	UNREFERENCED_PARAMETER(transform);
+	free(*transform);
+	*transform = NULL;
 }
 
 // Read the properties of a Transform component from a file.
