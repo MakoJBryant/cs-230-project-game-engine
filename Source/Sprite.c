@@ -12,6 +12,9 @@
 #include "stdafx.h"
 #include "Sprite.h"
 
+#include "Trace.h"
+#include "Mesh.h"
+
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
@@ -61,7 +64,7 @@ typedef struct Sprite
 //	   else return NULL.
 Sprite* SpriteCreate(void)
 {
-	Sprite* newSprite = (Transform*)calloc(1, sizeof(Sprite));
+	Sprite* newSprite = (Sprite*)calloc(1, sizeof(Sprite));
 
 	if (newSprite == NULL) {
 		TraceMessage("Graphics: SpriteCreate() memory allocation FAILED.");
@@ -101,8 +104,10 @@ void SpriteRead(Sprite* sprite, Stream stream)
 //   transform = Pointer to the Transform component.
 void SpriteRender(const Sprite* sprite, Transform* transform)
 {
-	UNREFERENCED_PARAMETER(sprite);
-	UNREFERENCED_PARAMETER(transform);
+	if (sprite == NULL || transform == NULL) {
+		return;
+	}
+	MeshRender(sprite->mesh);
 }
 
 // Get a Sprite's alpha value.
@@ -155,7 +160,7 @@ void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 void SpriteSetMesh(Sprite* sprite, const Mesh* mesh)
 {
 	if (sprite == NULL || mesh == NULL) {
-		return NULL;
+		return;
 	}
 	sprite->mesh = mesh;
 }
