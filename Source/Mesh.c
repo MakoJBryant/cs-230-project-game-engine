@@ -105,8 +105,6 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 
 	// Set the color of the created mesh.
 	static const DGL_Color DGL_Color_Red = { 1.0f, 0.0f, 0.0f, 1.0f };
-	static const DGL_Color DGL_Color_Green = { 0.0f, 1.0f, 0.0f, 1.0f };
-	static const DGL_Color DGL_Color_Blue = { 0.0f, 0.0f, 1.0f, 1.0f };
 
 	// Informing the library that we're about to start adding triangles.
 	DGL_Graphics_StartMesh();
