@@ -153,8 +153,10 @@ const Vector2D* TransformGetScale(const Transform* transform)
 //	 translation = Pointer to the new translation.
 void TransformSetTranslation(Transform* transform, const Vector2D* translation)
 {
-	UNREFERENCED_PARAMETER(transform);
-	UNREFERENCED_PARAMETER(translation);
+	if (transform == NULL || translation == NULL) {
+		return;
+	}
+	transform->translation = *translation;
 }
 
 // Set the rotation of a Transform component.
@@ -163,8 +165,10 @@ void TransformSetTranslation(Transform* transform, const Vector2D* translation)
 //	 rotation = The rotation value (in radians).
 void TransformSetRotation(Transform* transform, float rotation)
 {
-	UNREFERENCED_PARAMETER(rotation);
-	UNREFERENCED_PARAMETER(transform);
+	if (transform == NULL) {
+		return;
+	}
+	transform->rotation = rotation;
 }
 
 // Set the scale of a Transform component.
@@ -173,8 +177,10 @@ void TransformSetRotation(Transform* transform, float rotation)
 //	 translation = Pointer to the new scale.
 void TransformSetScale(Transform* transform, const Vector2D* scale)
 {
-	UNREFERENCED_PARAMETER(scale);
-	UNREFERENCED_PARAMETER(transform);
+	if (transform == NULL || scale == NULL) {
+		return;
+	}
+	transform->scale = *scale;
 }
 
 //------------------------------------------------------------------------------
