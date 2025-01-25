@@ -154,8 +154,10 @@ void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 //   mesh = Pointer to a Mesh object.
 void SpriteSetMesh(Sprite* sprite, const Mesh* mesh)
 {
-	UNREFERENCED_PARAMETER(mesh);
-	UNREFERENCED_PARAMETER(sprite);
+	if (sprite == NULL || mesh == NULL) {
+		return NULL;
+	}
+	sprite->mesh = mesh;
 }
 
 // Set a new SpriteSource for the specified Sprite.
