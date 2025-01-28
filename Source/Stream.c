@@ -149,8 +149,8 @@ void StreamReadVector2D(Stream stream, Vector2D* vector) {
 	}
 
 	// (HINT: Use StreamReadFloat() to read the x and y values, in sequence.)
-	// vector->x = StreamReadFloat(stream); UNCOMMENT
-	// vector->y = StreamReadFloat(stream); UNCOMMENT
+	//vector->x = StreamReadFloat(stream); UNCOMMENT
+	//vector->y = StreamReadFloat(stream); UNCOMMENT
 
 }
 

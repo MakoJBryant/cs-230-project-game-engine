@@ -10,9 +10,9 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "DGL.h" // Vector2D
-
 #include "Transform.h"
+
+#include "DGL.h"
 #include "Trace.h"
 
 //------------------------------------------------------------------------------
@@ -65,11 +65,13 @@ Transform* TransformCreate(void)
 	// malloc writes garbage for init, calloc writes 0's for init.
 	Transform* newTransform = (Transform*)calloc(1, sizeof(Transform));
 
+	// Verify that arguments are valid.
 	if (newTransform == NULL) {
-		TraceMessage("Transform: TransformCreate() memory allocation FAILED.");
+		TraceMessage("TransformCreate(): failed to allocate memory.");
 		return NULL;
 	}
 
+	// Set default scale to (1, 1).
 	newTransform->scale.x = 1;
 	newTransform->scale.y = 1;
 
@@ -82,6 +84,13 @@ Transform* TransformCreate(void)
 //	 transform = Pointer to the Transform pointer.
 void TransformFree(Transform** transform)
 {
+	// Verify that arguments are valid.
+	if (transform == NULL || *transform == NULL) {
+		TraceMessage("TransformFree: arguments invalid.");
+		return;
+	}
+
+	// Free object and nullify dangling pointer.
 	free(*transform);
 	*transform = NULL;
 }
@@ -95,8 +104,16 @@ void TransformFree(Transform** transform)
 //	 stream = The data stream used for reading.
 void TransformRead(Transform* transform, Stream stream)
 {
-	UNREFERENCED_PARAMETER(stream);
-	UNREFERENCED_PARAMETER(transform);
+	// Verify that arguments are valid.
+	if (transform == NULL || stream == NULL) {
+		TraceMessage("TransformRead: invalid arguments.");
+		return;
+	}
+
+	// Assign translation, rotation, and scale to the transform.
+	//transform->translation = StreamReadVector2D(stream); UNCOMMENT
+	//transform->rotation = StreamReadFloat(stream); UNCOMMENT
+	//transform->scale = StreamReadVector2D(stream); UNCOMMENT
 }
 
 // Get the translation of a Transform component.
@@ -108,9 +125,12 @@ void TransformRead(Transform* transform, Stream stream)
 //		else return a NULL pointer.
 const Vector2D* TransformGetTranslation(const Transform* transform)
 {
+	// Verify that arguments are valid.
 	if (transform == NULL) {
+		TraceMessage("TransformGetTranslation: arguments invalid.");
 		return NULL;
 	}
+
 	return &transform->translation;
 }
 
@@ -123,9 +143,12 @@ const Vector2D* TransformGetTranslation(const Transform* transform)
 //		else return 0.0f.
 float TransformGetRotation(const Transform* transform)
 {
+	// Verify that arguments are valid.
 	if (transform == NULL) {
+		TraceMessage("TransformGetRotation: arguments invalid.");
 		return 0.0f;
 	}
+
 	return transform->rotation;
 }
 
@@ -138,7 +161,9 @@ float TransformGetRotation(const Transform* transform)
 //		else return a NULL pointer.
 const Vector2D* TransformGetScale(const Transform* transform)
 {
+	// Verify that arguments are valid.
 	if (transform == NULL) {
+		TraceMessage("TransformGetScale: arguments invalid.");
 		return NULL;
 	}
 
@@ -151,9 +176,12 @@ const Vector2D* TransformGetScale(const Transform* transform)
 //	 translation = Pointer to the new translation.
 void TransformSetTranslation(Transform* transform, const Vector2D* translation)
 {
+	// Verify that arguments are valid.
 	if (transform == NULL || translation == NULL) {
+		TraceMessage("TransformSetTranslation: arguments invalid.");
 		return;
 	}
+
 	transform->translation = *translation;
 }
 
@@ -163,9 +191,12 @@ void TransformSetTranslation(Transform* transform, const Vector2D* translation)
 //	 rotation = The rotation value (in radians).
 void TransformSetRotation(Transform* transform, float rotation)
 {
+	// Verify that arguments are valid.
 	if (transform == NULL) {
+		TraceMessage("TransformSetRotation: arguments invalid.");
 		return;
 	}
+
 	transform->rotation = rotation;
 }
 
@@ -175,9 +206,12 @@ void TransformSetRotation(Transform* transform, float rotation)
 //	 translation = Pointer to the new scale.
 void TransformSetScale(Transform* transform, const Vector2D* scale)
 {
+	// Verify that arguments are valid.
 	if (transform == NULL || scale == NULL) {
+		TraceMessage("TransformSetScale: arguments invalid.");
 		return;
 	}
+
 	transform->scale = *scale;
 }
 
