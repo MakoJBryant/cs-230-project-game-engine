@@ -161,7 +161,14 @@ void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex
 //	 spriteSource = Pointer to the SpriteSource object.
 void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 {
-	UNREFERENCED_PARAMETER(spriteSource);
+	// Validate arguments passed.
+	if (spriteSource == NULL || spriteSource->texture == NULL) {
+		TraceMessage("Graphics: Invalid SpriteSource or texture.");
+		return;
+	}
+
+	// Bind the texture to the graphics pipeline so that it can be used for rendering.
+	DGL_Graphics_SetTexture(spriteSource->texture);
 }
 
 // Sets the texture UV offsets for rendering.
@@ -169,8 +176,32 @@ void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 //	 spriteSource = Pointer to the SpriteSource object.
 void SpriteSourceSetTextureOffset(const SpriteSource* spriteSource, unsigned frameIndex)
 {
-	UNREFERENCED_PARAMETER(frameIndex);
-	UNREFERENCED_PARAMETER(spriteSource);
+	// Validate arguments passed.
+	if (spriteSource == NULL || spriteSource->texture == NULL) {
+		TraceMessage("Graphics: Invalid SpriteSource or texture.");
+		return;
+	}
+
+	// Validate frameIndex isn't bigger than the total number of frames.
+	unsigned totalFrames = spriteSource->numCols * spriteSource->numRows;
+	if (frameIndex >= totalFrames) {
+		TraceMessage("Graphics: Invalid frameIndex.");
+		return;
+	}
+
+	// Calculate the row and column of the offset frame.
+	unsigned row = frameIndex / spriteSource->numCols;
+	unsigned col = frameIndex % spriteSource->numCols;
+	
+	// Calculate the UV coordinates for this frame.
+	float uStart = (float)col / spriteSource->numCols;
+	float vStart = (float)row / spriteSource->numRows;
+
+	// Create a DGL_Vec2 structure for the texture offset.
+	DGL_Vec2 textureOffset = { uStart, vStart };
+
+	// Update the pipeline so that only the correct part of the sprite sheet is rendered.
+	DGL_Graphics_SetCB_TextureOffset(&textureOffset);
 }
 
 

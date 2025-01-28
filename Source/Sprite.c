@@ -112,13 +112,16 @@ void SpriteRender(const Sprite* sprite, Transform* transform)
 	}
 
 	if (sprite->spriteSource != NULL) {
+
 		// Prepare to render a textured sprite
 		DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
+
 		// Set texture and texture offsets
 		SpriteSourceSetTexture(sprite->spriteSource);
 		SpriteSourceSetTextureOffset(sprite->spriteSource, sprite->frameIndex);
 	} 
 	else {
+
 		// Prepare to render an untextured sprite
 		DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
 	}
