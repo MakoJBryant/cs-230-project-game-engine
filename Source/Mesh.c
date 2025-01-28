@@ -10,11 +10,11 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "DGL.h"
-
 #include "Mesh.h"
-#include "Trace.h" // TraceMessage()
-#include <Assert.h> // assert()
+
+#include "DGL.h"
+#include "Trace.h"
+#include <Assert.h>
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -61,10 +61,12 @@ typedef struct Mesh
 //	   else return NULL.
 Mesh* MeshCreate()
 {
+	// Allocate memory for new Mesh object.
 	Mesh* mesh = (Mesh*) calloc(1, sizeof(Mesh));
 
+	// Verify that memory allocation was successful.
 	if (mesh == NULL) {
-		TraceMessage("Graphics: MeshCreate() FAILED, newMesh is NULL.");
+		TraceMessage("MeshCreate: failed to allocate memory.");
 		return NULL;
 	}
 
@@ -86,15 +88,17 @@ Mesh* MeshCreate()
 //	 name = A name for the mesh.
 void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, float vSize, const char* name)
 {
-
-	if (mesh == NULL) {
-		TraceMessage("Graphics: MeshBuildQuad() FAILED, mesh is NULL.");
+	// Verify that arguments are valid.
+	if (mesh == NULL || name == NULL) {
+		TraceMessage("MeshBuildQuad: arguments invalid.");
 		return;
 	}
 
 	// Settings.
 	mesh->drawMode = DGL_DM_TRIANGLELIST;
 	strcpy_s(mesh->name, _countof(mesh->name), name);
+
+	/* REMOVE: demo code for setting shader and other temporary settings. */
 	/*DEMO*/ DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
 	/*DEMO*/ DGL_Graphics_SetTexture(NULL);
 	/*DEMO*/ DGL_Graphics_SetCB_Alpha(1.0f);
@@ -102,9 +106,7 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 	/*DEMO*/ static const DGL_Vec2 posColored = { -200.f, 200.f };
 	/*DEMO*/ static const DGL_Vec2 scaleColored = { 100.f, 100.f };
 	/*DEMO*/ DGL_Graphics_SetCB_TransformData(&posColored, &scaleColored, 0.f);
-
-	// Set the color of the created mesh.
-	static const DGL_Color DGL_Color_Red = { 1.0f, 0.0f, 0.0f, 1.0f };
+	static const DGL_Color DGL_Color_Red = { 1.0f, 0.0f, 0.0f, 1.0f }; // red
 
 	// Informing the library that we're about to start adding triangles.
 	DGL_Graphics_StartMesh();
@@ -121,7 +123,7 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 
 	// Save the mesh (list of triangles).
 	mesh->meshResource = DGL_Graphics_EndMesh();
-	assert(mesh && "Graphics: Failed to create mesh!");
+	assert(mesh && "MeshBuildQuad: failed to create mesh!");
 
 }
 
@@ -145,8 +147,9 @@ void MeshBuildSpaceship(Mesh* mesh)
 //   mesh = Pointer to a Mesh to be rendered.
 void MeshRender(const Mesh* mesh)
 {
+	// Verify that arguments are valid.
 	if (mesh == NULL) {
-		TraceMessage("Graphics: MeshRender() FAILED.");
+		TraceMessage("MeshRender: arguments invalid.");
 		return;
 	}
 
@@ -161,14 +164,16 @@ void MeshRender(const Mesh* mesh)
 //   mesh = Pointer to the Mesh pointer.
 void MeshFree(Mesh** mesh)
 {
-	if (mesh == NULL) {
-		TraceMessage("Graphics: MeshFree() FAILED.");
+	// Verify that arguments are valid.
+	if (mesh == NULL || *mesh == NULL) {
+		TraceMessage("MeshFree: arguments invalid.");
 		return;
 	}
 
 	// Must dereference the (pointer to the pointer) before you can access the (pointer).
 	DGL_Graphics_FreeMesh(&(*mesh)->meshResource);
 
+	// Free the mesh and nullify the dangling pointer.
 	free(*mesh);
 	*mesh = NULL;
 }
