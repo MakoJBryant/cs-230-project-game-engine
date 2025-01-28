@@ -11,12 +11,13 @@
 
 #include "stdafx.h"
 #include "Sprite.h"
-#include "DGL.h"
 
+#include "DGL.h"
 #include "Trace.h"
-#include "Mesh.h"
 #include "SpriteSource.h"
 #include "Transform.h"
+#include "Stream.h"
+#include "Mesh.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -67,15 +68,17 @@ typedef struct Sprite
 //	   else return NULL.
 Sprite* SpriteCreate(void)
 {
+	// Allocate memory for Sprite object.
 	Sprite* newSprite = (Sprite*)calloc(1, sizeof(Sprite));
 
+	// Verify memory allocation succeeded.
 	if (newSprite == NULL) {
-		TraceMessage("Graphics: SpriteCreate() memory allocation FAILED.");
+		TraceMessage("SpriteCreate: failed to allocate memory.");
 		return NULL;
 	}
 
+	// Set the default alpha value and return pointer to new Sprite.
 	newSprite->alpha = 1.0f;
-
 	return newSprite;
 }
 
@@ -85,6 +88,13 @@ Sprite* SpriteCreate(void)
 //	 sprite = Pointer to the Sprite pointer.
 void SpriteFree(Sprite** sprite)
 {
+	// Verify that arguments are valid (and pointer arguments).
+	if (sprite == NULL || *sprite == NULL) {
+		TraceMessage("SpriteFree: arguments invalid.");
+		return;
+	}
+
+	// Free the Sprite object and nullify dangling pointer.
 	free(*sprite);
 	*sprite = NULL;
 }
@@ -97,8 +107,15 @@ void SpriteFree(Sprite** sprite)
 //	 stream = The data stream used for reading.
 void SpriteRead(Sprite* sprite, Stream stream)
 {
-	UNREFERENCED_PARAMETER(sprite);
-	UNREFERENCED_PARAMETER(stream);
+	// Verify that arguments are valid.
+	if (sprite == NULL || stream == NULL) {
+		TraceMessage("SpriteRead: arguments invalid.");
+		return;
+	}
+
+	// Read frameIndex and transparency into sprite object.
+	sprite->frameIndex = StreamReadInt(stream);
+	sprite->alpha = StreamReadFloat(stream);
 }
 
 // Render a Sprite (Sprite can be textured or untextured).
@@ -107,33 +124,38 @@ void SpriteRead(Sprite* sprite, Stream stream)
 //   transform = Pointer to the Transform component.
 void SpriteRender(const Sprite* sprite, Transform* transform)
 {
+	// Verify that arguments are valid.
 	if (sprite == NULL || transform == NULL) {
+		TraceMessage("SpriteRender: arguments invalid.");
 		return;
 	}
 
-	if (sprite->spriteSource != NULL) {
+	if (sprite->spriteSource == NULL) {
+		// Prepare to render untextured sprite.
+		DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
 
-		// Prepare to render a textured sprite
+	}
+	if (sprite->spriteSource != NULL) {
+		// Prepare to render a textured sprite.
 		DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
 
-		// Set texture and texture offsets
+		// Assign the texture via SpriteSource.
 		SpriteSourceSetTexture(sprite->spriteSource);
 		SpriteSourceSetTextureOffset(sprite->spriteSource, sprite->frameIndex);
+
 	} 
-	else {
 
-		// Prepare to render an untextured sprite
-		DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
-	}
-
-	// Set position, scale, and rotation for the sprite
-	DGL_Graphics_SetCB_TransformData(TransformGetTranslation(transform), TransformGetScale(transform), TransformGetRotation(transform));
-	// Set transparency (range 0.0f – 1.0f)
-	DGL_Graphics_SetCB_Alpha(sprite->alpha);
-	// Set blend color (RGBA, A = “strength” of blend)
-	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 1.0f, 0.0f, 0.0, 0.0f }); // RED
+	// Express settings for the rendered sprite.
+	DGL_Graphics_SetCB_TransformData(
+		 TransformGetTranslation(transform)		// position
+		,TransformGetScale(transform)			// scale
+		,TransformGetRotation(transform)		// rotation
+	);
+	DGL_Graphics_SetCB_Alpha(sprite->alpha);	// transparency
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) 
+		{ 1.0f, 0.0f, 0.0, 0.0f });				// tint color (red)
 	
-	// Render the mesh (list of triangles)
+	// Render the mesh (list of triangles).
 	MeshRender(sprite->mesh);
 }
 
@@ -146,8 +168,13 @@ void SpriteRender(const Sprite* sprite, Transform* transform)
 //		else return 0.0f.
 float SpriteGetAlpha(const Sprite* sprite)
 {
-	UNREFERENCED_PARAMETER(sprite);
-	return 0.0f;
+	// Verify that arguements are valid.
+	if (sprite == NULL) {
+		TraceMessage("SpriteGetAlpha: arguments invalid.");
+		return 0.0f;
+	}
+
+	return sprite->alpha;
 }
 
 // Set a Sprite's alpha value.
@@ -159,8 +186,14 @@ float SpriteGetAlpha(const Sprite* sprite)
 //   alpha = The Sprite's new alpha value.
 void SpriteSetAlpha(Sprite* sprite, float alpha)
 {
-	UNREFERENCED_PARAMETER(alpha);
-	UNREFERENCED_PARAMETER(sprite);
+	// Verify that arguments are valid.
+	if (sprite == NULL) {
+		TraceMessage("SpriteSetAlpha: arguments invalid.");
+		return;
+	}
+
+	// Clamp the alpha value so that it stays in range.
+	sprite->alpha = min(1.0f, max(0.0f, alpha));
 }
 
 // Set a Sprite's current frame.
@@ -174,8 +207,22 @@ void SpriteSetAlpha(Sprite* sprite, float alpha)
 //     TraceMessage("SpriteSetFrame: frame index = %d", frameIndex);
 void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 {
-	UNREFERENCED_PARAMETER(frameIndex);
-	UNREFERENCED_PARAMETER(sprite);
+	// Verify that arguments are valid.
+	if (sprite == NULL) {
+		TraceMessage("SpriteSetFrame: arguments invalid.");
+		return;
+	}
+
+	// Verify frameIndex does not exceed total number of frames.
+	unsigned totalFrames = SpriteSourceGetFrameCount(sprite->spriteSource);
+	if (frameIndex >= totalFrames || frameIndex < 0) {
+		TraceMessage("SpriteSetFrame: invalid frame index = %d", frameIndex);
+		return;
+	}
+
+	// Assign the frameIndex to sprite and run a trace message.
+	sprite->frameIndex = frameIndex;
+	TraceMessage("SpriteSetFrame: frame index = %d", frameIndex);
 }
 
 // Set the Sprite's mesh.
@@ -186,9 +233,13 @@ void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 //   mesh = Pointer to a Mesh object.
 void SpriteSetMesh(Sprite* sprite, const Mesh* mesh)
 {
+	// Verify arguments are valid.
 	if (sprite == NULL || mesh == NULL) {
+		TraceMessage("SpriteSetMesh: arguments invalid.");
 		return;
 	}
+
+	// Assign the mesh to the sprite.
 	sprite->mesh = mesh;
 }
 
@@ -200,8 +251,14 @@ void SpriteSetMesh(Sprite* sprite, const Mesh* mesh)
 //	 spriteSource = Pointer to a SpriteSource (this pointer may be NULL).
 void SpriteSetSpriteSource(Sprite* sprite, const SpriteSource* spriteSource)
 {
-	UNREFERENCED_PARAMETER(sprite);
-	UNREFERENCED_PARAMETER(spriteSource);
+	// Verify arguments are valid.
+	if (sprite == NULL) {
+		TraceMessage("SpriteSetSpriteSource: arguments invalid.");
+		return;
+	}
+
+	// Assign spriteSource to sprite.
+	sprite->spriteSource = spriteSource;
 }
 
 //------------------------------------------------------------------------------

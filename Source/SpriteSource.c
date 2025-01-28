@@ -65,7 +65,7 @@ SpriteSource* SpriteSourceCreate()
 
 	// Validate memory allocated correctly.
 	if (newSpriteSource == NULL) {
-		TraceMessage("Graphics: SpriteSourceCreate failed to allocate memory.");
+		TraceMessage("SpriteSourceCreate: failed to allocate memory.");
 		return NULL;
 	}
 
@@ -84,9 +84,9 @@ SpriteSource* SpriteSourceCreate()
 //	 spriteSource = Pointer to the SpriteSource pointer.
 void SpriteSourceFree(SpriteSource** spriteSource)
 {
-	// Verify arguments are valid (and pointer arguments).
+	// Verify that arguments are valid (and pointer arguments).
 	if (spriteSource == NULL || *spriteSource == NULL) {
-		TraceMessage("Graphics: SpriteSourceFree arguments invalid.");
+		TraceMessage("SpriteSourceFree: arguments invalid.");
 		return;
 	}
 
@@ -109,9 +109,9 @@ void SpriteSourceFree(SpriteSource** spriteSource)
 //	 textureName = The name of the texture to be loaded.
 void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRows, const char* textureName)
 {
-	// Verify arguments are valid.
+	// Verify that arguments are valid.
 	if (spriteSource == NULL || textureName == NULL) {
-		TraceMessage("Graphics: SpriteSourceLoadTexture arguments invalid.");
+		TraceMessage("SpriteSourceLoadTexture: arguments invalid.");
 		return;
 	}
 
@@ -123,7 +123,7 @@ void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRow
 	// Load texture from file path.
 	spriteSource->texture = DGL_Graphics_LoadTexture(fullFilePath);
 	if (spriteSource->texture == NULL) {
-		TraceMessage("Graphics: SpriteSourceLoadTexture failed to load texture.");
+		TraceMessage("SpriteSourceLoadTexture: failed to load texture.");
 		return;
 	}
 
@@ -142,9 +142,9 @@ void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRow
 //		else return 0.
 unsigned SpriteSourceGetFrameCount(const SpriteSource* spriteSource)
 {
-	// Verify arguments are valid.
+	// Verify that arguments are valid.
 	if (spriteSource == NULL) {
-		TraceMessage("Graphics: SpriteSourceGetFrameCount arguments invalid.");
+		TraceMessage("SpriteSourceGetFrameCount: arguments invalid.");
 		return 0;
 	}
 	
@@ -163,15 +163,15 @@ unsigned SpriteSourceGetFrameCount(const SpriteSource* spriteSource)
 void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex, float* u, float* v)
 {
 
-	// Verify arguments are valid.
+	// Verify that arguments are valid.
 	if (spriteSource == NULL || u == NULL || v == NULL) {
-		TraceMessage("Graphics: SpriteSourceGetUV arguments invalid.");
+		TraceMessage("SpriteSourceGetUV: arguments invalid.");
 		return;
 	}
 
 	// Verify index trying to be accessed isn't bigger than the texture.
 	if (frameIndex >= SpriteSourceGetFrameCount(spriteSource)) {
-		TraceMessage("Graphics: SpriteSourceGetUV frameIndex invalid.");
+		TraceMessage("SpriteSourceGetUV: frameIndex invalid.");
 		return;
 	}
 
@@ -189,9 +189,9 @@ void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex
 //	 spriteSource = Pointer to the SpriteSource object.
 void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 {
-	// Verify arguments are valid.
+	// Verify that arguments are valid.
 	if (spriteSource == NULL || spriteSource->texture == NULL) {
-		TraceMessage("Graphics: SpriteSource arguments invalid.");
+		TraceMessage("SpriteSource: arguments invalid.");
 		return;
 	}
 
@@ -204,16 +204,16 @@ void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 //	 spriteSource = Pointer to the SpriteSource object.
 void SpriteSourceSetTextureOffset(const SpriteSource* spriteSource, unsigned frameIndex)
 {
-	// Verify arguments are valid.
+	// Verify that arguments are valid.
 	if (spriteSource == NULL || spriteSource->texture == NULL) {
-		TraceMessage("Graphics: SpriteSourceSetTextureOffset arguments invalid.");
+		TraceMessage("SpriteSourceSetTextureOffset: arguments invalid.");
 		return;
 	}
 
 	// Validate frameIndex isn't bigger than the total number of frames.
 	unsigned totalFrames = spriteSource->numCols * spriteSource->numRows;
 	if (frameIndex >= totalFrames) {
-		TraceMessage("Graphics: Invalid frameIndex.");
+		TraceMessage("SpriteSourceSetTextureOffset: Invalid frameIndex.");
 		return;
 	}
 
