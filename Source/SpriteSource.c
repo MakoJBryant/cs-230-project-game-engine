@@ -60,13 +60,16 @@ typedef struct SpriteSource
 //	   else return NULL.
 SpriteSource* SpriteSourceCreate()
 {
+	// Create memory for object.
 	SpriteSource* newSpriteSource = (SpriteSource*)calloc(1, sizeof(SpriteSource));
 
+	// Validate memory allocated correctly.
 	if (newSpriteSource == NULL) {
-		TraceMessage("Graphics: SpriteSourceCreate() memory allocation FAILED.");
+		TraceMessage("Graphics: SpriteSourceCreate failed to allocate memory.");
 		return NULL;
 	}
 
+	// Initialize default values.
 	newSpriteSource->numRows = 1;
 	newSpriteSource->numCols = 1;
 
@@ -81,14 +84,17 @@ SpriteSource* SpriteSourceCreate()
 //	 spriteSource = Pointer to the SpriteSource pointer.
 void SpriteSourceFree(SpriteSource** spriteSource)
 {
-	if (spriteSource == NULL) {
-		TraceMessage("Graphics: SpriteSourceFree() FAILED.");
+	// Verify arguments are valid (and pointer arguments).
+	if (spriteSource == NULL || *spriteSource == NULL) {
+		TraceMessage("Graphics: SpriteSourceFree arguments invalid.");
 		return;
 	}
 
 	// Must dereference the (pointer to the pointer) before you can access the (pointer).
+	// Free the texture resource.
 	DGL_Graphics_FreeTexture(&(*spriteSource)->texture);
 
+	// Free the object itself and nullify the dangling pointer.
 	free(*spriteSource);
 	*spriteSource = NULL;
 }
@@ -103,16 +109,15 @@ void SpriteSourceFree(SpriteSource** spriteSource)
 //	 textureName = The name of the texture to be loaded.
 void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRows, const char* textureName)
 {
-	// Validate arguments passed.
+	// Verify arguments are valid.
 	if (spriteSource == NULL || textureName == NULL) {
 		TraceMessage("Graphics: SpriteSourceLoadTexture arguments invalid.");
 		return;
 	}
 
-	// Create file path from textureName.
+	// Create file path from textureName string.
 	char fullFilePath[256];
-	strcpy_s(fullFilePath, _countof(fullFilePath), "Assets/");
-	strcat_s(fullFilePath, _countof(fullFilePath), textureName);
+	sprintf_s(fullFilePath, sizeof(fullFilePath), "Assets/%s", textureName);
 	TraceMessage("Graphics: Created %s texture file path", fullFilePath);
 
 	// Load texture from file path.
@@ -122,7 +127,7 @@ void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRow
 		return;
 	}
 
-	// Assign spritesheet/texture a number of rows and columns.
+	// Assign the texture (spritesheet) a number of rows and columns.
 	spriteSource->numRows = numRows;
 	spriteSource->numCols = numCols;
 }
@@ -137,8 +142,15 @@ void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRow
 //		else return 0.
 unsigned SpriteSourceGetFrameCount(const SpriteSource* spriteSource)
 {
-	UNREFERENCED_PARAMETER(spriteSource);
-	return 0;
+	// Verify arguments are valid.
+	if (spriteSource == NULL) {
+		TraceMessage("Graphics: SpriteSourceGetFrameCount arguments invalid.");
+		return 0;
+	}
+	
+	// Return the total frame count in the texture.
+	unsigned totalFrameCount = spriteSource->numCols * spriteSource->numRows;
+	return totalFrameCount;
 }
 
 // Returns the UV coordinates of the specified frame in a sprite sheet.
@@ -150,10 +162,26 @@ unsigned SpriteSourceGetFrameCount(const SpriteSource* spriteSource)
 //   v = Pointer to a float to contain the V coordinate. 
 void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex, float* u, float* v)
 {
-	UNREFERENCED_PARAMETER(frameIndex);
-	UNREFERENCED_PARAMETER(spriteSource);
-	UNREFERENCED_PARAMETER(u);
-	UNREFERENCED_PARAMETER(v);
+
+	// Verify arguments are valid.
+	if (spriteSource == NULL || u == NULL || v == NULL) {
+		TraceMessage("Graphics: SpriteSourceGetUV arguments invalid.");
+		return;
+	}
+
+	// Verify index trying to be accessed isn't bigger than the texture.
+	if (frameIndex >= SpriteSourceGetFrameCount(spriteSource)) {
+		TraceMessage("Graphics: SpriteSourceGetUV frameIndex invalid.");
+		return;
+	}
+
+	// Convert values to find the position in terms of rows and columns.
+	unsigned col = frameIndex % spriteSource->numCols;
+	unsigned row = frameIndex / spriteSource->numCols;
+
+	// Assign pointers to the UV coordinates of the specified frame.
+	*u = (float)col / spriteSource->numCols;
+	*v = (float)row / spriteSource->numRows;
 }
 
 // Sets a SpriteSource texture for rendering.
@@ -161,9 +189,9 @@ void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex
 //	 spriteSource = Pointer to the SpriteSource object.
 void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 {
-	// Validate arguments passed.
+	// Verify arguments are valid.
 	if (spriteSource == NULL || spriteSource->texture == NULL) {
-		TraceMessage("Graphics: Invalid SpriteSource or texture.");
+		TraceMessage("Graphics: SpriteSource arguments invalid.");
 		return;
 	}
 
@@ -176,9 +204,9 @@ void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 //	 spriteSource = Pointer to the SpriteSource object.
 void SpriteSourceSetTextureOffset(const SpriteSource* spriteSource, unsigned frameIndex)
 {
-	// Validate arguments passed.
+	// Verify arguments are valid.
 	if (spriteSource == NULL || spriteSource->texture == NULL) {
-		TraceMessage("Graphics: Invalid SpriteSource or texture.");
+		TraceMessage("Graphics: SpriteSourceSetTextureOffset arguments invalid.");
 		return;
 	}
 
@@ -189,18 +217,12 @@ void SpriteSourceSetTextureOffset(const SpriteSource* spriteSource, unsigned fra
 		return;
 	}
 
-	// Calculate the row and column of the offset frame.
-	unsigned row = frameIndex / spriteSource->numCols;
-	unsigned col = frameIndex % spriteSource->numCols;
-	
-	// Calculate the UV coordinates for this frame.
-	float uStart = (float)col / spriteSource->numCols;
-	float vStart = (float)row / spriteSource->numRows;
+	// Calculate UV coordinates to the specific frame.
+	float u, v;
+	SpriteSourceGetUV(spriteSource, frameIndex, &u, &v);
 
-	// Create a DGL_Vec2 structure for the texture offset.
-	DGL_Vec2 textureOffset = { uStart, vStart };
-
-	// Update the pipeline so that only the correct part of the sprite sheet is rendered.
+	// Set the texture offset and add it to the rendering pipeline.
+	DGL_Vec2 textureOffset = { u, v };
 	DGL_Graphics_SetCB_TextureOffset(&textureOffset);
 }
 
