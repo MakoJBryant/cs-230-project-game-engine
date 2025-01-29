@@ -12,6 +12,8 @@
 #include "stdafx.h"
 #include "Entity.h"
 
+#include "Trace.h"
+
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
@@ -19,6 +21,32 @@
 //------------------------------------------------------------------------------
 // Private Structures:
 //------------------------------------------------------------------------------
+
+typedef struct Entity
+{
+	// The name of the entity.
+	// A buffer is used to allow each entity to have a unique name.
+	// The buffer is hardcoded to an arbitrary length that will be sufficient
+	//	 for all CS230 assignments.  You may, instead, use dynamically-allocated
+	//	 arrays for this purpose but the additional complexity is unnecessary
+	//	 and it is your responsibility to ensure that the memory is successfully
+	//	 allocated and deallocated in all possible situations.
+	// [NOTE: When setting the name, use strcpy_s() to reduce the risk of
+	//	 buffer overruns. Additionally, do NOT hardcode the number "32" when
+	//	 calling this function!  Instead, use the _countof() macro to get the
+	//	 size of the "name" array.]
+	char name[32];
+
+	// Pointer to an attached physics component.
+	Physics* physics;
+
+	// Pointer to an attached sprite component.
+	Sprite* sprite;
+
+	// Pointer to an attached transform component.
+	Transform* transform;
+
+} Entity;
 
 //------------------------------------------------------------------------------
 // Public Variables:
@@ -44,7 +72,22 @@
 //	   else return NULL.
 Entity* EntityCreate(void)
 {
-	return NULL;
+	// Create memory for object.
+	Entity* newEntity = (Entity*)calloc(1, sizeof(Entity));
+
+	// Verify that memory was allocated successfully.
+	if (newEntity == NULL) {
+		TraceMessage("Error: EntityCreate failed to allocated memory.");
+		return NULL;
+	}
+
+	// Set default values.
+	strcpy_s(newEntity->name, _countof(newEntity->name), "");
+	newEntity->physics = 0;
+	newEntity->sprite = 0;
+	newEntity->transform = 0;
+
+	return newEntity;
 }
 
 // Free the memory associated with an Entity.
