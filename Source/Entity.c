@@ -258,7 +258,7 @@ void EntityRender(Entity* entity)
 // Private Functions:
 //------------------------------------------------------------------------------
 
-void TestEntityCreate() 
+static void TestEntityCreate() 
 {
 	Entity* entity = EntityCreate();
 
@@ -278,4 +278,42 @@ void TestEntityCreate()
 	// Free the entity after testing
 	EntityFree(&entity);
 	return;
+}
+
+static void TestEntityAddAndGet() {
+	// Create the entity.
+	Entity* entity = EntityCreate();
+
+	// Create mock components.
+	Physics* physics = PhysicsCreate();
+	Sprite* sprite = SpriteCreate();
+	Transform* transform = TransformCreate();
+
+	// Add components to the entity.
+	EntityAddPhysics(entity, physics);
+	EntityAddSprite(entity, sprite);
+	EntityAddTransform(entity, transform);
+
+	// Get components and check if they match.
+	if (EntityGetPhysics(entity) == physics) {
+		printf("Physics component correctly added and retrieved.\n");
+	} else {
+		printf("Error: Physics component mismatch.\n");
+	}
+	if (EntityGetSprite(entity) == sprite) {
+		printf("Sprite component correctly added and retrieved.\n");
+	} else {
+		printf("Error: Sprite component mismatch.\n");
+	}
+	if (EntityGetTransform(entity) == transform) {
+		printf("Transform component correctly added and retrieved.\n");
+	} else {
+		printf("Error: Transform component mismatch.\n");
+	}
+
+	// Free allocated components and the entity
+	EntityFree(&entity);
+	PhysicsFree(&physics);
+	SpriteFree(&sprite);
+	TransformFree(&transform);
 }
