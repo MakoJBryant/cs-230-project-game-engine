@@ -139,8 +139,9 @@ void EntityRead(Entity* entity, Stream stream)
 //   physics = Pointer to the Physics component to be attached.
 void EntityAddPhysics(Entity* entity, Physics* physics)
 {
-	UNREFERENCED_PARAMETER(entity);
-	UNREFERENCED_PARAMETER(physics);
+	if (entity != NULL) {
+		entity->physics = physics;
+	}
 }
 
 // Attach a sprite component to an Entity.
@@ -149,8 +150,9 @@ void EntityAddPhysics(Entity* entity, Physics* physics)
 //   sprite = Pointer to the Sprite component to be attached.
 void EntityAddSprite(Entity* entity, Sprite* sprite)
 {
-	UNREFERENCED_PARAMETER(entity);
-	UNREFERENCED_PARAMETER(sprite);
+	if (entity != NULL) {
+		entity->sprite = sprite;
+	}
 }
 
 // Attach a transform component to an Entity.
@@ -159,8 +161,9 @@ void EntityAddSprite(Entity* entity, Sprite* sprite)
 //   transform = Pointer to the Transform component to be attached.
 void EntityAddTransform(Entity* entity, Transform* transform)
 {
-	UNREFERENCED_PARAMETER(entity);
-	UNREFERENCED_PARAMETER(transform);
+	if (entity != NULL) {
+		entity->transform = transform;
+	}
 }
 
 // Set the Entity's name.
@@ -188,7 +191,6 @@ void EntitySetName(Entity* entity, const char* name)
 const char* EntityGetName(const Entity* entity)
 {
 	UNREFERENCED_PARAMETER(entity);
-	return NULL;
 }
 
 // Get the Physics component attached to an Entity.
@@ -200,8 +202,8 @@ const char* EntityGetName(const Entity* entity)
 //		else return NULL.
 Physics* EntityGetPhysics(const Entity* entity)
 {
-	UNREFERENCED_PARAMETER(entity);
-	return NULL;
+	// ternary conditional operator
+	return entity ? entity->physics : NULL;
 }
 
 // Get the Sprite component attached to a Entity.
@@ -213,8 +215,8 @@ Physics* EntityGetPhysics(const Entity* entity)
 //		else return NULL.
 Sprite* EntityGetSprite(const Entity* entity)
 {
-	UNREFERENCED_PARAMETER(entity);
-	return NULL;
+	// ternary conditional operator
+	return entity ? entity->sprite : NULL;
 }
 
 // Get the Transform component attached to a Entity.
@@ -226,8 +228,8 @@ Sprite* EntityGetSprite(const Entity* entity)
 //		else return NULL.
 Transform* EntityGetTransform(const Entity* entity)
 {
-	UNREFERENCED_PARAMETER(entity);
-	return NULL;
+	// ternary conditional operator
+	return entity ? entity->transform : NULL;
 }
 
 // Update any components attached to the Entity.
