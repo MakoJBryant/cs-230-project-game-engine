@@ -280,6 +280,30 @@ static void TestEntityCreate()
 	return;
 }
 
+static void TestEntityFree() 
+{
+	Entity* entity = EntityCreate();
+
+	// Create mock components.
+	Physics* physics = PhysicsCreate();
+	Sprite* sprite = SpriteCreate();
+	Transform* transform = TransformCreate();
+
+	EntityAddPhysics(entity, physics);
+	EntityAddSprite(entity, sprite);
+	EntityAddTransform(entity, transform);
+
+	// Free the entity
+	EntityFree(&entity);
+
+	// Check if the entity is NULL
+	if (entity == NULL) {
+		printf("Entity is freed and pointer is set to NULL.\n");
+	} else {
+		printf("Error: Entity is not NULL after freeing.\n");
+	}
+}
+
 static void TestEntityAddAndGet() {
 	// Create the entity.
 	Entity* entity = EntityCreate();
@@ -313,7 +337,4 @@ static void TestEntityAddAndGet() {
 
 	// Free allocated components and the entity
 	EntityFree(&entity);
-	PhysicsFree(&physics);
-	SpriteFree(&sprite);
-	TransformFree(&transform);
 }
