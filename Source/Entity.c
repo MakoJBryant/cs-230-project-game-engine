@@ -13,6 +13,9 @@
 #include "Entity.h"
 
 #include "Trace.h"
+#include "Physics.h"
+#include "Sprite.h"
+#include "Transform.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -97,7 +100,26 @@ Entity* EntityCreate(void)
 //	 entity = Pointer to the Entity pointer.
 void EntityFree(Entity** entity)
 {
-	UNREFERENCED_PARAMETER(entity);
+	// Verify that arguments are valid.
+	if (entity == NULL || *entity == NULL) {
+		TraceMessage("Error: EntityFree received NULL argument(s).");
+		return;
+	}
+
+	// Free the attached components, if they exist.
+	if ((*entity)->physics != NULL) {
+		PhysicsFree(&(*entity)->physics);
+	}
+	if ((*entity)->sprite != NULL) {
+		SpriteFree(&(*entity)->sprite); 
+	}
+	if ((*entity)->transform != NULL) {
+		TransformFree(&(*entity)->transform);
+	}
+
+	// Free the entity object and nullify dangling pointer.
+	free(*entity);
+	*entity = NULL;
 }
 
 // Read (and construct) the components associated with a entity.
