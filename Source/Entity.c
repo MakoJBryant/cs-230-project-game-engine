@@ -322,7 +322,8 @@ static void TestEntityFree()
 	}
 }
 
-static void TestEntityAddAndGet() {
+static void TestEntityAddAndGet() 
+{
 	// Create the entity.
 	Entity* entity = EntityCreate();
 
@@ -352,6 +353,33 @@ static void TestEntityAddAndGet() {
 	} else {
 		printf("Error: Transform component mismatch.\n");
 	}
+
+	// Free allocated components and the entity
+	EntityFree(&entity);
+}
+
+void TestEntityUpdateAndRender() 
+{
+	// Create entity.
+	Entity* entity = EntityCreate();
+
+	// Create mock components.
+	Physics* physics = PhysicsCreate();
+	Sprite* sprite = SpriteCreate();
+	Transform* transform = TransformCreate();
+
+	// Add components to the entity.
+	EntityAddPhysics(entity, physics);
+	EntityAddSprite(entity, sprite);
+	EntityAddTransform(entity, transform);
+
+	// Test Update (normally would check component states here)!
+	EntityUpdate(entity, 1.0f);
+	printf("Entity updated successfully.\n");
+
+	// Test Render (normally would check rendering logic here)!
+	EntityRender(entity);
+	printf("Entity rendered successfully.\n");
 
 	// Free allocated components and the entity
 	EntityFree(&entity);
