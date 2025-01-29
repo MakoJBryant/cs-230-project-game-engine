@@ -19,7 +19,8 @@
 #include "SceneSystem.h"
 #include "StubScene.h"
 #include "Trace.h"
-#include "Level1Scene.h"
+
+#include "SandboxScene.h" // Find and replace.
 
 //------------------------------------------------------------------------------
 // Libraries
@@ -131,7 +132,7 @@ void SceneSystemSetNext(const Scene* scene)
 static bool SceneSystemInit(void)
 {
 	// Set the starting (Default) scene.
-	SceneSystemSetNext(Level1SceneGetInstance());
+	SceneSystemSetNext(SandboxSceneGetInstance());
 
 	return true;
 }

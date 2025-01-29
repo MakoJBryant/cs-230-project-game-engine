@@ -256,3 +256,24 @@ void EntityRender(Entity* entity)
 // Private Functions:
 //------------------------------------------------------------------------------
 
+void TestEntityCreate() 
+{
+	Entity* entity = EntityCreate();
+
+	// Check if entity is allocated.
+	if (entity == NULL) {
+		printf("Error: EntityCreate failed.\n");
+		return;
+	}
+	printf("Entity created successfully.\n");
+	
+	// Check if components aren't NULL.
+	if (entity->physics != 0 && entity->sprite != 0 && entity->transform != 0) {
+		printf("Error: Some components of entity are not 0.\n");
+	}
+	printf("All components are NULL as expected.\n");
+
+	// Free the entity after testing
+	EntityFree(&entity);
+	return;
+}
