@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-
 #include "Vector2D.h"
+
 #define _USE_MATH_DEFINES // For M_PI
 #include <math.h> // For sqrt(), cos, sin, atan2f
 

@@ -10,11 +10,12 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
+#include "Stream.h"
+
+#include "DGL.h" // Vector2D
+#include "Trace.h"
 #include <stdio.h>
 #include <string.h>
-
-#include "Stream.h"
-#include "Trace.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -55,6 +56,7 @@ Stream StreamOpen(const char* filePath) {
 
 	// NULL check.
 	if (filePath == NULL) {
+		TraceMessage("Error: StreamOpen received NULL argument(s).");
 		return NULL;
 	}
 
@@ -84,8 +86,9 @@ Stream StreamOpen(const char* filePath) {
 //	 otherwise, an integer value read from the file.
 int StreamReadInt(Stream stream) {
 
-	// NULL check.
+	// Verify that arguments are valid.
 	if (stream == NULL) {
+		TraceMessage("Error: StreamReadInt received NULL argument(s).");
 		return 0;
 	}
 
@@ -94,6 +97,7 @@ int StreamReadInt(Stream stream) {
 
 	// fscanf_s() error check.
 	if (err != 1) {
+		TraceMessage("Error: StreamReadInt stream failed to open.");
 		return 0;
 	}
 
@@ -113,9 +117,10 @@ int StreamReadInt(Stream stream) {
 //	   else return 0.
 float StreamReadFloat(Stream stream) {
 
-	// NULL check.
+	// Verify that arguments are valid.
 	if (stream == NULL) {
-		return 0;
+		TraceMessage("Error: StreamReadFloat received NULL argument(s).");
+		return 0.0f;
 	}
 
 	float value;
@@ -123,7 +128,8 @@ float StreamReadFloat(Stream stream) {
 
 	// fscanf_s() error check.
 	if (err != 1) {
-		return 0;
+		TraceMessage("Error: StreamReadFloat stream failed to open.");
+		return 0.0f;
 	}
 
 	// err == 1, no errors, 
@@ -140,18 +146,17 @@ float StreamReadFloat(Stream stream) {
 //	 If the stream and vector pointer are both valid,
 //	   then fill the vector with two float values (x & y),
 //	   else do nothing (optionally, write an error message to the trace log).
-void StreamReadVector2D(Stream stream, Vector2D* vector) {
-
-	// (NOTE: Verify that the stream and vector pointer are valid first.)
+void StreamReadVector2D(Stream stream, Vector2D* vector) 
+{
+	// Verify that the stream and vector pointer are valid.
 	if (stream == NULL || vector == NULL) {
-		TraceMessage("Error: %s or %s pointer(s) are NULL", stream, vector);
-		return; // do nothing.
+		TraceMessage("Error: StreamReadVector2D received NULL argument(s).");
+		return;
 	}
 
 	// (HINT: Use StreamReadFloat() to read the x and y values, in sequence.)
-	//vector->x = StreamReadFloat(stream); UNCOMMENT
-	//vector->y = StreamReadFloat(stream); UNCOMMENT
-
+	vector->x = StreamReadFloat(stream);
+	vector->y = StreamReadFloat(stream);
 }
 
 // Close an opened stream.
@@ -159,11 +164,17 @@ void StreamReadVector2D(Stream stream, Vector2D* vector) {
 // (PRO TIP: Avoid dangling pointers by setting the FILE pointer to NULL.)
 // Params:
 //	 stream = The file stream to be closed.
-void StreamClose(Stream* stream) {
-	if (stream != NULL) {
-		fclose(*stream);
-		stream = NULL; // Avoid dangling pointers.
+void StreamClose(Stream* stream)
+{
+	// Verify that arguments are valid.
+	if (stream == NULL) {
+		TraceMessage("Error: StreamClose received NULL argument(s).");
+		return;
 	}
+
+	// Close the stream and nullify the dangling pointer.
+	fclose(*stream);
+	*stream = NULL;
 }
 
 //------------------------------------------------------------------------------

@@ -62,15 +62,15 @@ typedef struct Mesh
 Mesh* MeshCreate()
 {
 	// Allocate memory for new Mesh object.
-	Mesh* mesh = (Mesh*) calloc(1, sizeof(Mesh));
+	Mesh* newMesh = (Mesh*) calloc(1, sizeof(Mesh));
 
 	// Verify that memory allocation was successful.
-	if (mesh == NULL) {
-		TraceMessage("MeshCreate: failed to allocate memory.");
+	if (newMesh == NULL) {
+		TraceMessage("Error: MeshCreate failed to allocate memory.");
 		return NULL;
 	}
 
-	return mesh;
+	return newMesh;
 }
 
 // Build a quadrilateral mesh and store it in the specified Mesh object.
@@ -90,7 +90,7 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 {
 	// Verify that arguments are valid.
 	if (mesh == NULL || name == NULL) {
-		TraceMessage("MeshBuildQuad: arguments invalid.");
+		TraceMessage("Error: MeshBuildQuad received NULL argument(s).");
 		return;
 	}
 
@@ -149,7 +149,7 @@ void MeshRender(const Mesh* mesh)
 {
 	// Verify that arguments are valid.
 	if (mesh == NULL) {
-		TraceMessage("MeshRender: arguments invalid.");
+		TraceMessage("Error: MeshRender received NULL argument(s).");
 		return;
 	}
 
@@ -166,7 +166,7 @@ void MeshFree(Mesh** mesh)
 {
 	// Verify that arguments are valid.
 	if (mesh == NULL || *mesh == NULL) {
-		TraceMessage("MeshFree: arguments invalid.");
+		TraceMessage("Error: MeshFree received NULL argument(s).");
 		return;
 	}
 
