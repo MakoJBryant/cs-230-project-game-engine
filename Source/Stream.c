@@ -11,11 +11,11 @@
 
 #include "stdafx.h"
 #include "Stream.h"
+
+#include "DGL.h" // Vector2D
+#include "Trace.h"
 #include <stdio.h>
 #include <string.h>
-
-#include "Trace.h"
-#include "DGL.h" // Vector2D
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -56,7 +56,7 @@ Stream StreamOpen(const char* filePath) {
 
 	// NULL check.
 	if (filePath == NULL) {
-		TraceMessage("Error: StreamOpen %s argument(s) are NULL", filePath);
+		TraceMessage("Error: StreamOpen received NULL argument(s).");
 		return NULL;
 	}
 
@@ -88,7 +88,7 @@ int StreamReadInt(Stream stream) {
 
 	// Verify that arguments are valid.
 	if (stream == NULL) {
-		TraceMessage("Error: StreamReadInt %s argument(s) are NULL", stream);
+		TraceMessage("Error: StreamReadInt received NULL argument(s).");
 		return 0;
 	}
 
@@ -119,7 +119,7 @@ float StreamReadFloat(Stream stream) {
 
 	// Verify that arguments are valid.
 	if (stream == NULL) {
-		TraceMessage("Error: StreamReadFloat %s argument(s) are NULL", stream);
+		TraceMessage("Error: StreamReadFloat received NULL argument(s).");
 		return 0.0f;
 	}
 
@@ -150,7 +150,7 @@ void StreamReadVector2D(Stream stream, Vector2D* vector)
 {
 	// Verify that the stream and vector pointer are valid.
 	if (stream == NULL || vector == NULL) {
-		TraceMessage("Error: StreamReadVector2D %s or %s argument(s) are NULL", stream, vector);
+		TraceMessage("Error: StreamReadVector2D received NULL argument(s).");
 		return;
 	}
 
@@ -168,7 +168,7 @@ void StreamClose(Stream* stream)
 {
 	// Verify that arguments are valid.
 	if (stream == NULL) {
-		TraceMessage("Error: StreamClose %s argument(s) are NULL", stream);
+		TraceMessage("Error: StreamClose received NULL argument(s).");
 		return;
 	}
 

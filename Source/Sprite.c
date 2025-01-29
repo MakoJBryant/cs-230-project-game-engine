@@ -73,7 +73,7 @@ Sprite* SpriteCreate(void)
 
 	// Verify memory allocation succeeded.
 	if (newSprite == NULL) {
-		TraceMessage("SpriteCreate: failed to allocate memory.");
+		TraceMessage("Error: SpriteCreate failed to allocate memory.");
 		return NULL;
 	}
 
@@ -90,7 +90,7 @@ void SpriteFree(Sprite** sprite)
 {
 	// Verify that arguments are valid (and pointer arguments).
 	if (sprite == NULL || *sprite == NULL) {
-		TraceMessage("SpriteFree: arguments invalid.");
+		TraceMessage("Error: SpriteFree received NULL argument(s).");
 		return;
 	}
 
@@ -109,7 +109,7 @@ void SpriteRead(Sprite* sprite, Stream stream)
 {
 	// Verify that arguments are valid.
 	if (sprite == NULL || stream == NULL) {
-		TraceMessage("SpriteRead: arguments invalid.");
+		TraceMessage("Error SpriteRead received NULL argument(s).");
 		return;
 	}
 
@@ -126,7 +126,7 @@ void SpriteRender(const Sprite* sprite, Transform* transform)
 {
 	// Verify that arguments are valid.
 	if (sprite == NULL || transform == NULL) {
-		TraceMessage("SpriteRender: arguments invalid.");
+		TraceMessage("Error: SpriteRender received NULL argument(s).");
 		return;
 	}
 
@@ -170,7 +170,7 @@ float SpriteGetAlpha(const Sprite* sprite)
 {
 	// Verify that arguements are valid.
 	if (sprite == NULL) {
-		TraceMessage("SpriteGetAlpha: arguments invalid.");
+		TraceMessage("Error: SpriteGetAlpha received NULL argument(s).");
 		return 0.0f;
 	}
 
@@ -188,7 +188,7 @@ void SpriteSetAlpha(Sprite* sprite, float alpha)
 {
 	// Verify that arguments are valid.
 	if (sprite == NULL) {
-		TraceMessage("SpriteSetAlpha: arguments invalid.");
+		TraceMessage("Error: SpriteSetAlpha received NULL argument(s).");
 		return;
 	}
 
@@ -209,14 +209,14 @@ void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 {
 	// Verify that arguments are valid.
 	if (sprite == NULL) {
-		TraceMessage("SpriteSetFrame: arguments invalid.");
+		TraceMessage("Error: SpriteSetFrame received NULL argument(s).");
 		return;
 	}
 
 	// Verify frameIndex does not exceed total number of frames.
 	unsigned totalFrames = SpriteSourceGetFrameCount(sprite->spriteSource);
 	if (frameIndex >= totalFrames || frameIndex < 0) {
-		TraceMessage("SpriteSetFrame: invalid frame index = %d", frameIndex);
+		TraceMessage("Error: SpriteSetFrame received an invalid frame index = %d", frameIndex);
 		return;
 	}
 
@@ -235,7 +235,7 @@ void SpriteSetMesh(Sprite* sprite, const Mesh* mesh)
 {
 	// Verify arguments are valid.
 	if (sprite == NULL || mesh == NULL) {
-		TraceMessage("SpriteSetMesh: arguments invalid.");
+		TraceMessage("Error: SpriteSetMesh received NULL argument(s).");
 		return;
 	}
 
@@ -253,7 +253,7 @@ void SpriteSetSpriteSource(Sprite* sprite, const SpriteSource* spriteSource)
 {
 	// Verify arguments are valid.
 	if (sprite == NULL) {
-		TraceMessage("SpriteSetSpriteSource: arguments invalid.");
+		TraceMessage("Error: SpriteSetSpriteSource received NULL argument(s).");
 		return;
 	}
 

@@ -14,6 +14,7 @@
 
 #include "DGL.h"
 #include "Trace.h"
+#include "Stream.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -67,7 +68,7 @@ Transform* TransformCreate(void)
 
 	// Verify that arguments are valid.
 	if (newTransform == NULL) {
-		TraceMessage("TransformCreate(): failed to allocate memory.");
+		TraceMessage("Error: TransformCreate failed to allocate memory.");
 		return NULL;
 	}
 
@@ -86,7 +87,7 @@ void TransformFree(Transform** transform)
 {
 	// Verify that arguments are valid.
 	if (transform == NULL || *transform == NULL) {
-		TraceMessage("TransformFree: arguments invalid.");
+		TraceMessage("Error: TransformFree received NULL argument(s).");
 		return;
 	}
 
@@ -106,14 +107,24 @@ void TransformRead(Transform* transform, Stream stream)
 {
 	// Verify that arguments are valid.
 	if (transform == NULL || stream == NULL) {
-		TraceMessage("TransformRead: invalid arguments.");
+		TraceMessage("Error: TransformRead received NULL argument(s).");
 		return;
 	}
 
-	// Assign translation, rotation, and scale to the transform.
-	//transform->translation = StreamReadVector2D(stream); UNCOMMENT
-	//transform->rotation = StreamReadFloat(stream); UNCOMMENT
-	//transform->scale = StreamReadVector2D(stream); UNCOMMENT
+	// Translation.
+	Vector2D tempTranslation;
+	StreamReadVector2D(stream, &tempTranslation);
+	TransformSetTranslation(transform, &tempTranslation);
+
+	// Rotation.
+	float tempRotation;
+	tempRotation = StreamReadFloat(stream);
+	TransformSetRotation(transform, tempRotation);
+
+	// Scale.
+	Vector2D tempScale;
+	StreamReadVector2D(stream, &tempScale);
+	TransformSetScale(transform, &tempScale);
 }
 
 // Get the translation of a Transform component.
@@ -127,7 +138,7 @@ const Vector2D* TransformGetTranslation(const Transform* transform)
 {
 	// Verify that arguments are valid.
 	if (transform == NULL) {
-		TraceMessage("TransformGetTranslation: arguments invalid.");
+		TraceMessage("Error: TransformGetTranslation received NULL argument(s).");
 		return NULL;
 	}
 
@@ -145,7 +156,7 @@ float TransformGetRotation(const Transform* transform)
 {
 	// Verify that arguments are valid.
 	if (transform == NULL) {
-		TraceMessage("TransformGetRotation: arguments invalid.");
+		TraceMessage("Error: TransformGetRotation received NULL argument(s).");
 		return 0.0f;
 	}
 
@@ -163,7 +174,7 @@ const Vector2D* TransformGetScale(const Transform* transform)
 {
 	// Verify that arguments are valid.
 	if (transform == NULL) {
-		TraceMessage("TransformGetScale: arguments invalid.");
+		TraceMessage("Error: TransformGetScale received NULL argument(s).");
 		return NULL;
 	}
 
@@ -178,7 +189,7 @@ void TransformSetTranslation(Transform* transform, const Vector2D* translation)
 {
 	// Verify that arguments are valid.
 	if (transform == NULL || translation == NULL) {
-		TraceMessage("TransformSetTranslation: arguments invalid.");
+		TraceMessage("Error: TransformSetTranslation received NULL argument(s).");
 		return;
 	}
 
@@ -193,7 +204,7 @@ void TransformSetRotation(Transform* transform, float rotation)
 {
 	// Verify that arguments are valid.
 	if (transform == NULL) {
-		TraceMessage("TransformSetRotation: arguments invalid.");
+		TraceMessage("Error: TransformSetRotation received NULL argument(s).");
 		return;
 	}
 
@@ -208,7 +219,7 @@ void TransformSetScale(Transform* transform, const Vector2D* scale)
 {
 	// Verify that arguments are valid.
 	if (transform == NULL || scale == NULL) {
-		TraceMessage("TransformSetScale: arguments invalid.");
+		TraceMessage("Error: TransformSetScale received NULL argument(s).");
 		return;
 	}
 

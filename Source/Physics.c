@@ -12,8 +12,8 @@
 #include "stdafx.h"
 #include "Physics.h"
 
-#include "Trace.h"
 #include "DGL.h" // Vector2D
+#include "Trace.h"
 #include "Stream.h" // StreamReadVector2D
 #include "Vector2D.h" // Vector2DScaleAdd
 #include "Transform.h"
@@ -73,7 +73,7 @@ Physics* PhysicsCreate(void)
 
 	// Verify that memory was allocated successfully.
 	if (newPhysics == NULL) {
-		TraceMessage("PhysicsCreate: failed to allocated memory.");
+		TraceMessage("Error: PhysicsCreate failed to allocated memory.");
 		return NULL;
 	}
 
@@ -93,11 +93,11 @@ void PhysicsFree(Physics** physics)
 {
 	// Verify that arguments are valid.
 	if (physics == NULL || *physics == NULL) {
-		TraceMessage("PhysicsFree: arguments invalid");
+		TraceMessage("Error: PhysicsFree received NULL argument(s).");
 		return;
 	}
 
-	// Free object and nullify dnagling pointer.
+	// Free object and nullify dangling pointer.
 	free(*physics);
 	*physics = NULL;
 }
@@ -111,7 +111,7 @@ void PhysicsRead(Physics* physics, Stream stream)
 {
 	// Verify that arguments are valid.
 	if (physics == NULL || stream == NULL) {
-		TraceMessage("PhysicsRead: arguments invalid.");
+		TraceMessage("Error: PhysicsRead received NULL argument(s).");
 		return;
 	}
 
@@ -131,7 +131,7 @@ const Vector2D* PhysicsGetAcceleration(const Physics* physics)
 {
 	// Verify that arguments are valid.
 	if (physics == NULL) {
-		TraceMessage("Error: PhysicsGetAcceleration %s argument(s) are NULL", physics);
+		TraceMessage("Error: PhysicsGetAcceleration received NULL argument(s).");
 		return NULL;
 	}
 
@@ -149,7 +149,7 @@ const Vector2D* PhysicsGetVelocity(const Physics* physics)
 {
 	// Verify that arguments are valid.
 	if (physics == NULL) {
-		TraceMessage("Error: PhysicsGetVelocity %s argument(s) are NULL", physics);
+		TraceMessage("Error: PhysicsGetVelocity received NULL argument(s).");
 		return NULL;
 	}
 
@@ -167,7 +167,7 @@ const Vector2D* PhysicsGetOldTranslation(Physics* physics)
 {
 	// Verify that arguments are valid.
 	if (physics == NULL) {
-		TraceMessage("Error: PhysicsGetOldTranslation %s argument(s) are NULL", physics);
+		TraceMessage("Error: PhysicsGetOldTranslation received NULL argument(s).");
 		return NULL;
 	}
 
@@ -182,7 +182,7 @@ void PhysicsSetAcceleration(Physics* physics, const Vector2D* acceleration)
 {
 	// Verify that arguments are valid.
 	if (physics == NULL || acceleration == NULL) {
-		TraceMessage("Error: PhysicsSetAcceleration %s or %s argument(s) are NULL", physics, acceleration);
+		TraceMessage("Error: PhysicsSetAcceleration received NULL argument(s).");
 		return;
 	}
 
@@ -197,7 +197,7 @@ void PhysicsSetVelocity(Physics* physics, const Vector2D* velocity)
 {
 	// Verify that arguments are valid.
 	if (physics == NULL || velocity == NULL) {
-		TraceMessage("Error: PhysicsSetVelocity %s or %s argument(s) are NULL", physics, velocity);
+		TraceMessage("Error: PhysicsSetVelocity received NULL argument(s).");
 		return;
 	}
 
@@ -216,14 +216,14 @@ void PhysicsUpdate(Physics* physics, Transform* transform, float dt)
 {
 	// Verify that the Physics and Transform pointers are valid.
 	if (physics == NULL || transform == NULL) {
-		TraceMessage("Error: PhysicsUpdate %s or %s argument(s) are NULL", physics, transform);
+		TraceMessage("Error: PhysicsUpdate received NULL argument(s).");
 		return;
 	}
 
 	// Get the current translation from the transform.
 	const Vector2D* currentTranslation = TransformGetTranslation(transform);
 	if (currentTranslation == NULL) {
-		TraceMessage("Error: PhysicsUpdate failed to get %s", currentTranslation);
+		TraceMessage("Error: PhysicsUpdate failed to get current translation.");
 		return;
 	}
 
