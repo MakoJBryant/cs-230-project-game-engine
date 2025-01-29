@@ -240,8 +240,19 @@ Transform* EntityGetTransform(const Entity* entity)
 //	 dt = Change in time (in seconds) since the last game loop.
 void EntityUpdate(Entity* entity, float dt)
 {
-	UNREFERENCED_PARAMETER(dt);
-	UNREFERENCED_PARAMETER(entity);
+	if (entity == NULL) {
+		return;
+	}
+
+	// Update the entity's physics component if not NULL..
+	if (entity->physics != NULL && entity->transform != NULL) {
+		PhysicsUpdate(entity->physics, entity->transform, dt);
+	}
+
+	// Update the entity's transform component if not NULL.
+	if (entity->transform != NULL) {
+		TransformUpdate(entity->transform, dt);
+	}
 }
 
 // Render any visible components attached to the Entity.
@@ -251,7 +262,14 @@ void EntityUpdate(Entity* entity, float dt)
 //	 entity = Pointer to the Entity.
 void EntityRender(Entity* entity)
 {
-	UNREFERENCED_PARAMETER(entity);
+	if (entity == NULL) {
+		return;
+	}
+
+	// Render the entity's sprite if not NULL.
+	if (entity->sprite != NULL && entity->transform != NULL) {
+		SpriteRender(entity->sprite, entity->transform);
+	}
 }
 
 //------------------------------------------------------------------------------
