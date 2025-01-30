@@ -189,7 +189,10 @@ const char* StreamReadToken(Stream stream)
 	if (result == 1) {
 		// Return the value read into the buffer.
 		return tokenBuffer;
+	} else {
+		return NULL;
 	}
+
 }
 
 // Close an opened stream.

@@ -321,11 +321,6 @@ void EntityUpdate(Entity* entity, float dt)
 	if (entity->physics != NULL && entity->transform != NULL) {
 		PhysicsUpdate(entity->physics, entity->transform, dt);
 	}
-
-	// Update the entity's transform component if not NULL.
-	if (entity->transform != NULL) {
-		TransformUpdate(entity->transform, dt);
-	}
 }
 
 // Render any visible components attached to the Entity.
@@ -349,6 +344,8 @@ void EntityRender(Entity* entity)
 // Private Functions:
 //------------------------------------------------------------------------------
 
+
+/*
 static void TestEntityCreate() 
 {
 	Entity* entity = EntityCreate();
@@ -457,3 +454,4 @@ void TestEntityUpdateAndRender()
 	// Free allocated components and the entity
 	EntityFree(&entity);
 }
+*/
