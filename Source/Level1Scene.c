@@ -21,6 +21,8 @@
 #include "SpriteSource.h"
 #include "Entity.h"
 #include "DGL.h"
+#include "EntityFactory.h"
+#include "Sprite.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -127,6 +129,26 @@ static void Level1SceneLoad(void)
 // Initialize the entities and variables used by the scene.
 static void Level1SceneInit()
 {
+	// Create Planet Entity.
+	instance.newEntity = EntityFactoryBuild("./Data/PlanetJump.txt");
+	if (instance.newEntity == NULL) {
+		return;
+	}
+
+	// Get Sprite component.
+	Sprite* newSprite = EntityGetSprite(instance.newEntity);
+	if (newSprite == NULL) {
+		return;
+	}
+
+	// Set Sprite components.
+	SpriteSetMesh(newSprite, instance.newMesh);
+	SpriteSetSpriteSource(newSprite, instance.newSpriteSource);
+	SpriteSetFrame(newSprite, 0); // for tracemessage testing
+
+	// General settings.
+	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 1.0f, 1.0f, 1.0f, 1.0f });
+	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 }
 
 // Update the the variables used by the scene.
