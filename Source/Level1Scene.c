@@ -106,20 +106,11 @@ static void Level1SceneLoad(void)
 	instance.numLives = StreamReadInt(fileStream);
 	StreamClose(&fileStream);
 
-	// Create Test Mesh.
-	instance.newMesh = MeshCreate();
-	MeshBuildQuad(instance.newMesh, 1.0f, 1.0f, 1.0f, 1.0f, "newMesh");
-
-
 }
 
 // Initialize the entities and variables used by the scene.
 static void Level1SceneInit()
 {
-
-	// TODO: Set the background color and blend mode.
-	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
-	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 }
 
 // Update the the variables used by the scene.
@@ -139,9 +130,6 @@ static void Level1SceneUpdate(float dt)
 // Render any objects associated with the scene.
 void Level1SceneRender(void)
 {
-	// Render Mesh Tests.
-	MeshRender(instance.newMesh);
-
 }
 
 // Free any objects associated with the scene.
@@ -152,6 +140,5 @@ static void Level1SceneExit()
 // Unload any resources used by the scene.
 static void Level1SceneUnload(void)
 {
-	MeshFree(&instance.newMesh);
 }
 
