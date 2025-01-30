@@ -54,7 +54,7 @@ Entity* EntityFactoryBuild(const char* filename)
     }
 
     // Open the file using StreamOpen().
-    Stream* fileStream = StreamOpen(filename);
+    Stream fileStream = StreamOpen(filename);
     if (fileStream == NULL) {
         return NULL;
     }

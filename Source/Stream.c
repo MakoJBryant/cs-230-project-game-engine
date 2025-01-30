@@ -32,6 +32,7 @@
 //------------------------------------------------------------------------------
 // Private Variables:
 //------------------------------------------------------------------------------
+static char tokenBuffer[1024];
 
 //------------------------------------------------------------------------------
 // Private Function Declarations:
@@ -176,20 +177,18 @@ const char* StreamReadToken(Stream stream)
 		return NULL;
 	}
 
-	// Size of 31 char and 1 terminator char.
-	static char tokenBuffer[32];
-
 	// Clear buffer because it might contain old data from a previous read.
 	tokenBuffer[0] = '\0';
 
-	// The %31s limits the input to 31 chars (to prevent overflows).
-	int result = fscanf_s(stream, "%31s", tokenBuffer, (unsigned)_countof(tokenBuffer));
+	// The %1023s limits the input to 1023 chars (to prevent overflows).
+	int result = fscanf_s(stream, "%1023s", tokenBuffer, (unsigned)_countof(tokenBuffer));
 
 	// If fscanf_s returned no errors:
 	if (result == 1) {
 		// Return the value read into the buffer.
 		return tokenBuffer;
-	} else {
+	}
+	else {
 		return NULL;
 	}
 
