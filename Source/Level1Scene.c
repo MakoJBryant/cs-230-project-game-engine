@@ -10,18 +10,13 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "DGL.h"
 
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
-
-#include "Stream.h" // Read numLives from file.
-#include "Trace.h" // TraceMessage.
-#include "Mesh.h" // For testing mesh functions.
-#include "Transform.h"
-#include "Sprite.h"
+#include "Stream.h"
+#include "Trace.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -38,7 +33,6 @@ typedef struct Level1Scene
 
 	// Add any scene-specific variables second.
 	int numLives;
-	Mesh* newMesh;
 
 } Level1Scene;
 
@@ -72,7 +66,6 @@ static Level1Scene instance =
 
 	// Initialize any scene-specific variables:
 	0 // numLives
-	,NULL // newMesh
 };
 
 //------------------------------------------------------------------------------
