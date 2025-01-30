@@ -159,6 +159,39 @@ void StreamReadVector2D(Stream stream, Vector2D* vector)
 	vector->y = StreamReadFloat(stream);
 }
 
+// Read a token (a single word) from a file.
+// Suggested steps:
+//	 - Set the first value in tokenBuffer to 0
+//	 - If the stream was opened successfully,
+//	   - Read a string ("%s") into tokenBuffer using fscanf_s()
+//	 - Return tokenBuffer
+// Params:
+//	 stream = The file stream from which to read.
+// Returns:
+//	 Pointer to tokenBuffer
+const char* StreamReadToken(Stream stream)
+{
+	if (stream == NULL) {
+		TraceMessage("Error: StreamReadToken argument(s) NULL.");
+		return NULL;
+	}
+
+	// Size of 31 char and 1 terminator char.
+	static char tokenBuffer[32];
+
+	// Clear buffer because it might contain old data from a previous read.
+	tokenBuffer[0] = '\0';
+
+	// The %31s limits the input to 31 chars (to prevent overflows).
+	int result = fscanf_s(stream, "%31s", tokenBuffer, (unsigned)_countof(tokenBuffer));
+
+	// If fscanf_s returned no errors:
+	if (result == 1) {
+		// Return the value read into the buffer.
+		return tokenBuffer;
+	}
+}
+
 // Close an opened stream.
 // (NOTE: Do not attempt to close the stream if the pointer is null.)
 // (PRO TIP: Avoid dangling pointers by setting the FILE pointer to NULL.)

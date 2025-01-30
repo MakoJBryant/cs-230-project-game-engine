@@ -214,31 +214,30 @@ void PhysicsSetVelocity(Physics* physics, const Vector2D* velocity)
 //	 dt = Change in time (in seconds) since the last game loop.
 void PhysicsUpdate(Physics* physics, Transform* transform, float dt)
 {
-	// Verify that the Physics and Transform pointers are valid.
+	// Validate the pointers.
 	if (physics == NULL || transform == NULL) {
 		TraceMessage("Error: PhysicsUpdate received NULL argument(s).");
 		return;
 	}
 
-	// Get the current translation from the transform.
+	// Get translation from the transform component.
 	const Vector2D* currentTranslation = TransformGetTranslation(transform);
 	if (currentTranslation == NULL) {
 		TraceMessage("Error: PhysicsUpdate failed to get current translation.");
 		return;
 	}
 
-	// Store the old translation in physics struct.
+	// Set oldTranslation = translation.
 	physics->oldTranslation = *currentTranslation;
 
-	// Update the velocity: (velocity = acceleration * dt + velocity).
+	// Set velocity += acceleration * dt
 	Vector2DScaleAdd(&physics->velocity, &physics->acceleration, dt, &physics->velocity);
 
-	// Update the position: (translation = velocity * dt + translation).
+	// Set translation += velocity * dt
 	Vector2D newTranslation;
 	Vector2DScaleAdd(&newTranslation, &physics->velocity, dt, currentTranslation);
 
-	// Set the new translation by calling the setter function.
-	// Private structs have variables that are local to the source file.
+	// Set translation on the transform component.
 	TransformSetTranslation(transform, &newTranslation);
 }
 
