@@ -23,6 +23,8 @@
 #include "DGL.h"
 #include "EntityFactory.h"
 #include "Sprite.h"
+#include "Physics.h"
+#include "Transform.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -69,6 +71,8 @@ static void Level1SceneUpdate(float dt);
 static void Level1SceneExit(void);
 static void Level1SceneUnload(void);
 static void Level1SceneRender(void);
+
+static void Level1SceneMovementController(Entity* entity);
 
 //------------------------------------------------------------------------------
 // Instance Variable:
@@ -159,10 +163,7 @@ static void Level1SceneUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	//instance.numLives -= 1;
-	if (instance.numLives <= 0) {
-		SceneSystemSetNext(Level2SceneGetInstance());
-	}
+	Level1SceneMovementController(instance.newEntity);
 }
 
 // Render any objects associated with the scene.
@@ -180,3 +181,68 @@ static void Level1SceneUnload(void)
 {
 }
 
+static void Level1SceneMovementController(Entity* entity)
+{
+	// Get the Physics and Transform components from the Entity.
+	Physics* newPhysics = EntityGetPhysics(entity);
+	Transform* newTransform = EntityGetTransform(entity);
+	if (newPhysics == NULL || newTransform == NULL) {
+		return;
+	}
+
+	// Handle moving left or right.
+	const Vector2D* currentVelocity = (PhysicsGetVelocity(newPhysics));
+	Vector2D velocity = *currentVelocity; // Modifiable non-const copy.
+
+	if (DGL_Input_KeyDown(VK_LEFT)) {
+		// If LEFT ARROW key is pressed, set velocity.x = - moveVelocity.
+		velocity.x = -moveVelocity;
+		PhysicsSetVelocity(newPhysics, currentVelocity);
+	}
+	else if (DGL_Input_KeyDown(VK_RIGHT)) {
+		// If RIGHT ARROW key is pressed, set velocity.x = moveVelocity.
+		velocity.x = moveVelocity;
+		PhysicsSetVelocity(newPhysics, currentVelocity);
+	}
+	else {
+		// If neither is pressed, set velocity.x = 0.
+		velocity.x = 0;
+		PhysicsSetVelocity(newPhysics, currentVelocity);
+	}
+
+	// Handle Jumping.
+	const Vector2D* currentAcceleration = (PhysicsGetAcceleration(newPhysics));
+	Vector2D newAcceleration = *currentAcceleration;
+
+	if (DGL_Input_KeyTriggered(VK_UP)) {
+		velocity.y = jumpVelocity;
+		newAcceleration = gravityNormal;
+		PhysicsSetAcceleration(newPhysics, &newAcceleration);
+	}
+
+	// Handle Landing.
+	const Vector2D* currentTranslation = TransformGetTranslation(newTransform);
+	if (currentTranslation->y < groundHeight) {
+
+		// Set y-axis translation value to groundHeight.
+		Vector2D newTranslation = *currentTranslation;
+		newTranslation.y = groundHeight;
+		TransformSetTranslation(newTransform, &newTranslation);
+
+		// Stop any y-axis velocity.
+		velocity.y = 0;
+
+		// Stop any acceleration.
+		const Vector2D* newGravityNone = &gravityNone;
+		PhysicsSetAcceleration(newPhysics, newGravityNone);
+
+		// Lose a life and check death parameters.
+		instance.numLives -= 1;
+		if (instance.numLives <= 0) {
+			SceneSystemSetNext(Level2SceneGetInstance());
+		}
+	}
+
+	// After landing calculations, update velocity.
+	PhysicsSetVelocity(newPhysics, &velocity);
+}
