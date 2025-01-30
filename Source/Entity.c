@@ -317,7 +317,7 @@ void EntityUpdate(Entity* entity, float dt)
 		return;
 	}
 
-	// Update the entity's physics component if not NULL..
+	// Update the entity's physics component if not NULL.
 	if (entity->physics != NULL && entity->transform != NULL) {
 		PhysicsUpdate(entity->physics, entity->transform, dt);
 	}

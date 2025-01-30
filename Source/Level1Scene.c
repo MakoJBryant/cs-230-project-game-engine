@@ -167,7 +167,7 @@ static void Level1SceneUpdate(float dt)
 
 	// Level management controls.
 	if (DGL_Input_KeyTriggered('1')) {
-		SceneSystemSetNext(Level1SceneGetInstance());
+		SceneSystemRestart();
 	}
 	else if (DGL_Input_KeyTriggered('2')) {
 		SceneSystemSetNext(Level2SceneGetInstance());
@@ -176,7 +176,7 @@ static void Level1SceneUpdate(float dt)
 		SceneSystemSetNext(SandboxSceneGetInstance());
 	}
 	else if (DGL_Input_KeyTriggered('0')) {
-		SceneSystemRestart();
+		SceneSystemSetNext(DemoSceneGetInstance());
 	}
 }
 
@@ -225,13 +225,9 @@ static void Level1SceneMovementController(Entity* entity)
 	}
 
 	// Handle Jumping.
-	const Vector2D* currentAcceleration = (PhysicsGetAcceleration(newPhysics));
-	Vector2D newAcceleration = *currentAcceleration;
-
 	if (DGL_Input_KeyTriggered(VK_UP)) {
 		velocity.y = jumpVelocity;
-		newAcceleration = gravityNormal;
-		PhysicsSetAcceleration(newPhysics, &newAcceleration);
+		PhysicsSetAcceleration(newPhysics, &gravityNormal);
 	}
 
 	// Handle Landing.

@@ -10,12 +10,13 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "Stream.h"
-
-#include "DGL.h" // Vector2D
-#include "Trace.h"
 #include <stdio.h>
 #include <string.h>
+
+#include "Stream.h"
+#include "DGL.h" // Vector2D
+#include "Trace.h"
+
 
 //------------------------------------------------------------------------------
 // Private Constants:

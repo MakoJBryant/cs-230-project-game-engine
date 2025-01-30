@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "SpriteSource.h"
 
+#include "SpriteSource.h"
 #include "DGL.h"
 #include "Trace.h"
 

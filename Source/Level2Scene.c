@@ -115,7 +115,7 @@ static void Level2SceneInit()
 	if (newSprite == NULL) {
 		return;
 	}
-	SpriteSetMesh(newSprite, instance.newMesh);
+	//SpriteSetMesh(newSprite, instance.newMesh);
 
 	// General settings.
 	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 1.0f });

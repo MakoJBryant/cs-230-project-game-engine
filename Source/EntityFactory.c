@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "EntityFactory.h"
 
+#include "EntityFactory.h"
 #include "Stream.h"
 #include "Entity.h" // EntityRead()
 
