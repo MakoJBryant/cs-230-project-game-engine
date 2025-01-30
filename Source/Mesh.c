@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "Mesh.h"
 
+#include "Mesh.h"
 #include "DGL.h"
 #include "Trace.h"
 #include <Assert.h>
@@ -97,29 +97,20 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 	// Settings.
 	mesh->drawMode = DGL_DM_TRIANGLELIST;
 	strcpy_s(mesh->name, _countof(mesh->name), name);
-
-	/* REMOVE: demo code for setting shader and other temporary settings. */
-	/*DEMO*/ DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
-	/*DEMO*/ DGL_Graphics_SetTexture(NULL);
-	/*DEMO*/ DGL_Graphics_SetCB_Alpha(1.0f);
-	/*DEMO*/ DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
-	/*DEMO*/ static const DGL_Vec2 posColored = { -200.f, 200.f };
-	/*DEMO*/ static const DGL_Vec2 scaleColored = { 100.f, 100.f };
-	/*DEMO*/ DGL_Graphics_SetCB_TransformData(&posColored, &scaleColored, 0.f);
-	static const DGL_Color DGL_Color_Red = { 1.0f, 0.0f, 0.0f, 1.0f }; // red
+	static const DGL_Color DGL_Color_None = { 0.0f, 0.0f, 0.0f, 1.0f };
 
 	// Informing the library that we're about to start adding triangles.
 	DGL_Graphics_StartMesh();
 
 	// Each Vector: Position, Color, UV.
 	DGL_Graphics_AddTriangle(
-		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){  0.0f, vSize },
-		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){ uSize,  0.0f },
-		&(DGL_Vec2){  xHalfSize, -yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){ uSize, vSize });
+		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &DGL_Color_None, &(DGL_Vec2){  0.0f, vSize },
+		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &DGL_Color_None, &(DGL_Vec2){ uSize,  0.0f },
+		&(DGL_Vec2){  xHalfSize, -yHalfSize }, &DGL_Color_None, &(DGL_Vec2){ uSize, vSize });
 	DGL_Graphics_AddTriangle(
-		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){  0.0f, vSize },
-		&(DGL_Vec2){ -xHalfSize,  yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){  0.0f,  0.0f },
-		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &DGL_Color_Red, &(DGL_Vec2){ uSize,  0.0f });
+		&(DGL_Vec2){ -xHalfSize, -yHalfSize }, &DGL_Color_None, &(DGL_Vec2){  0.0f, vSize },
+		&(DGL_Vec2){ -xHalfSize,  yHalfSize }, &DGL_Color_None, &(DGL_Vec2){  0.0f,  0.0f },
+		&(DGL_Vec2){  xHalfSize,  yHalfSize }, &DGL_Color_None, &(DGL_Vec2){ uSize,  0.0f });
 
 	// Save the mesh (list of triangles).
 	mesh->meshResource = DGL_Graphics_EndMesh();

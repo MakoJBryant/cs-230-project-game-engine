@@ -183,16 +183,20 @@ static void Level1SceneUpdate(float dt)
 // Render any objects associated with the scene.
 void Level1SceneRender(void)
 {
+	EntityRender(instance.newEntity);
 }
 
 // Free any objects associated with the scene.
 static void Level1SceneExit()
 {
+	EntityFree(&instance.newEntity);
 }
 
 // Unload any resources used by the scene.
 static void Level1SceneUnload(void)
 {
+	SpriteSourceFree(&instance.newSpriteSource);
+	MeshFree(&instance.newMesh);
 }
 
 static void Level1SceneMovementController(Entity* entity)
