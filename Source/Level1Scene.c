@@ -25,6 +25,7 @@
 #include "Sprite.h"
 #include "Physics.h"
 #include "Transform.h"
+#include "SandboxScene.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -160,10 +161,23 @@ static void Level1SceneInit()
 //	 dt = Change in time (in seconds) since the last game loop.
 static void Level1SceneUpdate(float dt)
 {
-	// Tell the compiler that the 'dt' variable is unused.
-	UNREFERENCED_PARAMETER(dt);
-
+	// Update the planet Entity.
 	Level1SceneMovementController(instance.newEntity);
+	EntityUpdate(instance.newEntity, dt);
+
+	// Level management controls.
+	if (DGL_Input_KeyTriggered('1')) {
+		SceneSystemSetNext(Level1SceneGetInstance());
+	}
+	else if (DGL_Input_KeyTriggered('2')) {
+		SceneSystemSetNext(Level2SceneGetInstance());
+	}
+	else if (DGL_Input_KeyTriggered('9')) {
+		SceneSystemSetNext(SandboxSceneGetInstance());
+	}
+	else if (DGL_Input_KeyTriggered('0')) {
+		SceneSystemRestart();
+	}
 }
 
 // Render any objects associated with the scene.
@@ -191,23 +205,19 @@ static void Level1SceneMovementController(Entity* entity)
 	}
 
 	// Handle moving left or right.
-	const Vector2D* currentVelocity = (PhysicsGetVelocity(newPhysics));
-	Vector2D velocity = *currentVelocity; // Modifiable non-const copy.
+	Vector2D velocity = *PhysicsGetVelocity(newPhysics);
 
 	if (DGL_Input_KeyDown(VK_LEFT)) {
 		// If LEFT ARROW key is pressed, set velocity.x = - moveVelocity.
 		velocity.x = -moveVelocity;
-		PhysicsSetVelocity(newPhysics, currentVelocity);
 	}
 	else if (DGL_Input_KeyDown(VK_RIGHT)) {
 		// If RIGHT ARROW key is pressed, set velocity.x = moveVelocity.
 		velocity.x = moveVelocity;
-		PhysicsSetVelocity(newPhysics, currentVelocity);
 	}
 	else {
 		// If neither is pressed, set velocity.x = 0.
 		velocity.x = 0;
-		PhysicsSetVelocity(newPhysics, currentVelocity);
 	}
 
 	// Handle Jumping.
