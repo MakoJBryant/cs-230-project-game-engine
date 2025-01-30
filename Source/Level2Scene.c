@@ -17,10 +17,16 @@
 #include "SandboxScene.h"
 #include "Stream.h"
 #include "Trace.h"
+#include "Mesh.h"
+#include "Entity.h"
+#include "EntityFactory.h"
+#include "DGL.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
+
+static const float spaceshipSpeed = 500.0f;
 
 //------------------------------------------------------------------------------
 // Private Structures:
@@ -32,8 +38,8 @@ typedef struct Level2Scene
 	Scene	base;
 
 	// Add any scene-specific variables second.
-	int numLives;
-	int numHealth;
+	Mesh* newMesh;
+	Entity* newEntity;
 
 } Level2Scene;
 
@@ -66,8 +72,8 @@ static Level2Scene instance =
 	{ "Level2", Level2SceneLoad, Level2SceneInit, Level2SceneUpdate, Level2SceneRender, Level2SceneExit, Level2SceneUnload },
 
 	// Initialize any scene-specific variables:
-	0, // numLives
-	0 // numHealth
+	 NULL	// newMesh
+	,NULL	// newEntity
 };
 
 //------------------------------------------------------------------------------
@@ -89,37 +95,31 @@ const Scene* Level2SceneGetInstance(void)
 // Load any resources used by the scene.
 static void Level2SceneLoad(void)
 {
-	// Open file path and save to Stream type variable.
-	const char* filePath = "Data/Level2_Lives.txt";
-	Stream fileStream = StreamOpen(filePath);
+	// Load spaceship mesh.
+	instance.newMesh = MeshCreate();
+	MeshBuildSpaceship(instance.newMesh);
 
-	if (fileStream != NULL) {
-		// Read initial value for numLives into variable.
-		instance.numLives = StreamReadInt(fileStream);
-		StreamClose(&fileStream);
-	}
-	else {
-		// If NULL, send an error message.
-		TraceMessage("Error: fileStream for %s is NULL", filePath);
-	}
 }
 
 // Initialize the entities and variables used by the scene.
 static void Level2SceneInit()
 {
-	// Open file path and save to Stream type variable.
-	const char* filePath = "Data/Level2_Health.txt";
-	Stream fileStream = StreamOpen(filePath);
+	// Initialize spaceship entity.
+	instance.newEntity = EntityFactoryBuild("./Data/SpaceshipHoming.txt");
+	if (instance.newEntity == NULL) {
+		return;
+	}
 
-	if (fileStream != NULL) {
-		// Read initial value for numHealth into variable.
-		instance.numHealth = StreamReadInt(fileStream);
-		StreamClose(&fileStream);
+	// Get Sprite, Set Mesh.
+	Sprite* newSprite = EntityGetSprite(instance.newEntity);
+	if (newSprite == NULL) {
+		return;
 	}
-	else {
-		// If NULL, send an error message.
-		TraceMessage("Error: fileStream for %s is NULL", filePath);
-	}
+	SpriteSetMesh(newSprite, instance.newMesh);
+
+	// General settings.
+	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 1.0f });
+	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 }
 
 // Update the the variables used by the scene.
@@ -130,21 +130,7 @@ static void Level2SceneUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	// NOTE: This call causes the engine to exit immediately.  Make sure to remove
-	//   it when you are ready to test out a new scene.
-	//SceneSystemSetNext(NULL);
 
-	instance.numHealth -= 1;
-	if (instance.numHealth <= 0) {
-
-		instance.numLives -= 1;
-		if (instance.numLives > 0) {
-			SceneRestart();
-		}
-		else {
-			SceneSystemSetNext(SandboxSceneGetInstance());
-		}
-	}
 }
 
 // Render any objects associated with the scene.
