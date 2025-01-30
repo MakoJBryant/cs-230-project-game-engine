@@ -17,10 +17,20 @@
 #include "Level2Scene.h"
 #include "Stream.h"
 #include "Trace.h"
+#include "Mesh.h"
+#include "SpriteSource.h"
+#include "Entity.h"
+#include "DGL.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
+
+static const float groundHeight = -150.0f;
+static const float moveVelocity = 500.0f;
+static const float jumpVelocity = 1000.0f;
+static const Vector2D gravityNormal = { 0.0f, -1500.0f };
+static const Vector2D gravityNone = { 0.0f, 0.0f };
 
 //------------------------------------------------------------------------------
 // Private Structures:
@@ -33,6 +43,9 @@ typedef struct Level1Scene
 
 	// Add any scene-specific variables second.
 	int numLives;
+	Mesh* newMesh;
+	SpriteSource* newSpriteSource;
+	Entity* newEntity;
 
 } Level1Scene;
 
@@ -65,7 +78,10 @@ static Level1Scene instance =
 	{ "Level1", Level1SceneLoad, Level1SceneInit, Level1SceneUpdate, Level1SceneRender, Level1SceneExit, Level1SceneUnload },
 
 	// Initialize any scene-specific variables:
-	0 // numLives
+	0		// numLives
+	,NULL	// Mesh*
+	,NULL	// SpriteSource*
+	,NULL	// Entity*
 };
 
 //------------------------------------------------------------------------------
@@ -99,6 +115,13 @@ static void Level1SceneLoad(void)
 	instance.numLives = StreamReadInt(fileStream);
 	StreamClose(&fileStream);
 
+	// Test Mesh* newMesh.
+	instance.newMesh = MeshCreate();
+	MeshBuildQuad(instance.newMesh, 0.5f, 0.5f, 1.0f, 1.0f, "Mesh1x1");
+
+	// Test SpriteSource* mySpriteSource.
+	instance.newSpriteSource = SpriteSourceCreate();
+	SpriteSourceLoadTexture(instance.newSpriteSource, 1, 1, "PlanetTexture.png");
 }
 
 // Initialize the entities and variables used by the scene.
