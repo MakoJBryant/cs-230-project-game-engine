@@ -61,11 +61,11 @@ typedef struct SpriteSource
 SpriteSource* SpriteSourceCreate()
 {
 	// Create memory for object.
-	SpriteSource* newSpriteSource = (SpriteSource*)calloc(1, sizeof(SpriteSource));
+	SpriteSource* newSpriteSource = calloc(1, sizeof(SpriteSource));
 
 	// Validate memory allocated correctly.
 	if (newSpriteSource == NULL) {
-		TraceMessage("SpriteSourceCreate: failed to allocate memory.");
+		TraceMessage("Error: SpriteSourceCreate failed to allocate memory.");
 		return NULL;
 	}
 
@@ -86,7 +86,7 @@ void SpriteSourceFree(SpriteSource** spriteSource)
 {
 	// Verify that arguments are valid (and pointer arguments).
 	if (spriteSource == NULL || *spriteSource == NULL) {
-		TraceMessage("SpriteSourceFree: arguments invalid.");
+		TraceMessage("Error: SpriteSourceFree received NULL argument(s).");
 		return;
 	}
 
@@ -111,7 +111,7 @@ void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRow
 {
 	// Verify that arguments are valid.
 	if (spriteSource == NULL || textureName == NULL) {
-		TraceMessage("SpriteSourceLoadTexture: arguments invalid.");
+		TraceMessage("Error: SpriteSourceLoadTexture received NULL argument(s).");
 		return;
 	}
 
@@ -123,7 +123,7 @@ void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRow
 	// Load texture from file path.
 	spriteSource->texture = DGL_Graphics_LoadTexture(fullFilePath);
 	if (spriteSource->texture == NULL) {
-		TraceMessage("SpriteSourceLoadTexture: failed to load texture.");
+		TraceMessage("Error: SpriteSourceLoadTexture failed to load texture.");
 		return;
 	}
 
@@ -144,7 +144,7 @@ unsigned SpriteSourceGetFrameCount(const SpriteSource* spriteSource)
 {
 	// Verify that arguments are valid.
 	if (spriteSource == NULL) {
-		TraceMessage("SpriteSourceGetFrameCount: arguments invalid.");
+		TraceMessage("Error: SpriteSourceGetFrameCount received NULL argument(s).");
 		return 0;
 	}
 	
@@ -165,13 +165,13 @@ void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex
 
 	// Verify that arguments are valid.
 	if (spriteSource == NULL || u == NULL || v == NULL) {
-		TraceMessage("SpriteSourceGetUV: arguments invalid.");
+		TraceMessage("Error: SpriteSourceGetUV received NULL argument(s).");
 		return;
 	}
 
 	// Verify index trying to be accessed isn't bigger than the texture.
 	if (frameIndex >= SpriteSourceGetFrameCount(spriteSource)) {
-		TraceMessage("SpriteSourceGetUV: frameIndex invalid.");
+		TraceMessage("Error: SpriteSourceGetUV frameIndex %u invalid.", frameIndex);
 		return;
 	}
 
@@ -191,7 +191,7 @@ void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 {
 	// Verify that arguments are valid.
 	if (spriteSource == NULL || spriteSource->texture == NULL) {
-		TraceMessage("SpriteSource: arguments invalid.");
+		TraceMessage("Error: SpriteSource received NULL argument(s).");
 		return;
 	}
 
@@ -206,14 +206,14 @@ void SpriteSourceSetTextureOffset(const SpriteSource* spriteSource, unsigned fra
 {
 	// Verify that arguments are valid.
 	if (spriteSource == NULL || spriteSource->texture == NULL) {
-		TraceMessage("SpriteSourceSetTextureOffset: arguments invalid.");
+		TraceMessage("Error: SpriteSourceSetTextureOffset received NULL argument(s).");
 		return;
 	}
 
 	// Validate frameIndex isn't bigger than the total number of frames.
 	unsigned totalFrames = spriteSource->numCols * spriteSource->numRows;
 	if (frameIndex >= totalFrames) {
-		TraceMessage("SpriteSourceSetTextureOffset: Invalid frameIndex.");
+		TraceMessage("Error: SpriteSourceSetTextureOffset received NULL argument(s).");
 		return;
 	}
 

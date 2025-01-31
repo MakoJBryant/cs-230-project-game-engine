@@ -62,7 +62,7 @@ typedef struct Mesh
 Mesh* MeshCreate()
 {
 	// Allocate memory for new Mesh object.
-	Mesh* newMesh = (Mesh*) calloc(1, sizeof(Mesh));
+	Mesh* newMesh = calloc(1, sizeof(Mesh));
 
 	// Verify that memory allocation was successful.
 	if (newMesh == NULL) {

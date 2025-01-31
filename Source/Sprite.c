@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "Sprite.h"
 
+#include "Sprite.h"
 #include "DGL.h"
 #include "Trace.h"
 #include "SpriteSource.h"
@@ -69,7 +69,7 @@ typedef struct Sprite
 Sprite* SpriteCreate(void)
 {
 	// Allocate memory for Sprite object.
-	Sprite* newSprite = (Sprite*)calloc(1, sizeof(Sprite));
+	Sprite* newSprite = calloc(1, sizeof(Sprite));
 
 	// Verify memory allocation succeeded.
 	if (newSprite == NULL) {
@@ -109,7 +109,7 @@ void SpriteRead(Sprite* sprite, Stream stream)
 {
 	// Verify that arguments are valid.
 	if (sprite == NULL || stream == NULL) {
-		TraceMessage("Error SpriteRead received NULL argument(s).");
+		TraceMessage("Error: SpriteRead received NULL argument(s).");
 		return;
 	}
 

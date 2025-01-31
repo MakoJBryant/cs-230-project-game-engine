@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "Transform.h"
 
+#include "Transform.h"
 #include "DGL.h"
 #include "Trace.h"
 #include "Stream.h"
@@ -64,7 +64,7 @@ typedef struct Transform
 Transform* TransformCreate(void)
 {
 	// malloc writes garbage for init, calloc writes 0's for init.
-	Transform* newTransform = (Transform*)calloc(1, sizeof(Transform));
+	Transform* newTransform = calloc(1, sizeof(Transform));
 
 	// Verify that arguments are valid.
 	if (newTransform == NULL) {

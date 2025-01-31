@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "Entity.h"
 
+#include "Entity.h"
 #include "Trace.h"
 #include "Physics.h"
 #include "Sprite.h"
@@ -77,7 +77,7 @@ typedef struct Entity
 Entity* EntityCreate(void)
 {
 	// Create memory for object.
-	Entity* newEntity = (Entity*)calloc(1, sizeof(Entity));
+	Entity* newEntity = calloc(1, sizeof(Entity));
 
 	// Verify that memory was allocated successfully.
 	if (newEntity == NULL) {
@@ -314,6 +314,7 @@ Transform* EntityGetTransform(const Entity* entity)
 void EntityUpdate(Entity* entity, float dt)
 {
 	if (entity == NULL) {
+		TraceMessage("Error: EntityUpdate received NULL argument(s).");
 		return;
 	}
 
@@ -331,6 +332,7 @@ void EntityUpdate(Entity* entity, float dt)
 void EntityRender(Entity* entity)
 {
 	if (entity == NULL) {
+		TraceMessage("Error: EntityRender received NULL argument(s).");
 		return;
 	}
 

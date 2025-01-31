@@ -10,8 +10,8 @@
 //------------------------------------------------------------------------------
 
 #include "stdafx.h"
-#include "Physics.h"
 
+#include "Physics.h"
 #include "DGL.h" // Vector2D
 #include "Trace.h"
 #include "Stream.h" // StreamReadVector2D
@@ -69,7 +69,7 @@ typedef struct Physics
 Physics* PhysicsCreate(void)
 {
 	// Create memory for object.
-	Physics* newPhysics = (Physics*)calloc(1, sizeof(Physics));
+	Physics* newPhysics = calloc(1, sizeof(Physics));
 
 	// Verify that memory was allocated successfully.
 	if (newPhysics == NULL) {

@@ -14,6 +14,7 @@
 #include "EntityFactory.h"
 #include "Stream.h"
 #include "Entity.h" // EntityRead()
+#include "Trace.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -50,12 +51,14 @@
 Entity* EntityFactoryBuild(const char* filename)
 {
     if (filename == NULL) {
+        TraceMessage("Error: EntityFactoryBuild received NULL argument(s).");
         return NULL;
     }
 
     // Open the file using StreamOpen().
     Stream fileStream = StreamOpen(filename);
     if (fileStream == NULL) {
+        TraceMessage("Error: EntityFactoryBuild failed to open stream.");
         return NULL;
     }
 
@@ -64,6 +67,7 @@ Entity* EntityFactoryBuild(const char* filename)
 
     // Verify that the first token is “Entity” using strncmp().
     if (token == NULL || strncmp(token, "Entity", _countof("Entity") - 1) != 0) {
+        TraceMessage("Error: EntityFactoryBuild failed to verify first token.");
         StreamClose(&fileStream);
         return NULL;
     }
@@ -71,6 +75,7 @@ Entity* EntityFactoryBuild(const char* filename)
     // Create a new entity using EntityCreate().
     Entity* newEntity = EntityCreate();
     if (newEntity == NULL) {
+        TraceMessage("Error: EntityFactoryBuild failed to create new Entity.");
         StreamClose(&fileStream);
         return NULL;
     }
