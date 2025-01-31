@@ -13,8 +13,10 @@
 
 #include "Scene.h"
 #include "SceneSystem.h"
+#include "DemoScene.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
+#include "SandboxScene.h"
 #include "Stream.h"
 #include "Trace.h"
 #include "Mesh.h"
@@ -25,7 +27,6 @@
 #include "Sprite.h"
 #include "Physics.h"
 #include "Transform.h"
-#include "SandboxScene.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:

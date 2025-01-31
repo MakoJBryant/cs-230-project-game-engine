@@ -129,7 +129,29 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 //   mesh = Pointer to an existing, empty Mesh object.
 void MeshBuildSpaceship(Mesh* mesh)
 {
-	UNREFERENCED_PARAMETER(mesh);
+	// Verify that arguments are valid.
+	if (mesh == NULL) {
+		TraceMessage("Error: MeshBuildSpaceship received NULL argument(s).");
+		return;
+	}
+
+	// Settings.
+	mesh->drawMode = DGL_DM_TRIANGLELIST;
+	strcpy_s(mesh->name, _countof(mesh->name), "Spaceship");
+	static const DGL_Color DGL_Color_Yellow = { 1.0f, 1.0f, 0.0f, 1.0f };
+	static const DGL_Color DGL_Color_Red = { 1.0f, 0.0f, 0.0f, 1.0f };
+
+	// Create a triangular, colored mesh.
+	DGL_Graphics_StartMesh();
+	DGL_Graphics_AddTriangle(
+		&(DGL_Vec2){  0.5f,  0.0f }, &DGL_Color_Yellow, &(DGL_Vec2){ 0.0f, 0.0f },
+		&(DGL_Vec2){ -0.5f, -0.5f }, &DGL_Color_Red, &(DGL_Vec2){ 0.0f, 0.0f },
+		&(DGL_Vec2){ -0.5f,  0.5f }, &DGL_Color_Red, &(DGL_Vec2){ 0.0f, 0.0f });
+
+	// Save the mesh (list of triangles).
+	mesh->meshResource = DGL_Graphics_EndMesh();
+	assert(mesh && "MeshBuildSpaceship: failed to create mesh!");
+
 }
 
 // Render a mesh.

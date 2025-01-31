@@ -13,14 +13,20 @@
 
 #include "Scene.h"
 #include "SceneSystem.h"
+#include "Level1Scene.h"
 #include "Level2Scene.h"
 #include "SandboxScene.h"
+#include "DemoScene.h"
 #include "Stream.h"
 #include "Trace.h"
 #include "Mesh.h"
 #include "Entity.h"
 #include "EntityFactory.h"
 #include "DGL.h"
+#include "Sprite.h"
+#include "Transform.h"
+#include "Vector2D.h"
+#include "Physics.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -38,8 +44,8 @@ typedef struct Level2Scene
 	Scene	base;
 
 	// Add any scene-specific variables second.
-	Mesh* newMesh;
-	Entity* newEntity;
+	Mesh* spaceshipMesh;
+	Entity* spaceshipEntity;
 
 } Level2Scene;
 
@@ -62,6 +68,8 @@ static void Level2SceneExit(void);
 static void Level2SceneUnload(void);
 static void Level2SceneRender(void);
 
+static void Level2SceneMovementController(Entity* entity);
+
 //------------------------------------------------------------------------------
 // Instance Variable:
 //------------------------------------------------------------------------------
@@ -72,8 +80,8 @@ static Level2Scene instance =
 	{ "Level2", Level2SceneLoad, Level2SceneInit, Level2SceneUpdate, Level2SceneRender, Level2SceneExit, Level2SceneUnload },
 
 	// Initialize any scene-specific variables:
-	 NULL	// newMesh
-	,NULL	// newEntity
+	 NULL	// spaceshipMesh
+	,NULL	// spaceshipEntity
 };
 
 //------------------------------------------------------------------------------
@@ -96,8 +104,8 @@ const Scene* Level2SceneGetInstance(void)
 static void Level2SceneLoad(void)
 {
 	// Load spaceship mesh.
-	instance.newMesh = MeshCreate();
-	MeshBuildSpaceship(instance.newMesh);
+	instance.spaceshipMesh = MeshCreate();
+	MeshBuildSpaceship(instance.spaceshipMesh);
 
 }
 
@@ -105,17 +113,17 @@ static void Level2SceneLoad(void)
 static void Level2SceneInit()
 {
 	// Initialize spaceship entity.
-	instance.newEntity = EntityFactoryBuild("./Data/SpaceshipHoming.txt");
-	if (instance.newEntity == NULL) {
+	instance.spaceshipEntity = EntityFactoryBuild("./Data/SpaceshipHoming.txt");
+	if (instance.spaceshipEntity == NULL) {
 		return;
 	}
 
 	// Get Sprite, Set Mesh.
-	Sprite* newSprite = EntityGetSprite(instance.newEntity);
+	Sprite* newSprite = EntityGetSprite(instance.spaceshipEntity);
 	if (newSprite == NULL) {
 		return;
 	}
-	//SpriteSetMesh(newSprite, instance.newMesh);
+	SpriteSetMesh(newSprite, instance.spaceshipMesh);
 
 	// General settings.
 	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 1.0f });
@@ -127,24 +135,88 @@ static void Level2SceneInit()
 //	 dt = Change in time (in seconds) since the last game loop.
 static void Level2SceneUpdate(float dt)
 {
-	// Tell the compiler that the 'dt' variable is unused.
-	UNREFERENCED_PARAMETER(dt);
+	// Update and display the spaceship Entity.
+	Level2SceneMovementController(instance.spaceshipEntity);
+	EntityUpdate(instance.spaceshipEntity, dt);
 
+	// Get Sprite, Set Mesh.
+	Sprite* newSprite = EntityGetSprite(instance.spaceshipEntity);
+	if (newSprite == NULL) {
+		return;
+	}
+
+	if (DGL_Input_KeyTriggered('Z')) {
+		// If the user triggers the ‘Z’ key, set Spaceship sprite’s alpha value = 0.5f.
+		SpriteSetAlpha(newSprite, 0.5f);
+	}
+	if (DGL_Input_KeyTriggered('X')) {
+		// If the user triggers the ‘X’ key, set Spaceship sprite’s alpha value = 1.0f.
+		SpriteSetAlpha(newSprite, 1.0f);
+	}
+	if (DGL_Input_KeyTriggered('1')) {
+		// If the user triggers the ‘1’ key, change the scene to Level1.
+		SceneSystemSetNext(Level1SceneGetInstance());
+	}
+	if (DGL_Input_KeyTriggered('2')) {
+		// If the user triggers the ‘2’ key, restart the current level.
+		SceneSystemRestart();
+	}
+	if (DGL_Input_KeyTriggered('9')) {
+		// If the user triggers the ‘9’ key, change the scene to Sandbox.
+		SceneSystemSetNext(SandboxSceneGetInstance());
+	}
+	if (DGL_Input_KeyTriggered('0')) {
+		// If the user triggers the ‘0’ key, change the scene to Demo.
+		SceneSystemSetNext(DemoSceneGetInstance());
+	}
 
 }
 
 // Render any objects associated with the scene.
 void Level2SceneRender(void)
 {
+	EntityRender(instance.spaceshipEntity);
 }
 
 // Free any objects associated with the scene.
 static void Level2SceneExit()
 {
+	EntityFree(&instance.spaceshipEntity);
 }
 
 // Unload any resources used by the scene.
 static void Level2SceneUnload(void)
 {
+	MeshFree(&instance.spaceshipMesh);
 }
 
+static void Level2SceneMovementController(Entity* entity) 
+{
+	// Get the Physics and Transform components from the Entity.
+	Physics* newPhysics = EntityGetPhysics(entity);
+	Transform* newTransform = EntityGetTransform(entity);
+	if (newPhysics == NULL || newTransform == NULL) {
+		return;
+	}
+
+	// Get the mouse cursor position (in screen coordinates).
+	Vector2D mousePosition = DGL_Input_GetMousePosition();
+	// Convert the screen coordinates to world coordinates.
+	mousePosition = DGL_Camera_ScreenCoordToWorld(&mousePosition);
+
+	// Get the spaceship’s current translation.
+	const Vector2D* spaceshipTranslation = TransformGetTranslation(newTransform);
+
+	// Calculate a direction vector from the spaceship to the mouse position.
+	Vector2D directionVector = { 0.0f, 0.0f };
+	Vector2DSub(&directionVector, &mousePosition, spaceshipTranslation); // ERROR?
+	Vector2DNormalize(&directionVector, &directionVector);
+
+	// Set the transform’s rotation to convert the direction vector into an angle (in radians).
+	float rotation = Vector2DToAngleRad(&directionVector);
+	TransformSetRotation(newTransform, rotation);
+
+	/// Set the Physics component’s velocity = direction vector * spaceshipSpeed.
+	Vector2DScale(&directionVector, &directionVector, spaceshipSpeed);
+	PhysicsSetVelocity(newPhysics, &directionVector);
+}
