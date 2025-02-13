@@ -172,10 +172,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Animation.c" />
+    <ClCompile Include="Source\CheatSystem.c" />
     <ClCompile Include="Source\Engine.c" />
     <ClCompile Include="Source\Entity.c" />
     <ClCompile Include="Source\EntityFactory.c" />
     <ClCompile Include="Source\Main.c" />
+    <ClCompile Include="Source\Matrix2D.c" />
     <ClCompile Include="Source\Mesh.c" />
     <ClCompile Include="Source\Physics.c" />
     <ClCompile Include="Source\PlatformSystem.c" />
@@ -202,9 +205,12 @@
     <ClCompile Include="Source\Vector2D.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Animation.h" />
+    <ClInclude Include="Source\CheatSystem.h" />
     <ClInclude Include="Source\Engine.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\EntityFactory.h" />
+    <ClInclude Include="Source\Matrix2D.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\Physics.h" />
     <ClInclude Include="Source\PlatformSystem.h" />
