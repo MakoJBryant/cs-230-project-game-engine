@@ -20,7 +20,7 @@ o	To implement functionality for positioning and moving entities.
 o	To implement functionality for displaying entities.  
 
 ## Project_3_Transformations
-The objectives for this project are four-fold:
+The objectives for this project are four-fold:  
 o	To implement your own Matrix2D module.  
 o	To calculate transformations for sprite positioning, scaling, and rotation.  
 o	To implement displaying of sprite text.  
