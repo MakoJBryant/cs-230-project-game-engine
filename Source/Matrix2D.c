@@ -12,7 +12,11 @@
 #include "stdafx.h"
 #include "Matrix2D.h"
 
-#include "DGL.h"
+#include "DGL.h" // For DGL_Mat4
+#define _USE_MATH_DEFINES // For M_PI
+#include <math.h>  // For trig functions
+
+
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -83,18 +87,28 @@ void Matrix2DConcat(Matrix2D* pResult, const Matrix2D* pMtx0, const Matrix2D* pM
 // (Hint: This function must initialize all matrix values.)
 void Matrix2DTranslate(Matrix2D* pResult, float x, float y)
 {
-	UNREFERENCED_PARAMETER(pResult);
-	UNREFERENCED_PARAMETER(x);
-	UNREFERENCED_PARAMETER(y);
+	if (!pResult) return;
+
+	// Initialize identity matrix
+	void Matrix2DIdentity(pResult);
+
+	// Set translation values
+	pResult->m[0][3] = x;
+	pResult->m[1][3] = y;
 }
 
 // This function creates a scaling matrix from x & y and saves it in Result.
 // (Hint: This function must initialize all matrix values.)
 void Matrix2DScale(Matrix2D* pResult, float x, float y)
 {
-	UNREFERENCED_PARAMETER(pResult);
-	UNREFERENCED_PARAMETER(x);
-	UNREFERENCED_PARAMETER(y);
+	if (!pResult) return;
+
+	// Initialize identity matrix
+	Matrix2DIdentity(pResult);
+
+	// Set scaling values
+	pResult->m[0][0] = x;
+	pResult->m[1][1] = y;
 }
 
 // This matrix creates a rotation matrix from "Angle" whose value is in degrees.
@@ -106,16 +120,35 @@ void Matrix2DScale(Matrix2D* pResult, float x, float y)
 //   #include <math.h>
 void Matrix2DRotDeg(Matrix2D* pResult, float angle)
 {
-	UNREFERENCED_PARAMETER(pResult);
-	UNREFERENCED_PARAMETER(angle);
+	if (!pResult) return; 
+
+	// Convert angle from degrees to radians
+	float radians = (angle * M_PI) / 180.0f;
+
+	// Initialize identity matrix
+	Matrix2DIdentity(pResult);
+
+	// Set rotation values
+	pResult->m[0][0] = cosf(radians);
+	pResult->m[0][1] = -sinf(radians);
+	pResult->m[1][0] = sinf(radians);
+	pResult->m[1][1] = cosf(radians);
 }
 
 // This matrix creates a rotation matrix from "Angle" whose value is in radians.
 // (Hint: This function must initialize all matrix values.)
 void Matrix2DRotRad(Matrix2D* pResult, float angle)
 {
-	UNREFERENCED_PARAMETER(pResult);
-	UNREFERENCED_PARAMETER(angle);
+	if (!pResult) return;
+
+	// Initialize identity matrix
+	Matrix2DIdentity(pResult);
+
+	// Set rotation values
+	pResult->m[0][0] = cosf(angle);
+	pResult->m[0][1] = -sinf(angle);
+	pResult->m[1][0] = sinf(angle);
+	pResult->m[1][1] = cosf(angle);
 }
 
 // This function multiplies the matrix Mtx with the vector Vec and saves the result in Result.
