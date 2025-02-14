@@ -62,8 +62,8 @@ typedef struct Level1Scene
 	// Add any scene-specific variables second.
 	int numLives;
 	Mesh* planetMesh;
-	Mesh* mesh3x3;
-	Mesh* mesh16x8;
+	Mesh* myMesh3x3;
+	Mesh* myMesh16x8;
 	SpriteSource* planetSpriteSource;
 	SpriteSource* monkeyIdleSpriteSource;
 	SpriteSource* monkeyJumpSpriteSource;
@@ -110,8 +110,8 @@ static Level1Scene instance =
 	// Initialize any scene-specific variables:
 	0		// numLives
 	,NULL	// planetMesh
-	,NULL	// mesh3x3
-	,NULL	// mesh16x8
+	,NULL	// myMesh3x3
+	,NULL	// myMesh16x8
 	,NULL	// planetSpriteSource
 	,NULL	// monkeyIdleSpriteSource
 	,NULL	// monkeyJumpSpriteSource
@@ -158,10 +158,10 @@ static void Level1SceneLoad(void)
 	SpriteSourceLoadTexture(instance.planetSpriteSource, 1, 1, "PlanetTexture.png");
 
 	// Create the monkey meshes.
-	instance.mesh3x3 = MeshCreate(); // 3x3 mesh
-	MeshBuildQuad(instance.mesh3x3, 0.5f, 0.5f, 1.0f / 3, 1.0f / 3, "Mesh3x3");
-	instance.mesh16x8 = MeshCreate(); // 16x8 mesh
-	MeshBuildQuad(instance.mesh16x8, 0.5f, 0.5f, 1.0f / 16, 1.0f / 8, "Mesh16x8");
+	instance.myMesh3x3 = MeshCreate(); // 3x3 mesh
+	MeshBuildQuad(instance.myMesh3x3, 0.5f, 0.5f, 1.0f / 3, 1.0f / 3, "Mesh3x3");
+	instance.myMesh16x8 = MeshCreate(); // 16x8 mesh
+	MeshBuildQuad(instance.myMesh16x8, 0.5f, 0.5f, 1.0f / 16, 1.0f / 8, "Mesh16x8");
 
 	// Create the monkey sprite sources.
 	instance.monkeyIdleSpriteSource = SpriteSourceCreate(); // 1x1 monkey idle
@@ -181,10 +181,6 @@ static void Level1SceneInit()
 	// Create Planet Entity.
 	instance.planetEntity = EntityFactoryBuild("./Data/PlanetBounce.txt");
 	if (instance.planetEntity == NULL) {
-		return;
-	}
-	instance.monkeyEntity = EntityFactoryBuild("./Data/PlanetBounce.txt");
-	if (instance.monkeyEntity == NULL) {
 		return;
 	}
 
@@ -238,13 +234,23 @@ void Level1SceneRender(void)
 static void Level1SceneExit()
 {
 	EntityFree(&instance.planetEntity);
+	EntityFree(&instance.monkeyEntity);
+
 }
 
 // Unload any resources used by the scene.
 static void Level1SceneUnload(void)
 {
 	SpriteSourceFree(&instance.planetSpriteSource);
+	SpriteSourceFree(&instance.monkeyIdleSpriteSource);
+	SpriteSourceFree(&instance.monkeyJumpSpriteSource);
+	SpriteSourceFree(&instance.monkeyWalkSpriteSource);
+	SpriteSourceFree(&instance.robotoMonoBlackSpriteSource);
+
 	MeshFree(&instance.planetMesh);
+	MeshFree(&instance.myMesh3x3);
+	MeshFree(&instance.myMesh16x8);
+
 }
 
 // Allows entities to move.
