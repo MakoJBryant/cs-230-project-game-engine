@@ -87,6 +87,7 @@ Transform* TransformCreate(void)
 	// Set default scale to (1, 1).
 	newTransform->scale.x = 1;
 	newTransform->scale.y = 1;
+	newTransform->isDirty = true;
 
 	return newTransform;
 }
@@ -219,6 +220,7 @@ void TransformSetTranslation(Transform* transform, const Vector2D* translation)
 	}
 
 	transform->translation = *translation;
+	transform->isDirty = true;
 }
 
 // Set the rotation of a Transform component.
@@ -234,6 +236,7 @@ void TransformSetRotation(Transform* transform, float rotation)
 	}
 
 	transform->rotation = rotation;
+	transform->isDirty = true;
 }
 
 // Set the scale of a Transform component.
@@ -249,6 +252,7 @@ void TransformSetScale(Transform* transform, const Vector2D* scale)
 	}
 
 	transform->scale = *scale;
+	transform->isDirty = true;
 }
 
 //------------------------------------------------------------------------------
