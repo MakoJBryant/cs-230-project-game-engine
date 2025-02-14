@@ -58,6 +58,7 @@ typedef struct Mesh
 // Public Functions:
 //------------------------------------------------------------------------------
 
+// Dynamically allocate a new Mesh object but leave it empty.
 Mesh* MeshCreate()
 {
 	// Allocate memory for new Mesh object.
@@ -72,6 +73,7 @@ Mesh* MeshCreate()
 	return newMesh;
 }
 
+// Build a quadrilateral mesh and store it in the specified Mesh object.
 void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, float vSize, const char* name)
 {
 	// Verify that arguments are valid.
@@ -104,6 +106,7 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 
 }
 
+// Build a "spaceship" mesh and store it in the specified Mesh object.
 void MeshBuildSpaceship(Mesh* mesh)
 {
 	// Verify that arguments are valid.
@@ -131,6 +134,7 @@ void MeshBuildSpaceship(Mesh* mesh)
 
 }
 
+// Render a mesh.
 void MeshRender(const Mesh* mesh)
 {
 	// Verify that arguments are valid.
@@ -142,6 +146,7 @@ void MeshRender(const Mesh* mesh)
 	DGL_Graphics_DrawMesh(mesh->meshResource, mesh->drawMode);
 }
 
+// Free the memory associated with a mesh.
 void MeshFree(Mesh** mesh)
 {
 	// Verify that arguments are valid.

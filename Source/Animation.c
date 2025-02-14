@@ -73,6 +73,7 @@ typedef struct Animation
 // Public Functions:
 //------------------------------------------------------------------------------
 
+// Dynamically allocate a new Animation component.
 Animation* AnimationCreate(void)
 {
 	Animation* newAnimation = (Animation*)calloc(1, sizeof(Animation));
@@ -84,6 +85,7 @@ Animation* AnimationCreate(void)
 	return newAnimation;
 }
 
+// Read the properties of an Animation component from a file.
 void AnimationFree(Animation** animation)
 {
 	// Ensure the pointer is valid and not already NULL.
@@ -98,12 +100,6 @@ void AnimationFree(Animation** animation)
 }
 
 // Read the properties of an Animation component from a file.
-// [NOTE: Read the integer values for frameIndex and frameCount.]
-// [NOTE: Read the float values for frameDelay and frameDuration.]
-// [NOTE: Read the boolean values for isRunning and isLooping.]
-// Params:
-//	 animation = Pointer to the Animation component.
-//	 stream = The data stream used for reading.
 void AnimationRead(Animation* animation, Stream stream)
 {
 	if (animation == NULL || stream == NULL) {

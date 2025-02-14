@@ -9,12 +9,20 @@
 //
 //------------------------------------------------------------------------------
 
-#include "stdafx.h"
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
 
+// Essentials.
+#include "stdafx.h"
 #include "EntityFactory.h"
 #include "Stream.h"
-#include "Entity.h" // EntityRead()
 #include "Trace.h"
+
+// Components.
+#include "Entity.h" // EntityRead()
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -41,13 +49,6 @@
 //------------------------------------------------------------------------------
 
 // Build a single instance of the specified entity.
-// (HINT: See project instructions.)
-// Params:
-//	 filename = The name of the file to be deserialized.
-// Returns:
-//	 If the filename is valid
-//	   then return a pointer to a new instance of the specified entity,
-//	   else NULL.
 Entity* EntityFactoryBuild(const char* filename)
 {
     if (filename == NULL) {
@@ -93,4 +94,3 @@ Entity* EntityFactoryBuild(const char* filename)
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
-

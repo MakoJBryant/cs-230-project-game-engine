@@ -9,11 +9,17 @@
 //
 //------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
+
+// Essentials.
 #include "stdafx.h"
 #include "Vector2D.h"
-
 #define _USE_MATH_DEFINES // For M_PI
 #include <math.h> // For sqrt(), cos, sin, atan2f
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -85,7 +91,6 @@ void Vector2DSub(Vector2D* pResult, const Vector2D* pVec0, const Vector2D* pVec1
 }
 
 // In this function, pResult will be the unit vector of pVec0
-// (NOTE: Care must be taken when pResult = pVec0!)
 void Vector2DNormalize(Vector2D* pResult, const Vector2D* pVec0) {
 
 	// Vector magnitude formula.
@@ -130,7 +135,6 @@ float Vector2DLength(const Vector2D* pVec0) {
 }
 
 // This function returns the square of pVec0's length.
-// NOTE: The square root function must NOT be called by this function.
 float Vector2DSquareLength(const Vector2D* pVec0) {
 	// LengthSquared: scalar = v0.x^2 + v0.y^2
 	return (pVec0->x * pVec0->x) + (pVec0->y * pVec0->y);
@@ -143,7 +147,6 @@ float Vector2DDistance(const Vector2D* pVec0, const Vector2D* pVec1) {
 }
 
 // This function returns the distance squared between two points.
-// NOTE: The square root function must NOT be called by this function.
 float Vector2DSquareDistance(const Vector2D* pVec0, const Vector2D* pVec1) {
 	// Distance = sqrt((x1 - x0)^2 + (y1 - y0)^2)
 	float xDiffSquared = (pVec1->x - pVec0->x) * (pVec1->x - pVec0->x);
@@ -159,11 +162,6 @@ float Vector2DDotProduct(const Vector2D* pVec0, const Vector2D* pVec1) {
 }
 
 // This function computes the coordinates of the unit vector represented by the angle "angle", which is in Degrees.
-// Converting from degrees to radians can be performed as follows:
-//	 radians = (angle * M_PI) / 180.0f
-// M_PI is defined in "math.h", which may be included as follows:
-//   #define _USE_MATH_DEFINES
-//   #include <math.h>
 void Vector2DFromAngleDeg(Vector2D* pResult, float angle) {
 
 	float radians = (angle * (float)M_PI) / 180.0f;
@@ -173,7 +171,6 @@ void Vector2DFromAngleDeg(Vector2D* pResult, float angle) {
 }
 
 // This function computes the coordinates of the unit vector represented by the angle "angle", which is in Radians.
-// HINT: x = cos(angle), y = sin(angle).
 void Vector2DFromAngleRad(Vector2D* pResult, float angle) {
 
 	pResult->x = cosf(angle);
@@ -181,8 +178,6 @@ void Vector2DFromAngleRad(Vector2D* pResult, float angle) {
 }
 
 // This function computes the angle, in radians, of the specified vector.
-// HINT: Angle (radians) = atan2f(direction Y, direction X).
-// NOTE: If the pointer is NULL, then return 0.0f.
 float Vector2DToAngleRad(const Vector2D* pVec) {
 
 	if (pVec != NULL) {
@@ -196,4 +191,3 @@ float Vector2DToAngleRad(const Vector2D* pVec) {
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
-

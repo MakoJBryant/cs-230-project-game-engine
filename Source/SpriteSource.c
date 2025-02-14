@@ -9,11 +9,17 @@
 //
 //------------------------------------------------------------------------------
 
-#include "stdafx.h"
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
 
+// Essentials.
+#include "stdafx.h"
 #include "SpriteSource.h"
-#include "DGL.h"
 #include "Trace.h"
+#include "DGL.h"
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -52,12 +58,6 @@ typedef struct SpriteSource
 //------------------------------------------------------------------------------
 
 // Dynamically allocate a new SpriteSource object.
-// (Hint: Use calloc() to ensure that all member variables are initialized to 0.)
-// (Hint: numRows and numCols should be initialized to 1.)
-// Returns:
-//	 If the memory allocation was successful,
-//	   then return a pointer to the allocated memory,
-//	   else return NULL.
 SpriteSource* SpriteSourceCreate()
 {
 	// Create memory for object.
@@ -77,11 +77,6 @@ SpriteSource* SpriteSourceCreate()
 }
 
 // Free the memory associated with a SpriteSource object.
-// (NOTE: The DGL_Texture resource must be freed using DGL_Graphics_FreeTexture().)
-// (NOTE: The SpriteSource object must be freed using free().
-// (NOTE: The SpriteSource pointer must be set to NULL.)
-// Params:
-//	 spriteSource = Pointer to the SpriteSource pointer.
 void SpriteSourceFree(SpriteSource** spriteSource)
 {
 	// Verify that arguments are valid (and pointer arguments).
@@ -100,13 +95,6 @@ void SpriteSourceFree(SpriteSource** spriteSource)
 }
 
 // Load a texture from a file (may be an Col x Row sprite sheet).
-// (NOTE: The folder path, "Assets/" should be prepended to the texture name before
-//    opening the file.  The function sprintf_s can be used for this purpose.
-//    https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/sprintf-s-sprintf-s-l-swprintf-s-swprintf-s-l)
-// Params:
-//	 numCols = The number of columns in the sprite sheet.
-//	 numRows = The number of rows in the sprite sheet.
-//	 textureName = The name of the texture to be loaded.
 void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRows, const char* textureName)
 {
 	// Verify that arguments are valid.
@@ -133,13 +121,6 @@ void SpriteSourceLoadTexture(SpriteSource* spriteSource, int numCols, int numRow
 }
 
 // Returns the maximum number of frames possible, given the dimensions of the sprite sheet.
-// (Hint: Frame count = numCols * numRows.)
-// Params:
-//	 spriteSource = Pointer to the SpriteSource object.
-// Returns:
-//	 If the SpriteSource pointer is valid,
-//		then return the calculated frame count (numCols * numRows),
-//		else return 0.
 unsigned SpriteSourceGetFrameCount(const SpriteSource* spriteSource)
 {
 	// Verify that arguments are valid.
@@ -153,13 +134,7 @@ unsigned SpriteSourceGetFrameCount(const SpriteSource* spriteSource)
 	return totalFrameCount;
 }
 
-// Returns the UV coordinates of the specified frame in a sprite sheet.
-// (Hint: Refer to the Week 2 lecture slides for the correct calculations.)
-// Params:
-//	 spriteSource = Pointer to the SpriteSource object.
-//	 frameIndex = A frame index within a sprite sheet.
-//   u = Pointer to a float to contain the U coordinate. 
-//   v = Pointer to a float to contain the V coordinate. 
+// Returns the UV coordinates of the specified frame in a sprite sheet. 
 void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex, float* u, float* v)
 {
 
@@ -185,8 +160,6 @@ void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex
 }
 
 // Sets a SpriteSource texture for rendering.
-// Params:
-//	 spriteSource = Pointer to the SpriteSource object.
 void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 {
 	// Verify that arguments are valid.
@@ -200,8 +173,6 @@ void SpriteSourceSetTexture(const SpriteSource* spriteSource)
 }
 
 // Sets the texture UV offsets for rendering.
-// Params:
-//	 spriteSource = Pointer to the SpriteSource object.
 void SpriteSourceSetTextureOffset(const SpriteSource* spriteSource, unsigned frameIndex)
 {
 	// Verify that arguments are valid.
@@ -225,7 +196,6 @@ void SpriteSourceSetTextureOffset(const SpriteSource* spriteSource, unsigned fra
 	DGL_Vec2 textureOffset = { u, v };
 	DGL_Graphics_SetCB_TextureOffset(&textureOffset);
 }
-
 
 //------------------------------------------------------------------------------
 // Private Functions:

@@ -48,6 +48,7 @@ static char tokenBuffer[1024];
 // Public Functions:
 //------------------------------------------------------------------------------
 
+// Open a file for reading.
 Stream StreamOpen(const char* filePath) {
 
 	if (filePath == NULL) {
@@ -84,6 +85,7 @@ bool StreamReadBoolean(Stream stream)
 	UNREFERENCED_PARAMETER(stream);
 }
 
+// Read a single integer from a stream.
 int StreamReadInt(Stream stream) {
 
 	if (stream == NULL) {
@@ -105,6 +107,7 @@ int StreamReadInt(Stream stream) {
 	return value;
 }
 
+// Read a single float from a stream.
 float StreamReadFloat(Stream stream) {
 
 	if (stream == NULL) {
@@ -126,6 +129,7 @@ float StreamReadFloat(Stream stream) {
 	return value;
 }
 
+// Read the data for a Vector2D from a stream.
 void StreamReadVector2D(Stream stream, Vector2D* vector) 
 {
 	if (stream == NULL || vector == NULL) {
@@ -137,6 +141,7 @@ void StreamReadVector2D(Stream stream, Vector2D* vector)
 	vector->y = StreamReadFloat(stream);
 }
 
+// Read a token (a single word) from a file.
 const char* StreamReadToken(Stream stream)
 {
 	if (stream == NULL) {
@@ -161,6 +166,7 @@ const char* StreamReadToken(Stream stream)
 
 }
 
+// Close an opened stream.
 void StreamClose(Stream* stream)
 {
 	if (stream == NULL) {

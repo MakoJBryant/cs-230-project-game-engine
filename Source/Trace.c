@@ -9,10 +9,16 @@
 //
 //------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
+
+// Essentials.
 #include "stdafx.h"
 #include <stdarg.h>
-
 #include "Trace.h"
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -44,8 +50,6 @@ static FILE* traceFile;
 //------------------------------------------------------------------------------
 
 // Initialize the Tracing/Logging module.
-// - Open "trace.log" for writing in text mode.
-// - Perform error handling in the event that the file failed to open.
 void TraceInit()
 {
 	// TODO: Open "trace.log" for writing (text mode).
@@ -67,13 +71,8 @@ void TraceInit()
 }
 
 // Output a message to the Tracing/Logging file.
-// - Print the given message to the file if it was opened successfully.
-// - Every message must be printed on its own line.
-// - There must be no blank lines between messages.
 void TraceMessage(const char* formatString, ...)
 {
-	UNREFERENCED_PARAMETER(formatString);
-
 	// TODO: Write the message to the Tracing/Logging file using the variadic
 	//   functions discussed during the Week 1 lectures.
 
@@ -87,7 +86,6 @@ void TraceMessage(const char* formatString, ...)
 }
 
 // Shutdown the Tracing/Logging module.
-// - Close the file if-and-only-if the file was opened successfully
 void TraceShutdown()
 {
 	// TODO: Close "trace.log" if it has been opened successfully.
@@ -109,4 +107,3 @@ void TraceShutdown()
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
-
