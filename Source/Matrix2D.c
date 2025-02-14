@@ -12,6 +12,8 @@
 #include "stdafx.h"
 #include "Matrix2D.h"
 
+#include "DGL.h"
+
 //------------------------------------------------------------------------------
 // Private Constants:
 //------------------------------------------------------------------------------
@@ -40,7 +42,23 @@
 // This function sets the matrix equal to the identity matrix.
 void Matrix2DIdentity(Matrix2D* pResult)
 {
-	UNREFERENCED_PARAMETER(pResult);
+	if (!pResult) return;
+
+	// Set all elements to zero
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (i == j) {
+				// Set diagonal elements to 1
+				pResult->m[i][j] = 1.0f; 
+			} 
+			else {
+				// Set non-diagonal elements to 0
+				pResult->m[i][j] = 0.0f;
+			}
+		}
+	}
 }
 
 // This function calculates the transpose matrix of Mtx and saves it in the result matrix.
