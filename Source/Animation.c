@@ -89,9 +89,8 @@ Animation* AnimationCreate(void)
 void AnimationFree(Animation** animation)
 {
 	// Ensure the pointer is valid and not already NULL.
-	if (animation == NULL || *animation == NULL)
-	{
-		TraceMessage("Error: AnimationFree failed to allocate memory.");
+	if (animation == NULL || *animation == NULL) {
+		TraceMessage("Error: AnimationFree received NULL argument(s).");
 		return;
 	}
 
@@ -121,54 +120,90 @@ void AnimationRead(Animation* animation, Stream stream)
 }
 
 // Set the parent Entity for an Animation component.
-// Params:
-//	 animation = Pointer to the Animation component.
-//	 parent = Pointer to the parent Entity.
 void AnimationSetParent(Animation* animation, Entity* parent)
 {
-	UNREFERENCED_PARAMETER(animation);
-	UNREFERENCED_PARAMETER(parent);
+	if (animation == NULL) {
+		TraceMessage("Error: AnimationSetParent received NULL argument(s).");
+		return;
+	}
+
+	animation->parent = parent;
 }
 
 // Play a simple animation sequence [0 .. frameCount - 1].
-// (Hint: This function must initialize all variables, except for "parent".)
-// Params:
-//	 animation = Pointer to the Animation component.
-//	 frameCount = The number of frames in the sequence.
-//	 frameDuration = The amount of time to display each frame (in seconds).
-//	 isLooping = True if the animation loops, false otherwise.
 void AnimationPlay(Animation* animation, int frameCount, float frameDuration, bool isLooping)
 {
-	UNREFERENCED_PARAMETER(animation);
-	UNREFERENCED_PARAMETER(frameCount);
-	UNREFERENCED_PARAMETER(frameDuration);
-	UNREFERENCED_PARAMETER(isLooping);
+	if (animation == NULL) {
+		TraceMessage("Error: AnimationPlay received NULL argument(s).");
+		return;
+	}
+
+	// (Hint: This function must initialize all variables, except for "parent".)
+	animation->frameIndex = 0;
+	animation->frameCount = frameCount;
+	animation->frameDuration = frameDuration;
+	animation->frameDelay = frameDuration;
+	animation->isLooping = isLooping;
+	animation->isRunning = true;
+	animation->isDone = false;
 }
 
 // Update the animation.
-// Params:
-//	 animation = Pointer to the Animation component.
-//	 dt = Change in time (in seconds) since the last game loop.
 void AnimationUpdate(Animation* animation, float dt)
 {
-	UNREFERENCED_PARAMETER(animation);
-	UNREFERENCED_PARAMETER(dt);
+	if (animation == NULL) {
+		TraceMessage("Error: AnimationUpdate received NULL argument(s).");
+		return;
+	}
+
+	// If the animation is not running, do nothing.
+	if (!animation->isRunning) {
+		return;
+	}
+
+	// Decrease the frame delay by dt.
+	animation->frameDelay -= dt;
+
+	// If the frame delay has elapsed, move to the next frame.
+	while (animation->frameDelay <= 0.0f)
+	{
+		// Advance to the next frame.
+		animation->frameIndex++;
+
+		// Reset frame delay for the next frame.
+		animation->frameDelay += animation->frameDuration;
+
+		// Check if the animation has reached the end.
+		if (animation->frameIndex >= animation->frameCount)
+		{
+			if (animation->isLooping)
+			{
+				// Loop back to the first frame.
+				animation->frameIndex = 0;
+			}
+			else
+			{
+				// Stop the animation at the last frame.
+				animation->frameIndex = animation->frameCount - 1;
+				animation->isRunning = false;
+				animation->isDone = true;
+				break;
+			}
+		}
+	}
 }
 
 // Determine if the animation has reached the end of its sequence.
-// Params:
-//	 animation = Pointer to the Animation component.
-// Returns:
-//	 If the Animation pointer is valid,
-//		then return the value in isDone,
-//		else return false.
 bool AnimationIsDone(const Animation* animation)
 {
-	UNREFERENCED_PARAMETER(animation);
-	return 0;
+	if (animation == NULL) {
+		TraceMessage("Error: AnimationIsDone received NULL argument(s).");
+		return false;
+	}
+
+	return animation->isDone;
 }
 
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
-
