@@ -75,13 +75,16 @@ typedef struct Level1Scene
 	Mesh* planetMesh;
 	Mesh* myMesh3x3;
 	Mesh* myMesh16x8;
+	Mesh* livesTextMesh;
 	SpriteSource* planetSpriteSource;
 	SpriteSource* monkeyIdleSpriteSource;
 	SpriteSource* monkeyJumpSpriteSource;
 	SpriteSource* monkeyWalkSpriteSource;
 	SpriteSource* robotoMonoBlackSpriteSource;
+	SpriteSource* livesTextSpriteSource;
 	Entity* planetEntity;
 	Entity* monkeyEntity;
+	Entity* livesTextEntity;
 
 } Level1Scene;
 
@@ -124,13 +127,16 @@ static Level1Scene instance =
 	,NULL	// planetMesh
 	,NULL	// myMesh3x3
 	,NULL	// myMesh16x8
+	,NULL	// livesTextMesh
 	,NULL	// planetSpriteSource
 	,NULL	// monkeyIdleSpriteSource
 	,NULL	// monkeyJumpSpriteSource
 	,NULL	// monkeyWalkSpriteSource
 	,NULL	// robotoMonoBlackSpriteSource
+	,NULL	// livesTextSpriteSource
 	,NULL	// planetEntity
 	,NULL	// monkeyEntity
+	,NULL	// livesTextEntity
 };
 
 //------------------------------------------------------------------------------
@@ -190,25 +196,36 @@ static void Level1SceneLoad(void)
 // Initialize the entities and variables used by the scene.
 static void Level1SceneInit()
 {
-	// Create Planet Entity.
+	// Create a “Planet” Entity.
 	instance.planetEntity = EntityFactoryBuild("./Data/PlanetBounce.txt");
 	if (instance.planetEntity == NULL) {
 		return;
 	}
 
-	// Get Sprite component.
-	Sprite* newSprite = EntityGetSprite(instance.planetEntity);
-	if (newSprite == NULL) {
+	// Create a “Monkey” Entity.
+	instance.monkeyEntity = EntityFactoryBuild("./Data/Monkey.txt");
+	if (instance.monkeyEntity == NULL) {
 		return;
 	}
+	monkeyState = MonkeyInvalid; // Initialize the monkeyState variable to “MonkeyInvalid”
+	Level1SceneSetMonkeyState(instance.monkeyEntity, MonkeyIdle);
 
-	// Set Sprite components.
-	SpriteSetMesh(newSprite, instance.planetMesh);
-	SpriteSetSpriteSource(newSprite, instance.planetSpriteSource);
-	SpriteSetFrame(newSprite, 0); // for tracemessage testing
+	// Create a “LivesText” Entity.
+	instance.livesTextEntity = EntityFactoryBuild("./Data/MonkeyLivesText.txt");
+	if (instance.livesTextEntity == NULL) {
+		return;
+	}
+	Sprite* livesSprite = EntityGetSprite(instance.livesTextEntity); // Get the Entity’s Sprite.
+	if (livesSprite == NULL) {
+		return;
+	}
+	SpriteSetMesh(livesSprite, instance.livesTextMesh); // Set the Sprite’s Mesh
+	SpriteSetSpriteSource(livesSprite, instance.livesTextSpriteSource); // and SpriteSource
+	sprintf_s(livesBuffer, sizeof(livesBuffer), "Lives: %d", instance.numLives); // write text to livesBuffer
+	SpriteSetText(livesSprite, livesBuffer); // Call SpriteSetText(), passing the livesBuffer.
 
 	// General settings.
-	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 1.0f, 1.0f, 1.0f, 1.0f });
+	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 1.0f, 1.0f, 1.0f, 1.0f }); // white
 	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 }
 
