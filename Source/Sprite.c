@@ -18,6 +18,7 @@
 #include "Transform.h"
 #include "Stream.h"
 #include "Mesh.h"
+#include "Matrix2D.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -130,19 +131,25 @@ void SpriteRender(const Sprite* sprite, Transform* transform)
 		return;
 	}
 
+	// Get the transformation matrix from the Transform component.
+	const Matrix2D* matrix = TransformGetMatrix(transform);
+	if (matrix == NULL) {
+		TraceMessage("Error: TransformGetMatrix failed to retrieve matrix.");
+		return;
+	}
+
+	// Set up rendering based on whether spriteSource is textured or untextured.
 	if (sprite->spriteSource == NULL) {
 		// Prepare to render untextured sprite.
 		DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
-
 	}
-	if (sprite->spriteSource != NULL) {
+	else {
 		// Prepare to render a textured sprite.
 		DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
 
 		// Assign the texture via SpriteSource.
 		SpriteSourceSetTexture(sprite->spriteSource);
 		SpriteSourceSetTextureOffset(sprite->spriteSource, sprite->frameIndex);
-
 	} 
 
 	// Express settings for the rendered sprite.
