@@ -402,7 +402,8 @@ static void Level1SceneBounceController(Entity* entity)
 	// Get local copies of the Entity’s current position and velocity.
 	const Vector2D* currentPosition = TransformGetTranslation(newTransform);
 	Vector2D tempPosition = *currentPosition;
-	Vector2D velocity = *PhysicsGetVelocity(newPhysics);
+	const Vector2D* currentVelocity = PhysicsGetVelocity(newPhysics);
+	Vector2D velocity = *currentVelocity;
 
 	if (tempPosition.x <= -wallDistance) {
 		tempPosition.x = -wallDistance;  // Constrain position to the left wall
@@ -410,8 +411,8 @@ static void Level1SceneBounceController(Entity* entity)
 	}
 
 	if (tempPosition.x >= wallDistance) {
-		tempPosition.x = wallDistance;  // Constrain position to the right wall
-		velocity.x = -velocity.x;  // Reverse velocity.x for bouncing effect
+		tempPosition.x = wallDistance;   // Constrain position to the right wall
+		velocity.x = -velocity.x;      // Reverse velocity.x for bouncing effect
 	}
 
 	if (tempPosition.y <= groundHeight) {
@@ -420,8 +421,8 @@ static void Level1SceneBounceController(Entity* entity)
 	}
 
 	// Store the Entity’s new position and velocity.
-	TransformSetTranslation(newTransform, currentPosition);
-	PhysicsSetVelocity(newPhysics, &velocity);
+	TransformSetTranslation(newTransform, &tempPosition);  // Update with modified position
+	PhysicsSetVelocity(newPhysics, &velocity);  // Update with modified velocity
 }
 
 // Check if two entities are colliding.
