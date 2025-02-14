@@ -97,6 +97,7 @@ static void Level1SceneUnload(void);
 static void Level1SceneRender(void);
 
 static void Level1SceneMovementController(Entity* entity);
+static void Level1SceneSetMonkeyState(Entity* entity, MonkeyStates newState);
 
 //------------------------------------------------------------------------------
 // Instance Variable:
@@ -310,4 +311,46 @@ static void Level1SceneMovementController(Entity* entity)
 
 	// After landing calculations, update velocity.
 	PhysicsSetVelocity(newPhysics, &velocity);
+}
+
+// For managing the “Monkey” Entity’s current state and animation.
+static void Level1SceneSetMonkeyState(Entity* entity, MonkeyStates newState)
+{
+	// If (monkeyState != newState),
+	if (monkeyState != newState)
+	{
+		// Set monkeyState = newState.
+		monkeyState = newState;
+
+		// Get the Entity’s Sprite and Animation components.
+		Sprite* sprite = EntityGetSprite(entity);
+		Animation* animation = EntityGetAnimation(entity);
+		if (!sprite || !animation) {
+			return;
+		}
+
+		switch (newState) 
+		{
+		case MonkeyIdle:
+			SpriteSetMesh(sprite, instance.planetMesh); // Set the Sprite’s Mesh to the 1x1 mesh.
+			SpriteSetSpriteSource(sprite, instance.monkeyIdleSpriteSource); // Set the Sprite’s SpriteSource to “MonkeyIdle”.
+			AnimationPlay(animation, 1, 0.0f, false); // Call AnimationPlay with a frame count of 1, a frame duration of 0.0f, and looping = false.
+			break;
+
+		case MonkeyWalk:
+			SpriteSetMesh(sprite, instance.myMesh3x3); // Set the Sprite’s Mesh to the 3x3 mesh.
+			SpriteSetSpriteSource(sprite, instance.monkeyWalkSpriteSource); // Set the Sprite’s SpriteSource to “MonkeyWalk”.
+			AnimationPlay(animation, 8, 0.05f, true); // Call AnimationPlay with a frame count of 8, a frame duration of 0.05f, and looping = true.
+			break;
+
+		case MonkeyJump:
+			SpriteSetMesh(sprite, instance.planetMesh); // Set the Sprite’s Mesh to the 1x1 mesh.
+			SpriteSetSpriteSource(sprite, instance.monkeyJumpSpriteSource); // Set the Sprite’s SpriteSource to “MonkeyJump”.
+			AnimationPlay(animation, 1, 0.0f, false); // Call AnimationPlay with a frame count of 1, a frame duration of 0.0f, and looping = false.
+			break;
+
+		default:
+			break;
+		}
+	}
 }
