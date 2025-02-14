@@ -294,30 +294,35 @@ static void Level1SceneMovementController(Entity* entity)
 
 	// Handle moving left or right.
 	Vector2D velocity = *PhysicsGetVelocity(newPhysics);
-
-	if (DGL_Input_KeyDown(VK_LEFT)) {
-		// If LEFT ARROW key is pressed, set velocity.x = - moveVelocity.
+	if (DGL_Input_KeyDown(VK_LEFT)) { // left arrow key
 		velocity.x = -moveVelocity;
+		if (monkeyState != MonkeyJump) {
+			Level1SceneSetMonkeyState(entity, MonkeyWalk);
+		}
 	}
-	else if (DGL_Input_KeyDown(VK_RIGHT)) {
-		// If RIGHT ARROW key is pressed, set velocity.x = moveVelocity.
+	else if (DGL_Input_KeyDown(VK_RIGHT)) { // right arrow key
 		velocity.x = moveVelocity;
+		if (monkeyState != MonkeyJump) {
+			Level1SceneSetMonkeyState(entity, MonkeyWalk);
+		}
 	}
-	else {
-		// If neither is pressed, set velocity.x = 0.
+	else { 
 		velocity.x = 0;
+		if (monkeyState != MonkeyJump) {
+			Level1SceneSetMonkeyState(entity, MonkeyIdle);
+		}
 	}
 
-	// Handle Jumping.
-	if (DGL_Input_KeyTriggered(VK_UP)) {
+	// Handle jumping.
+	if (DGL_Input_KeyTriggered(VK_UP)) { // up arrow key
 		velocity.y = jumpVelocity;
 		PhysicsSetAcceleration(newPhysics, &gravityNormal);
+		Level1SceneSetMonkeyState(entity, MonkeyJump);
 	}
 
-	// Handle Landing.
+	// Handle landing.
 	const Vector2D* currentTranslation = TransformGetTranslation(newTransform);
 	if (currentTranslation->y < groundHeight) {
-
 		// Set y-axis translation value to groundHeight.
 		Vector2D newTranslation = *currentTranslation;
 		newTranslation.y = groundHeight;
@@ -330,11 +335,8 @@ static void Level1SceneMovementController(Entity* entity)
 		const Vector2D* newGravityNone = &gravityNone;
 		PhysicsSetAcceleration(newPhysics, newGravityNone);
 
-		// Lose a life and check death parameters.
-		instance.numLives -= 1;
-		if (instance.numLives <= 0) {
-			SceneSystemSetNext(Level2SceneGetInstance());
-		}
+		// Set monkey state to idle upon landing.
+		Level1SceneSetMonkeyState(entity, MonkeyIdle);
 	}
 
 	// After landing calculations, update velocity.
