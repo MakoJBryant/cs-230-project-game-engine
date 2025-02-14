@@ -32,9 +32,21 @@
 // Private Constants:
 //------------------------------------------------------------------------------
 
+typedef enum MonkeyStates
+{
+	MonkeyInvalid = -1,
+	MonkeyIdle,
+	MonkeyWalk,
+	MonkeyJump
+
+} MonkeyStates;
+enum MonkeyStates monkeyState = MonkeyInvalid;
+
 static const float groundHeight = -150.0f;
 static const float moveVelocity = 500.0f;
 static const float jumpVelocity = 1000.0f;
+static const float wallDistance = 462.0f;
+static const float CheckSquareDistance = (75.0f * 75.0f);
 static const Vector2D gravityNormal = { 0.0f, -1500.0f };
 static const Vector2D gravityNone = { 0.0f, 0.0f };
 
@@ -49,9 +61,16 @@ typedef struct Level1Scene
 
 	// Add any scene-specific variables second.
 	int numLives;
-	Mesh* newMesh;
-	SpriteSource* newSpriteSource;
-	Entity* newEntity;
+	Mesh* planetMesh;
+	Mesh* mesh3x3;
+	Mesh* mesh16x8;
+	SpriteSource* planetSpriteSource;
+	SpriteSource* monkeyIdleSpriteSource;
+	SpriteSource* monkeyJumpSpriteSource;
+	SpriteSource* monkeyWalkSpriteSource;
+	SpriteSource* robotoMonoBlackSpriteSource;
+	Entity* planetEntity;
+	Entity* monkeyEntity;
 
 } Level1Scene;
 
@@ -62,6 +81,9 @@ typedef struct Level1Scene
 //------------------------------------------------------------------------------
 // Private Variables:
 //------------------------------------------------------------------------------
+
+char livesBuffer[16];
+char name[32];
 
 //------------------------------------------------------------------------------
 // Private Function Declarations:
@@ -87,9 +109,16 @@ static Level1Scene instance =
 
 	// Initialize any scene-specific variables:
 	0		// numLives
-	,NULL	// Mesh*
-	,NULL	// SpriteSource*
-	,NULL	// Entity*
+	,NULL	// planetMesh
+	,NULL	// mesh3x3
+	,NULL	// mesh16x8
+	,NULL	// planetSpriteSource
+	,NULL	// monkeyIdleSpriteSource
+	,NULL	// monkeyJumpSpriteSource
+	,NULL	// monkeyWalkSpriteSource
+	,NULL	// robotoMonoBlackSpriteSource
+	,NULL	// planetEntity
+	,NULL	// monkeyEntity
 };
 
 //------------------------------------------------------------------------------
@@ -114,7 +143,6 @@ static void Level1SceneLoad(void)
 	// Open file path and save to Stream type variable.
 	const char* filePath = "Data/Level1_Lives.txt";
 	Stream fileStream = StreamOpen(filePath);
-
 	if (fileStream == NULL) {
 		TraceMessage("Error: fileStream for %s is NULL", filePath);
 	}
@@ -123,33 +151,52 @@ static void Level1SceneLoad(void)
 	instance.numLives = StreamReadInt(fileStream);
 	StreamClose(&fileStream);
 
-	// Test Mesh* newMesh.
-	instance.newMesh = MeshCreate();
-	MeshBuildQuad(instance.newMesh, 0.5f, 0.5f, 1.0f, 1.0f, "Mesh1x1");
+	// Create the planet.
+	instance.planetMesh = MeshCreate(); // planet mesh
+	MeshBuildQuad(instance.planetMesh, 0.5f, 0.5f, 1.0f, 1.0f, "Mesh1x1");
+	instance.planetSpriteSource = SpriteSourceCreate(); // planet sprite source
+	SpriteSourceLoadTexture(instance.planetSpriteSource, 1, 1, "PlanetTexture.png");
 
-	// Test SpriteSource* mySpriteSource.
-	instance.newSpriteSource = SpriteSourceCreate();
-	SpriteSourceLoadTexture(instance.newSpriteSource, 1, 1, "PlanetTexture.png");
+	// Create the monkey meshes.
+	instance.mesh3x3 = MeshCreate(); // 3x3 mesh
+	MeshBuildQuad(instance.mesh3x3, 0.5f, 0.5f, 1.0f / 3, 1.0f / 3, "Mesh3x3");
+	instance.mesh16x8 = MeshCreate(); // 16x8 mesh
+	MeshBuildQuad(instance.mesh16x8, 0.5f, 0.5f, 1.0f / 16, 1.0f / 8, "Mesh16x8");
+
+	// Create the monkey sprite sources.
+	instance.monkeyIdleSpriteSource = SpriteSourceCreate(); // 1x1 monkey idle
+	SpriteSourceLoadTexture(instance.monkeyIdleSpriteSource, 1, 1, "MonkeyIdle.png");
+	instance.monkeyJumpSpriteSource = SpriteSourceCreate(); // 1x1 monkey jump
+	SpriteSourceLoadTexture(instance.monkeyJumpSpriteSource, 1, 1, "MonkeyJump.png");
+	instance.monkeyWalkSpriteSource = SpriteSourceCreate(); // 3x3 monkey walk
+	SpriteSourceLoadTexture(instance.monkeyWalkSpriteSource, 3, 3, "MonkeyWalk.png");
+	instance.robotoMonoBlackSpriteSource = SpriteSourceCreate(); // 16x8 roboto mono black
+	SpriteSourceLoadTexture(instance.robotoMonoBlackSpriteSource, 16, 8, "Roboto_Mono_Black.png");
+
 }
 
 // Initialize the entities and variables used by the scene.
 static void Level1SceneInit()
 {
 	// Create Planet Entity.
-	instance.newEntity = EntityFactoryBuild("./Data/PlanetJump.txt");
-	if (instance.newEntity == NULL) {
+	instance.planetEntity = EntityFactoryBuild("./Data/PlanetBounce.txt");
+	if (instance.planetEntity == NULL) {
+		return;
+	}
+	instance.monkeyEntity = EntityFactoryBuild("./Data/PlanetBounce.txt");
+	if (instance.monkeyEntity == NULL) {
 		return;
 	}
 
 	// Get Sprite component.
-	Sprite* newSprite = EntityGetSprite(instance.newEntity);
+	Sprite* newSprite = EntityGetSprite(instance.planetEntity);
 	if (newSprite == NULL) {
 		return;
 	}
 
 	// Set Sprite components.
-	SpriteSetMesh(newSprite, instance.newMesh);
-	SpriteSetSpriteSource(newSprite, instance.newSpriteSource);
+	SpriteSetMesh(newSprite, instance.planetMesh);
+	SpriteSetSpriteSource(newSprite, instance.planetSpriteSource);
 	SpriteSetFrame(newSprite, 0); // for tracemessage testing
 
 	// General settings.
@@ -163,8 +210,8 @@ static void Level1SceneInit()
 static void Level1SceneUpdate(float dt)
 {
 	// Update the planet Entity.
-	Level1SceneMovementController(instance.newEntity);
-	EntityUpdate(instance.newEntity, dt);
+	Level1SceneMovementController(instance.planetEntity);
+	EntityUpdate(instance.planetEntity, dt);
 
 	// Level management controls.
 	if (DGL_Input_KeyTriggered('1')) {
@@ -184,22 +231,23 @@ static void Level1SceneUpdate(float dt)
 // Render any objects associated with the scene.
 void Level1SceneRender(void)
 {
-	EntityRender(instance.newEntity);
+	EntityRender(instance.planetEntity);
 }
 
 // Free any objects associated with the scene.
 static void Level1SceneExit()
 {
-	EntityFree(&instance.newEntity);
+	EntityFree(&instance.planetEntity);
 }
 
 // Unload any resources used by the scene.
 static void Level1SceneUnload(void)
 {
-	SpriteSourceFree(&instance.newSpriteSource);
-	MeshFree(&instance.newMesh);
+	SpriteSourceFree(&instance.planetSpriteSource);
+	MeshFree(&instance.planetMesh);
 }
 
+// Allows entities to move.
 static void Level1SceneMovementController(Entity* entity)
 {
 	// Get the Physics and Transform components from the Entity.
