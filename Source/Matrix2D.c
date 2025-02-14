@@ -157,9 +157,19 @@ void Matrix2DRotRad(Matrix2D* pResult, float angle)
 // (NOTE: Remember to treat the implied w component as 1.)
 void Matrix2DMultVec(Vector2D* pResult, const Matrix2D* pMtx, const Vector2D* pVec)
 {
-	UNREFERENCED_PARAMETER(pResult);
-	UNREFERENCED_PARAMETER(pMtx);
-	UNREFERENCED_PARAMETER(pVec);
+	if (!pResult || !pMtx || !pVec) return;
+
+	// The x-component of the resulting vector after matrix-vector multiplication.
+	pResult->x = 
+		pMtx->m[0][0] * pVec->x		// scales the x component of the vector
+		+ pMtx->m[0][1] * pVec->y	// scales the y component of the vector
+		+ pMtx->m[0][2];			// translation in the x direction
+
+	// The y-component of the resulting vector after matrix-vector multiplication.
+	pResult->y = 
+		pMtx->m[1][0] * pVec->x		// scales the x component of the vector
+		+ pMtx->m[1][1] * pVec->y   // scales the y component of the vector
+		+ pMtx->m[1][2];			// translation in the y direction
 }
 
 //------------------------------------------------------------------------------
