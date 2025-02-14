@@ -26,6 +26,7 @@ extern "C" {
 // Forward References:
 //------------------------------------------------------------------------------
 
+typedef struct Animation Animation;
 typedef struct Entity Entity;
 typedef struct Physics Physics;
 typedef struct Sprite Sprite;
@@ -59,13 +60,16 @@ typedef struct Entity
 	//	 size of the "name" array.]
 	char name[32];
 
-	// Pointer to an attached physics component.
+	// Pointer to an attached Animation component.
+	Animation* animation;
+
+	// Pointer to an attached Physics component.
 	Physics* physics;
 
-	// Pointer to an attached sprite component.
+	// Pointer to an attached Sprite component.
 	Sprite* sprite;
 
-	// Pointer to an attached transform component.
+	// Pointer to an attached Transform component.
 	Transform* transform;
 
 } Entity;
@@ -100,6 +104,14 @@ void EntityFree(Entity** entity);
 //	 entity = Pointer to the Entity.
 //	 stream = The data stream used for reading.
 void EntityRead(Entity* entity, Stream stream);
+
+// Attach an Animation component to an Entity.
+// (NOTE: This function must set the animation component's parent pointer by
+//	  calling the AnimationSetParent() function.)
+// Params:
+//	 entity = Pointer to the Entity.
+//   animation = Pointer to the Animation component to be attached.
+void EntityAddAnimation(Entity* entity, Animation* animation);
 
 // Attach a Physics component to an Entity.
 // Params:
@@ -139,12 +151,21 @@ void EntitySetName(Entity* entity, const char * name);
 //		else return NULL.
 const char * EntityGetName(const Entity* entity);
 
+// Get the Animation component attached to an Entity.
+// Params:
+//	 entity = Pointer to the Entity.
+// Returns:
+//	 If the Entity pointer is valid,
+//		then return a pointer to the attached Animation component,
+//		else return NULL.
+Animation* EntityGetAnimation(const Entity* entity);
+
 // Get the Physics component attached to an Entity.
 // Params:
 //	 entity = Pointer to the Entity.
 // Returns:
 //	 If the Entity pointer is valid,
-//		then return a pointer to the attached physics component,
+//		then return a pointer to the attached Physics component,
 //		else return NULL.
 Physics* EntityGetPhysics(const Entity* entity);
 

@@ -104,7 +104,7 @@ BaseSystem* PlatformSystemGetInstance(HINSTANCE hInstance, int show)
 	DGL_SysInitInfo initInfo;
 	initInfo.mAppInstance = instance.mAppInstance;
 	initInfo.mShow = instance.mCreateWindow;
-	initInfo.mWindowTitle = "CS230S25 Project 2 - Graphics and Physics";
+	initInfo.mWindowTitle = "CS230S25 Project 3 - Transformations";
 	initInfo.mWindowWidth = 1024;
 	initInfo.mWindowHeight = 768;
 	initInfo.mMaxFrameRate = 60;

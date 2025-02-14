@@ -60,6 +60,17 @@ typedef struct DGL_Vec2 Vector2D;
 //	 Pointer to a FILE object if the file was opened successfully.
 Stream StreamOpen(const char * filePath);
 
+// Read a single boolean value from a stream.
+// (NOTE: Verify that the stream is valid first.)
+// (NOTE: Use fscanf_s() to scan the input stream for an integer.)
+// Params:
+//	 stream = The file stream from which to read.
+// Returns:
+//	 If the stream was opened succesfully,
+//	   then return a boolean value read from the file as an integer,
+//	   else return 0.
+bool StreamReadBoolean(Stream stream);
+
 // Read a single integer from a stream.
 // (NOTE: Verify that the stream is valid first.)
 // (NOTE: Use fscanf_s() to scan the input stream for an integer.)

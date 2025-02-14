@@ -44,13 +44,13 @@ typedef struct Entity Entity;
 // Public Functions:
 //------------------------------------------------------------------------------
 
-// Build a single instance of the specified entity.
+// Build a single instance of the specified Entity.
 // (HINT: See project instructions.)
 // Params:
 //	 filename = The name of the file to be deserialized.
 // Returns:
 //	 If the filename is valid
-//	   then return a pointer to a new instance of the specified entity,
+//	   then return a pointer to a new instance of the specified Entity,
 //	   else NULL.
 Entity* EntityFactoryBuild(const char * filename);
 
