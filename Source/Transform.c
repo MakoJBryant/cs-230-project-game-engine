@@ -157,25 +157,22 @@ const Matrix2D* TransformGetMatrix(Transform* transform)
 		return NULL;
 	}
 
-	// If the isDirty flag is true, then recalculate the transform matrix.
+	// If the isDirty flag is true when TransformGetMatrix is called, 
+	// then the stored transformation matrix must be calculated, as follows:
 	if (transform->isDirty) {
-		// Create temp matrices for altering
+		// Use the Matrix2DScale, Matrix2DRotRad, and Matrix2DTranslate functions to create
+		// separate matrices for the transform’s scale, rotation, and translation values.
 		Matrix2D scaleMatrix, rotMatrix, transMatrix, tempMatrix;
-
-		// Create scale matrix
 		Matrix2DScale(&scaleMatrix, transform->scale.x, transform->scale.y);
-
-		// Create rotation matrix
 		Matrix2DRotRad(&rotMatrix, transform->rotation);
-
-		// Create translation matrix
 		Matrix2DTranslate(&transMatrix, transform->translation.x, transform->translation.y);
 
-		// Compute final transformation matrix: T * R * S (order matters!)
-		Matrix2DConcat(&tempMatrix, &rotMatrix, &scaleMatrix); // tempMatrix = R * S
-		Matrix2DConcat(&transform->matrix, &transMatrix, &tempMatrix); // Final matrix = T * (R * S)
+		// Concatenate the rotation and scale matrices into a result matrix.
+		Matrix2DConcat(&tempMatrix, &rotMatrix, &scaleMatrix);
+		// Concatenate the translation and result matrices into a result matrix.
+		Matrix2DConcat(&transform->matrix, &transMatrix, &tempMatrix);
 
-		// Mark matrix as up-to-date
+		// Set the isDirty flag to false.
 		transform->isDirty = false;
 	}
 
