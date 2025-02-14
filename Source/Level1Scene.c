@@ -112,6 +112,7 @@ static void Level1SceneRender(void);
 
 static void Level1SceneMovementController(Entity* entity);
 static void Level1SceneSetMonkeyState(Entity* entity, MonkeyStates newState);
+static void Level1SceneBounceController(Entity* entity);
 
 //------------------------------------------------------------------------------
 // Instance Variable:
@@ -384,3 +385,38 @@ static void Level1SceneSetMonkeyState(Entity* entity, MonkeyStates newState)
 		}
 	}
 }
+
+// Bouncing logic for the Planet entity.
+static void Level1SceneBounceController(Entity* entity)
+{
+	// Get the Physics and Transform components from the Entity.
+	Physics* newPhysics = EntityGetPhysics(entity);
+	Transform* newTransform = EntityGetTransform(entity);
+	if (newPhysics == NULL || newTransform == NULL) {
+		return;
+	}
+
+	// Get local copies of the Entity’s current position and velocity.
+	Vector2D* currentPosition = TransformGetTranslation(newTransform);
+	Vector2D velocity = *PhysicsGetVelocity(newPhysics);
+
+	if (currentPosition->x <= -wallDistance) {
+		currentPosition->x = -wallDistance;  // Constrain position to the left wall
+		velocity.x = -velocity.x;  // Reverse velocity.x for bouncing effect
+	}
+
+	if (currentPosition->x >= wallDistance) {
+		currentPosition->x = wallDistance;  // Constrain position to the right wall
+		velocity.x = -velocity.x;  // Reverse velocity.x for bouncing effect
+	}
+
+	if (currentPosition->y <= groundHeight) {
+		currentPosition->y = groundHeight + (groundHeight - currentPosition->y); // Note: This calculation is necessary to conserve energy
+		velocity.y = -velocity.y;  // Reverse velocity.y for bouncing effect
+	}
+
+	// Store the Entity’s new position and velocity.
+	TransformSetTranslation(newTransform, currentPosition);
+	PhysicsSetVelocity(newPhysics, &velocity);
+}
+
