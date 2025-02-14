@@ -15,6 +15,7 @@
 #include "DGL.h"
 #include "Trace.h"
 #include "Stream.h"
+#include "Matrix2D.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -150,7 +151,36 @@ void TransformRead(Transform* transform, Stream stream)
 //		else return a NULL pointer.
 const Matrix2D* TransformGetMatrix(Transform* transform)
 {
-	UNREFERENCED_PARAMETER(transform);
+	// Verify that the transform pointer is valid.
+	if (transform == NULL) {
+		TraceMessage("Error: TransformGetMatrix received NULL argument(s).");
+		return NULL;
+	}
+
+	// If the isDirty flag is true, then recalculate the transform matrix.
+	if (transform->isDirty) {
+		// Create temp matrices for altering
+		Matrix2D scaleMatrix, rotMatrix, transMatrix, tempMatrix;
+
+		// Create scale matrix
+		Matrix2DScale(&scaleMatrix, transform->scale.x, transform->scale.y);
+
+		// Create rotation matrix
+		Matrix2DRotRad(&rotMatrix, transform->rotation);
+
+		// Create translation matrix
+		Matrix2DTranslate(&transMatrix, transform->translation.x, transform->translation.y);
+
+		// Compute final transformation matrix: T * R * S (order matters!)
+		Matrix2DConcat(&tempMatrix, &rotMatrix, &scaleMatrix); // tempMatrix = R * S
+		Matrix2DConcat(&transform->matrix, &transMatrix, &tempMatrix); // Final matrix = T * (R * S)
+
+		// Mark matrix as up-to-date
+		transform->isDirty = false;
+	}
+
+	// Return pointer to the updated transformation matrix.
+	return &transform->matrix;
 }
 
 // Get the translation of a Transform component.
