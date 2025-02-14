@@ -58,6 +58,9 @@ typedef struct Sprite
 	// The mesh used to draw the sprite.
 	const Mesh* mesh;
 
+	// Zero-terminated string used to display sprite text.
+	const char* text;
+
 } Sprite;
 #endif
 
@@ -142,6 +145,15 @@ void SpriteSetMesh(Sprite* sprite, const Mesh* mesh);
 //	 sprite = Pointer to the Sprite component.
 //	 spriteSource = Pointer to a SpriteSource (this pointer may be NULL).
 void SpriteSetSpriteSource(Sprite* sprite, const SpriteSource* spriteSource);
+
+// Assign a text string to a Sprite component.  This will allow a sequence of
+//	 characters to be displayed as text.
+// (NOTE: The text parameter may be NULL.  This will remove an existing text
+//	 string from a sprite and cause the sprite to be displayed normally.)
+// Params:
+//	 sprite = Pointer to the Sprite component.
+//	 text = Pointer to a zero-terminated array of characters.
+void SpriteSetText(Sprite* sprite, const char* text);
 
 /*----------------------------------------------------------------------------*/
 

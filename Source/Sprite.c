@@ -268,6 +268,19 @@ void SpriteSetSpriteSource(Sprite* sprite, const SpriteSource* spriteSource)
 	sprite->spriteSource = spriteSource;
 }
 
+// Assign a text string to a Sprite component.  This will allow a sequence of
+//	 characters to be displayed as text.
+// (NOTE: The text parameter may be NULL.  This will remove an existing text
+//	 string from a sprite and cause the sprite to be displayed normally.)
+// Params:
+//	 sprite = Pointer to the Sprite component.
+//	 text = Pointer to a zero-terminated array of characters.
+void SpriteSetText(Sprite* sprite, const char* text)
+{
+	UNREFERENCED_PARAMETER(sprite);
+	UNREFERENCED_PARAMETER(text);
+}
+
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
