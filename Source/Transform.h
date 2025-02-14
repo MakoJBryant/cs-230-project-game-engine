@@ -26,6 +26,7 @@ extern "C" {
 // Forward References:
 //------------------------------------------------------------------------------
 
+typedef struct DGL_Mat4 Matrix2D;
 typedef struct Transform Transform;
 typedef struct DGL_Vec2 Vector2D;
 typedef FILE* Stream;
@@ -53,6 +54,16 @@ typedef struct Transform
 	// The scale (or size) of an entity.
 	// (Hint: This should be initialized to (1, 1).)
 	Vector2D	scale;
+
+	// True if the transformation matrix needs to be recalculated.
+	// (Hint: This should be initialized to true.)
+	// (Hint: This should be set to true when the Transform data changes.)
+	bool	isDirty;
+
+	// The transformation matrix resulting from concatenating the matrices
+	//   representing the translation, rotation, and scale transformations.
+	//	 (e.g. matrix = Translation*Rotation*Scale matrices)
+	Matrix2D	matrix;
 
 } Transform;
 #endif
@@ -88,6 +99,16 @@ void TransformFree(Transform** transform);
 //	 transform = Pointer to the Transform component.
 //	 stream = The data stream used for reading.
 void TransformRead(Transform* transform, Stream stream);
+
+// Get the transform matrix, based upon translation, rotation and scale settings.
+// (HINT: If the isDirty flag is true, then recalculate the transform matrix.)
+// Params:
+//	 transform = Pointer to the Transform component.
+// Returns:
+//	 If the Transform pointer is valid,
+//		then return a pointer to the component's matrix structure,
+//		else return a NULL pointer.
+const Matrix2D* TransformGetMatrix(Transform* transform);
 
 // Get the translation of a Transform component.
 // Params:

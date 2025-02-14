@@ -127,6 +127,19 @@ void TransformRead(Transform* transform, Stream stream)
 	TransformSetScale(transform, &tempScale);
 }
 
+// Get the transform matrix, based upon translation, rotation and scale settings.
+// (HINT: If the isDirty flag is true, then recalculate the transform matrix.)
+// Params:
+//	 transform = Pointer to the Transform component.
+// Returns:
+//	 If the Transform pointer is valid,
+//		then return a pointer to the component's matrix structure,
+//		else return a NULL pointer.
+const Matrix2D* TransformGetMatrix(Transform* transform)
+{
+	UNREFERENCED_PARAMETER(transform);
+}
+
 // Get the translation of a Transform component.
 // Params:
 //	 transform = Pointer to the Transform component.
