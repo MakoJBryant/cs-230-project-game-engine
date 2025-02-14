@@ -72,17 +72,24 @@ Stream StreamOpen(const char* filePath) {
 }
 
 // Read a single boolean value from a stream.
-// (NOTE: Verify that the stream is valid first.)
-// (NOTE: Use fscanf_s() to scan the input stream for an integer.)
-// Params:
-//	 stream = The file stream from which to read.
-// Returns:
-//	 If the stream was opened succesfully,
-//	   then return a boolean value read from the file as an integer,
-//	   else return 0.
 bool StreamReadBoolean(Stream stream)
 {
-	UNREFERENCED_PARAMETER(stream);
+	if (stream == NULL) { // (NOTE: Verify that the stream is valid first.)
+		TraceMessage("Error: StreamReadBoolean received NULL argument(s).");
+		return false;
+	}
+
+	int value; // (NOTE: Use fscanf_s() to scan the input stream for an integer.)
+	errno_t err = fscanf_s(stream, "%d", &value);
+
+	// fscanf_s() error check.
+	if (err != 1) {
+		TraceMessage("Error: StreamReadBoolean stream failed to open.");
+		return false;
+	}
+
+	// Return true if value is nonzero, otherwise false.
+	return value != 0;
 }
 
 // Read a single integer from a stream.
