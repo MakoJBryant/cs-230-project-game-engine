@@ -238,24 +238,33 @@ static void Level1SceneInit()
 //	 dt = Change in time (in seconds) since the last game loop.
 static void Level1SceneUpdate(float dt)
 {
-	// Update the planet Entity.
-	Level1SceneMovementController(instance.planetEntity);
-	EntityUpdate(instance.planetEntity, dt);
 
-	// Level management controls.
-	if (DGL_Input_KeyTriggered('1')) {
-		SceneSystemRestart();
-	}
-	else if (DGL_Input_KeyTriggered('2')) {
-		SceneSystemSetNext(Level2SceneGetInstance());
-	}
-	else if (DGL_Input_KeyTriggered('9')) {
-		SceneSystemSetNext(SandboxSceneGetInstance());
-	}
-	else if (DGL_Input_KeyTriggered('0')) {
-		SceneSystemSetNext(DemoSceneGetInstance());
+	// Call required controllers for entities.
+	Level1SceneMovementController(instance.monkeyEntity); // monkey moves
+	Level1SceneBounceController(instance.planetEntity); // planet bounces
+
+	// Update all entities in the scene with the delta time.
+	EntityUpdate(instance.monkeyEntity, dt);
+	EntityUpdate(instance.planetEntity, dt);
+	EntityUpdate(instance.livesTextEntity, dt);
+
+	// Check for collision between the Monkey and the Planet.
+	if (Level1SceneIsColliding(instance.monkeyEntity, instance.planetEntity)) {
+		// Decrement the number of lives.
+		instance.numLives--;
+
+		// If no lives remain, transition to Level 2.
+		if (instance.numLives <= 0) {
+			SceneSystemSetNext(Level2SceneGetInstance());
+		}
+		// Otherwise, restart the current level.
+		else {
+			SceneSystemRestart();
+		}
 	}
 }
+
+
 
 // Render any objects associated with the scene.
 void Level1SceneRender(void)

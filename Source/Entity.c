@@ -186,6 +186,18 @@ void EntityRead(Entity* entity, Stream stream)
 	}
 }
 
+// Attach an Animation component to an Entity.
+// (NOTE: This function must set the animation component's parent pointer by
+//	  calling the AnimationSetParent() function.)
+// Params:
+//	 entity = Pointer to the Entity.
+//   animation = Pointer to the Animation component to be attached.
+void EntityAddAnimation(Entity* entity, Animation* animation)
+{
+	UNREFERENCED_PARAMETER(entity);
+	UNREFERENCED_PARAMETER(animation);
+}
+
 // Attach a Physics component to an Entity.
 void EntityAddPhysics(Entity* entity, Physics* physics)
 {
@@ -226,6 +238,19 @@ const char* EntityGetName(const Entity* entity)
 {
 	// ternary conditional operator
 	return entity ? entity->name : NULL;
+}
+
+// Get the Animation component attached to an Entity.
+// Params:
+//	 entity = Pointer to the Entity.
+// Returns:
+//	 If the Entity pointer is valid,
+//		then return a pointer to the attached Animation component,
+//		else return NULL.
+Animation* EntityGetAnimation(const Entity* entity)
+{
+	UNREFERENCED_PARAMETER(entity);
+	return NULL;
 }
 
 // Get the Physics component attached to an Entity.
