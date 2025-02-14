@@ -18,6 +18,7 @@
 #include "Stream.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h> // bool
 #include "Trace.h"
 #include "DGL.h" // Vector2D
 

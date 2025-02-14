@@ -19,6 +19,8 @@
 #include "Stream.h"
 #include "Trace.h"
 #include "DGL.h"
+#include "Vector2D.h"
+#include <stdbool.h>
 
 // Components.
 #include "Entity.h"
@@ -113,6 +115,7 @@ static void Level1SceneRender(void);
 static void Level1SceneMovementController(Entity* entity);
 static void Level1SceneSetMonkeyState(Entity* entity, MonkeyStates newState);
 static void Level1SceneBounceController(Entity* entity);
+static bool Level1SceneIsColliding(const Entity* entityA, const Entity* entityB);
 
 //------------------------------------------------------------------------------
 // Instance Variable:
@@ -397,21 +400,22 @@ static void Level1SceneBounceController(Entity* entity)
 	}
 
 	// Get local copies of the Entity’s current position and velocity.
-	Vector2D* currentPosition = TransformGetTranslation(newTransform);
+	const Vector2D* currentPosition = TransformGetTranslation(newTransform);
+	Vector2D tempPosition = *currentPosition;
 	Vector2D velocity = *PhysicsGetVelocity(newPhysics);
 
-	if (currentPosition->x <= -wallDistance) {
-		currentPosition->x = -wallDistance;  // Constrain position to the left wall
+	if (tempPosition.x <= -wallDistance) {
+		tempPosition.x = -wallDistance;  // Constrain position to the left wall
 		velocity.x = -velocity.x;  // Reverse velocity.x for bouncing effect
 	}
 
-	if (currentPosition->x >= wallDistance) {
-		currentPosition->x = wallDistance;  // Constrain position to the right wall
+	if (tempPosition.x >= wallDistance) {
+		tempPosition.x = wallDistance;  // Constrain position to the right wall
 		velocity.x = -velocity.x;  // Reverse velocity.x for bouncing effect
 	}
 
-	if (currentPosition->y <= groundHeight) {
-		currentPosition->y = groundHeight + (groundHeight - currentPosition->y); // Note: This calculation is necessary to conserve energy
+	if (tempPosition.y <= groundHeight) {
+		tempPosition.y = groundHeight + (groundHeight - tempPosition.y); // Note: This calculation is necessary to conserve energy
 		velocity.y = -velocity.y;  // Reverse velocity.y for bouncing effect
 	}
 
@@ -420,3 +424,27 @@ static void Level1SceneBounceController(Entity* entity)
 	PhysicsSetVelocity(newPhysics, &velocity);
 }
 
+// Check if two entities are colliding.
+static bool Level1SceneIsColliding(const Entity* entityA, const Entity* entityB)
+{
+	// Get the current positions of the two Entities.
+	Transform* transformA = EntityGetTransform(entityA);
+	Transform* transformB = EntityGetTransform(entityB);
+	if (transformA == NULL || transformB == NULL) {
+		return false;
+	}
+
+	// Get the current position of the two Entities.
+	const Vector2D* positionA = TransformGetTranslation(transformA);
+	const Vector2D* positionB = TransformGetTranslation(transformB);
+
+	// Using Vector2DSquareDistance, calculate the distance (squared) between the two Entities.
+	float distanceSquared = Vector2DSquareDistance(positionA, positionB);
+
+	if (distanceSquared <= CheckSquareDistance) {
+		return true; // (collision detected)
+	}
+
+	return false; // (no collision)
+
+}
