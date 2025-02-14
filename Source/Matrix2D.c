@@ -48,17 +48,16 @@ void Matrix2DIdentity(Matrix2D* pResult)
 {
 	if (!pResult) return;
 
-	// Set all elements to zero
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++) // ROWs
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < 4; j++) // COLUMNs
 		{
 			if (i == j) {
-				// Set diagonal elements to 1
-				pResult->m[i][j] = 1.0f; 
-			} 
+				// Set diagonal elements to 1.0f
+				pResult->m[i][j] = 1.0f;
+			}
 			else {
-				// Set non-diagonal elements to 0
+				// Set all off-diagonal elements to 0.0f
 				pResult->m[i][j] = 0.0f;
 			}
 		}
@@ -69,8 +68,21 @@ void Matrix2DIdentity(Matrix2D* pResult)
 // (NOTE: Care must be taken when pResult = pMtx.)
 void Matrix2DTranspose(Matrix2D* pResult, const Matrix2D* pMtx)
 {
-	UNREFERENCED_PARAMETER(pResult);
-	UNREFERENCED_PARAMETER(pMtx);
+	if (!pResult || !pMtx) return;
+
+	Matrix2D temp; // Temporary matrix to store the result
+
+	for (int i = 0; i < 4; i++) // ROWs
+	{
+		for (int j = 0; j < 4; j++) // COLUMNs
+		{
+			// Swap rows and columns
+			temp.m[i][j] = pMtx->m[j][i];
+		}
+	}
+
+	// Copy the result back to pResult
+	*pResult = temp;
 }
 
 // This function multiplies Mtx0 with Mtx1 and saves the result in Result.
@@ -78,9 +90,25 @@ void Matrix2DTranspose(Matrix2D* pResult, const Matrix2D* pMtx)
 // (NOTE: Care must be taken when pResult = either pMtx0 or pMtx1.)
 void Matrix2DConcat(Matrix2D* pResult, const Matrix2D* pMtx0, const Matrix2D* pMtx1)
 {
-	UNREFERENCED_PARAMETER(pResult);
-	UNREFERENCED_PARAMETER(pMtx0);
-	UNREFERENCED_PARAMETER(pMtx1);
+	if (!pResult || !pMtx0 || !pMtx1) return;
+
+	Matrix2D temp; // Temporary matrix to store the result
+
+	for (int i = 0; i < 4; i++) // ROWs
+	{
+		for (int j = 0; j < 4; j++) // COLUMNs
+		{
+			// Perform matrix multiplication between two 4x4 matrices
+			temp.m[i][j] =
+				  Matrix2DRowCol(pMtx0, i, 0) * Matrix2DRowCol(pMtx1, 0, j)	// first term
+				+ Matrix2DRowCol(pMtx0, i, 1) * Matrix2DRowCol(pMtx1, 1, j)	// second term
+				+ Matrix2DRowCol(pMtx0, i, 2) * Matrix2DRowCol(pMtx1, 2, j)	// third term
+				+ Matrix2DRowCol(pMtx0, i, 3) * Matrix2DRowCol(pMtx1, 3, j);// fourth term
+		}
+	}
+
+	// Copy the result back to pResult
+	*pResult = temp;
 }
 
 // This function creates a translation matrix from x & y and saves it in Result.
@@ -90,7 +118,7 @@ void Matrix2DTranslate(Matrix2D* pResult, float x, float y)
 	if (!pResult) return;
 
 	// Initialize identity matrix
-	void Matrix2DIdentity(pResult);
+	Matrix2DIdentity(pResult);
 
 	// Set translation values
 	pResult->m[0][3] = x;
@@ -123,7 +151,7 @@ void Matrix2DRotDeg(Matrix2D* pResult, float angle)
 	if (!pResult) return; 
 
 	// Convert angle from degrees to radians
-	float radians = (angle * M_PI) / 180.0f;
+	float radians = (angle * (float)M_PI) / 180.0f;
 
 	// Initialize identity matrix
 	Matrix2DIdentity(pResult);
@@ -159,17 +187,15 @@ void Matrix2DMultVec(Vector2D* pResult, const Matrix2D* pMtx, const Vector2D* pV
 {
 	if (!pResult || !pMtx || !pVec) return;
 
-	// The x-component of the resulting vector after matrix-vector multiplication.
-	pResult->x = 
-		pMtx->m[0][0] * pVec->x		// scales the x component of the vector
-		+ pMtx->m[0][1] * pVec->y	// scales the y component of the vector
-		+ pMtx->m[0][2];			// translation in the x direction
+	pResult->x =
+		  Matrix2DRowCol(pMtx, 0, 0) * pVec->x	// scales the x-component of the vector
+		+ Matrix2DRowCol(pMtx, 0, 1) * pVec->y	// scales the y-component of the vector
+		+ Matrix2DRowCol(pMtx, 0, 3);			// adds translation in the x-direction
 
-	// The y-component of the resulting vector after matrix-vector multiplication.
-	pResult->y = 
-		pMtx->m[1][0] * pVec->x		// scales the x component of the vector
-		+ pMtx->m[1][1] * pVec->y   // scales the y component of the vector
-		+ pMtx->m[1][2];			// translation in the y direction
+	pResult->y =
+		  Matrix2DRowCol(pMtx, 1, 0) * pVec->x	// scales the x-component of the vector
+		+ Matrix2DRowCol(pMtx, 1, 1) * pVec->y	// scales the y-component of the vector
+		+ Matrix2DRowCol(pMtx, 1, 3);			// adds translation in the y-direction
 }
 
 //------------------------------------------------------------------------------
