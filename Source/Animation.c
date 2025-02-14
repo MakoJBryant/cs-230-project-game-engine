@@ -16,6 +16,8 @@
 // Essentials.
 #include "stdafx.h"
 #include "Animation.h"
+#include "Stream.h"
+#include "Trace.h"
 
 //------------------------------------------------------------------------------
 
@@ -71,20 +73,28 @@ typedef struct Animation
 // Public Functions:
 //------------------------------------------------------------------------------
 
-// Dynamically allocate a new Animation component.
-// (Hint: Use calloc() to ensure that all member variables are initialized to 0.)
 Animation* AnimationCreate(void)
 {
-	return NULL;
+	Animation* newAnimation = (Animation*)calloc(1, sizeof(Animation));
+	if (!newAnimation) {
+		TraceMessage("Error: AnimationCreate failed to allocate memory.");
+		return NULL;
+	}
+
+	return newAnimation;
 }
 
-// Free the memory associated with an Animation component.
-// (NOTE: The Animation pointer must be set to NULL.)
-// Params:
-//	 animation = Pointer to the Animation pointer.
 void AnimationFree(Animation** animation)
 {
-	UNREFERENCED_PARAMETER(animation);
+	// Ensure the pointer is valid and not already NULL.
+	if (animation == NULL || *animation == NULL)
+	{
+		TraceMessage("Error: AnimationFree failed to allocate memory.");
+		return;
+	}
+
+	free(*animation);
+	*animation = NULL;
 }
 
 // Read the properties of an Animation component from a file.
@@ -96,8 +106,22 @@ void AnimationFree(Animation** animation)
 //	 stream = The data stream used for reading.
 void AnimationRead(Animation* animation, Stream stream)
 {
-	UNREFERENCED_PARAMETER(animation);
-	UNREFERENCED_PARAMETER(stream);
+	if (animation == NULL || stream == NULL) {
+		TraceMessage("Error: AnimationRead received NULL argument(s).");
+		return;
+	}
+
+	// Read integer values.
+	animation->frameIndex = StreamReadInt(stream);
+	animation->frameCount = StreamReadInt(stream);
+
+	// Read float values.
+	animation->frameDelay = StreamReadFloat(stream);
+	animation->frameDuration = StreamReadFloat(stream);
+
+	// Read boolean values.
+	animation->isRunning = StreamReadBoolean(stream);
+	animation->isLooping = StreamReadBoolean(stream);
 }
 
 // Set the parent Entity for an Animation component.

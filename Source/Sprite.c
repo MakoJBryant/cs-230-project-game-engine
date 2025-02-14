@@ -9,16 +9,24 @@
 //
 //------------------------------------------------------------------------------
 
-#include "stdafx.h"
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
 
+// Essentials.
+#include "stdafx.h"
 #include "Sprite.h"
 #include "DGL.h"
+#include "Stream.h"
 #include "Trace.h"
+#include "Matrix2D.h"
+
+// Components.
 #include "SpriteSource.h"
 #include "Transform.h"
-#include "Stream.h"
 #include "Mesh.h"
-#include "Matrix2D.h"
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:

@@ -9,12 +9,18 @@
 //
 //------------------------------------------------------------------------------
 
-#include "stdafx.h"
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
 
+// Essentials.
+#include "stdafx.h"
 #include "Mesh.h"
 #include "DGL.h"
 #include "Trace.h"
 #include <Assert.h>
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -52,13 +58,6 @@ typedef struct Mesh
 // Public Functions:
 //------------------------------------------------------------------------------
 
-// Dynamically allocate a new Mesh object but leave it empty.
-// (Hint: Use calloc() to ensure that all member variables are initialized to 0.)
-// https://www.geeksforgeeks.org/dynamic-memory-allocation-in-c-using-malloc-calloc-free-and-realloc/
-// Returns:
-//	 If the mesh was created successfully,
-//	   then return a pointer to the created Mesh,
-//	   else return NULL.
 Mesh* MeshCreate()
 {
 	// Allocate memory for new Mesh object.
@@ -73,19 +72,6 @@ Mesh* MeshCreate()
 	return newMesh;
 }
 
-// Build a quadrilateral mesh and store it in the specified Mesh object.
-// (NOTE: The DGL_Mesh object must be created using DGL_Graphics_StartMesh,
-//    DGL_Graphics_AddTriangle, and DGL_Graphics_EndMesh.)
-// (NOTE: The Mesh name can be stored using strcpy_s(). For example:
-//    strcpy_s(mesh->name, _countof(mesh->name), name); )
-// (NOTE: The drawMode should be set to DGL_DM_TRIANGLELIST.)
-// Params:
-//   mesh = Pointer to an existing, empty Mesh object.
-//	 xHalfSize = The X half-size of the mesh.
-//	 yHalfSize = The Y half-size of the mesh.
-//   uSize = The U size of the mesh, relative to texture coordinates (0.0 .. 1.0).
-//   vSize = The V size of the mesh, relative to texture coordinates (0.0 .. 1.0).
-//	 name = A name for the mesh.
 void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, float vSize, const char* name)
 {
 	// Verify that arguments are valid.
@@ -118,15 +104,6 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 
 }
 
-// Build a "spaceship" mesh and store it in the specified Mesh object.
-// (NOTE: This must be a "unit"-sized triangular mesh with the same characteristics as
-//    the "triangular, colored mesh" created in DemoScene.c.)
-// (NOTE: The DGL_Mesh object must be created using DGL_Graphics_StartMesh,
-//    DGL_Graphics_AddTriangle, and DGL_Graphics_EndMesh.)
-// (NOTE: The Mesh name can be stored using strcpy_s().)
-// (NOTE: The drawMode should be set to DGL_DM_TRIANGLELIST.)
-// Params:
-//   mesh = Pointer to an existing, empty Mesh object.
 void MeshBuildSpaceship(Mesh* mesh)
 {
 	// Verify that arguments are valid.
@@ -154,10 +131,6 @@ void MeshBuildSpaceship(Mesh* mesh)
 
 }
 
-// Render a mesh.
-// (NOTE: This is done using DGL_Graphics_DrawMesh().)
-// Params:
-//   mesh = Pointer to a Mesh to be rendered.
 void MeshRender(const Mesh* mesh)
 {
 	// Verify that arguments are valid.
@@ -169,12 +142,6 @@ void MeshRender(const Mesh* mesh)
 	DGL_Graphics_DrawMesh(mesh->meshResource, mesh->drawMode);
 }
 
-// Free the memory associated with a mesh.
-// (NOTE: The DGL_Mesh resource must be freed using DGL_Graphics_FreeMesh().)
-// (NOTE: The Mesh object must be freed using free().
-// (NOTE: The Mesh pointer must be set to NULL.)
-// Params:
-//   mesh = Pointer to the Mesh pointer.
 void MeshFree(Mesh** mesh)
 {
 	// Verify that arguments are valid.
