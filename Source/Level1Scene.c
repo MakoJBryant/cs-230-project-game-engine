@@ -9,24 +9,35 @@
 //
 //------------------------------------------------------------------------------
 
-#include "stdafx.h"
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
 
+// Essentials.
+#include "stdafx.h"
 #include "Scene.h"
+#include "Stream.h"
+#include "Trace.h"
+#include "DGL.h"
+
+// Components.
+#include "Entity.h"
+#include "EntityFactory.h"
+#include "Mesh.h"
+#include "Sprite.h"
+#include "SpriteSource.h"
+#include "Physics.h"
+#include "Transform.h"
+#include "Animation.h"
+
+// Scenes.
 #include "SceneSystem.h"
-#include "DemoScene.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
 #include "SandboxScene.h"
-#include "Stream.h"
-#include "Trace.h"
-#include "Mesh.h"
-#include "SpriteSource.h"
-#include "Entity.h"
-#include "DGL.h"
-#include "EntityFactory.h"
-#include "Sprite.h"
-#include "Physics.h"
-#include "Transform.h"
+#include "DemoScene.h"
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:
