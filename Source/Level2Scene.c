@@ -153,23 +153,6 @@ static void Level2SceneUpdate(float dt)
 		// If the user triggers the ‘X’ key, set Spaceship sprite’s alpha value = 1.0f.
 		SpriteSetAlpha(newSprite, 1.0f);
 	}
-	if (DGL_Input_KeyTriggered('1')) {
-		// If the user triggers the ‘1’ key, change the scene to Level1.
-		SceneSystemSetNext(Level1SceneGetInstance());
-	}
-	if (DGL_Input_KeyTriggered('2')) {
-		// If the user triggers the ‘2’ key, restart the current level.
-		SceneSystemRestart();
-	}
-	if (DGL_Input_KeyTriggered('9')) {
-		// If the user triggers the ‘9’ key, change the scene to Sandbox.
-		SceneSystemSetNext(SandboxSceneGetInstance());
-	}
-	if (DGL_Input_KeyTriggered('0')) {
-		// If the user triggers the ‘0’ key, change the scene to Demo.
-		SceneSystemSetNext(DemoSceneGetInstance());
-	}
-
 }
 
 // Render any objects associated with the scene.

@@ -111,7 +111,6 @@ static void Level1SceneUpdate(float dt);
 static void Level1SceneExit(void);
 static void Level1SceneUnload(void);
 static void Level1SceneRender(void);
-
 static void Level1SceneMovementController(Entity* entity);
 static void Level1SceneSetMonkeyState(Entity* entity, MonkeyStates newState);
 static void Level1SceneBounceController(Entity* entity);
