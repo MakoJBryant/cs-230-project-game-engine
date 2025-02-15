@@ -50,6 +50,9 @@ typedef struct Sprite
 	// The mesh used to draw the sprite.
 	const Mesh* mesh;
 
+	// Text string to render as sprite text.
+	const char* text;
+
 } Sprite;
 
 //------------------------------------------------------------------------------
@@ -88,7 +91,6 @@ Sprite* SpriteCreate(void)
 // Free the memory associated with a Sprite component.
 void SpriteFree(Sprite** sprite)
 {
-	// Verify that arguments are valid (and pointer arguments).
 	if (sprite == NULL || *sprite == NULL) {
 		TraceMessage("Error: SpriteFree received NULL argument(s).");
 		return;
@@ -102,7 +104,6 @@ void SpriteFree(Sprite** sprite)
 // Read the properties of a Sprite component from a file.
 void SpriteRead(Sprite* sprite, Stream stream)
 {
-	// Verify that arguments are valid.
 	if (sprite == NULL || stream == NULL) {
 		TraceMessage("Error: SpriteRead received NULL argument(s).");
 		return;
@@ -230,17 +231,23 @@ void SpriteSetSpriteSource(Sprite* sprite, const SpriteSource* spriteSource)
 }
 
 // Assign a text string to a Sprite component.  This will allow a sequence of
-//	 characters to be displayed as text.
-// (NOTE: The text parameter may be NULL.  This will remove an existing text
-//	 string from a sprite and cause the sprite to be displayed normally.)
-// Params:
-//	 sprite = Pointer to the Sprite component.
-//	 text = Pointer to a zero-terminated array of characters.
 void SpriteSetText(Sprite* sprite, const char* text)
 {
-	UNREFERENCED_PARAMETER(sprite);
-	UNREFERENCED_PARAMETER(text);
+	if (sprite == NULL) {
+		TraceMessage("Error: SpriteSetText received NULL argument(s).");
+		return;
+	}
+
+	// If text is NULL, clear the existing text and display the sprite normally.
+	if (text == NULL) {
+		sprite->text = NULL;
+		return;
+	}
+
+	// Assign the text string to the sprite if it's not NULL.
+	sprite->text = text;
 }
+
 
 //------------------------------------------------------------------------------
 // Private Functions:
