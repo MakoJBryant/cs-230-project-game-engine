@@ -23,6 +23,7 @@
 #include "Physics.h"
 #include "Sprite.h"
 #include "Transform.h"
+#include "Animation.h"
 
 //------------------------------------------------------------------------------
 
@@ -47,6 +48,9 @@ typedef struct Entity
 
 	// Pointer to an attached transform component.
 	Transform* transform;
+
+	// Pointer to an attached transform component.
+	Animation* animation;
 
 } Entity;
 
@@ -112,7 +116,7 @@ void EntityFree(Entity** entity)
 	*entity = NULL;
 }
 
-// Read (and construct) the components associated with a entity.
+// Read (and construct) the components associated with an entity.
 void EntityRead(Entity* entity, Stream stream)
 {
 	// If the Entity and Stream pointers are not NULL.
@@ -125,7 +129,8 @@ void EntityRead(Entity* entity, Stream stream)
 	if (token != NULL && token[0] != '\0') {
 		// Use the token to set the Entity's name.
 		EntitySetName(entity, token);
-	} else {
+	}
+	else {
 		TraceMessage("Error: EntityRead failed to read token from stream.");
 		return;
 	}
@@ -148,7 +153,8 @@ void EntityRead(Entity* entity, Stream stream)
 				TransformRead(newTransform, stream);
 				// 3) Add the transform to the entity.
 				EntityAddTransform(entity, newTransform);
-			} else {
+			}
+			else {
 				TraceMessage("Error: EntityRead failed to create Transform component.");
 			}
 		}
@@ -159,7 +165,8 @@ void EntityRead(Entity* entity, Stream stream)
 			if (newPhysics != NULL) {
 				PhysicsRead(newPhysics, stream);
 				EntityAddPhysics(entity, newPhysics);
-			} else {
+			}
+			else {
 				TraceMessage("Error: EntityRead failed to create Physics component.");
 			}
 		}
@@ -170,8 +177,21 @@ void EntityRead(Entity* entity, Stream stream)
 			if (newSprite != NULL) {
 				SpriteRead(newSprite, stream);
 				EntityAddSprite(entity, newSprite);
-			} else {
+			}
+			else {
 				TraceMessage("Error: EntityRead failed to create Sprite component.");
+			}
+		}
+		// Else if “token” contains “Animation”,
+		else if (strstr(token, "Animation") != NULL) {
+			// Create a new animation component and attach it to the entity.
+			Animation* newAnimation = AnimationCreate();
+			if (newAnimation != NULL) {
+				AnimationRead(newAnimation, stream);
+				EntityAddAnimation(entity, newAnimation);
+			}
+			else {
+				TraceMessage("Error: EntityRead failed to create Animation component.");
 			}
 		}
 		// Else if “token” is empty (zero-length string), break out of the loop.
@@ -186,16 +206,14 @@ void EntityRead(Entity* entity, Stream stream)
 	}
 }
 
+
 // Attach an Animation component to an Entity.
-// (NOTE: This function must set the animation component's parent pointer by
-//	  calling the AnimationSetParent() function.)
-// Params:
-//	 entity = Pointer to the Entity.
-//   animation = Pointer to the Animation component to be attached.
 void EntityAddAnimation(Entity* entity, Animation* animation)
 {
-	UNREFERENCED_PARAMETER(entity);
-	UNREFERENCED_PARAMETER(animation);
+	if (entity != NULL && animation != NULL) {
+		AnimationSetParent(animation, entity);
+		entity->animation = animation;
+	}
 }
 
 // Attach a Physics component to an Entity.
@@ -236,41 +254,30 @@ void EntitySetName(Entity* entity, const char* name)
 // Get the Entity's name.
 const char* EntityGetName(const Entity* entity)
 {
-	// ternary conditional operator
 	return entity ? entity->name : NULL;
 }
 
 // Get the Animation component attached to an Entity.
-// Params:
-//	 entity = Pointer to the Entity.
-// Returns:
-//	 If the Entity pointer is valid,
-//		then return a pointer to the attached Animation component,
-//		else return NULL.
 Animation* EntityGetAnimation(const Entity* entity)
 {
-	UNREFERENCED_PARAMETER(entity);
-	return NULL;
+	return entity ? entity->animation : NULL;
 }
 
 // Get the Physics component attached to an Entity.
 Physics* EntityGetPhysics(const Entity* entity)
 {
-	// ternary conditional operator
 	return entity ? entity->physics : NULL;
 }
 
 // Get the Sprite component attached to a Entity.
 Sprite* EntityGetSprite(const Entity* entity)
 {
-	// ternary conditional operator
 	return entity ? entity->sprite : NULL;
 }
 
 // Get the Transform component attached to a Entity.
 Transform* EntityGetTransform(const Entity* entity)
 {
-	// ternary conditional operator
 	return entity ? entity->transform : NULL;
 }
 
@@ -285,6 +292,11 @@ void EntityUpdate(Entity* entity, float dt)
 	// Update the entity's physics component if not NULL.
 	if (entity->physics != NULL && entity->transform != NULL) {
 		PhysicsUpdate(entity->physics, entity->transform, dt);
+	}
+
+	// Update the entity's animation component if not NULL.
+	if (entity->animation != NULL) {
+		AnimationUpdate(entity->animation, dt);
 	}
 }
 
