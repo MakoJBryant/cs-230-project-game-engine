@@ -117,45 +117,59 @@ void SpriteRead(Sprite* sprite, Stream stream)
 // Render a Sprite (Sprite can be textured or untextured).
 void SpriteRender(const Sprite* sprite, Transform* transform)
 {
-	// Verify that arguments are valid.
-	if (sprite == NULL || transform == NULL) {
+	// Validate the Sprite and Sprite Mesh pointers.
+	if (sprite == NULL || sprite->mesh == NULL || transform == NULL) {
 		TraceMessage("Error: SpriteRender received NULL argument(s).");
 		return;
 	}
 
-	// Get the transformation matrix from the Transform component.
-	const Matrix2D* matrix = TransformGetMatrix(transform);
-	if (matrix == NULL) {
-		TraceMessage("Error: TransformGetMatrix failed to retrieve matrix.");
-		return;
-	}
-
-	// Set up rendering based on whether spriteSource is textured or untextured.
-	if (sprite->spriteSource == NULL) {
-		// Prepare to render untextured sprite.
-		DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
-	}
-	else {
-		// Prepare to render a textured sprite.
+	if (sprite->spriteSource) {
+		// If the Sprite has a valid SpriteSource,
 		DGL_Graphics_SetShaderMode(DGL_PSM_TEXTURE, DGL_VSM_DEFAULT);
-
-		// Assign the texture via SpriteSource.
 		SpriteSourceSetTexture(sprite->spriteSource);
 		SpriteSourceSetTextureOffset(sprite->spriteSource, sprite->frameIndex);
-	} 
+	}
+	else {
+		DGL_Graphics_SetShaderMode(DGL_PSM_COLOR, DGL_VSM_DEFAULT);
+	}
 
-	// Express settings for the rendered sprite.
-	DGL_Graphics_SetCB_TransformData(
-		 TransformGetTranslation(transform)		// position
-		,TransformGetScale(transform)			// scale
-		,TransformGetRotation(transform)		// rotation
-	);
-	DGL_Graphics_SetCB_Alpha(sprite->alpha);	// transparency
-	DGL_Graphics_SetCB_TintColor(&(DGL_Color) 
-		{ 1.0f, 0.0f, 0.0, 0.0f });				// tint color (red)
-	
-	// Render the mesh (list of triangles).
-	MeshRender(sprite->mesh);
+	DGL_Graphics_SetCB_Alpha(sprite->alpha);
+	DGL_Graphics_SetCB_TintColor(&(DGL_Color) { 0.0f, 0.0f, 0.0f, 0.0f });
+
+	if (sprite->text == NULL) {
+		// If the sprite’s text pointer is NULL,
+		const Matrix2D* matrix = TransformGetMatrix(transform);
+		if (matrix == NULL) {
+			TraceMessage("Error: TransformGetMatrix failed to retrieve matrix.");
+			return;
+		}
+		DGL_Graphics_SetCB_TransformMatrix(matrix);
+		MeshRender(sprite->mesh);
+	}
+	else {
+
+		Matrix2D matrix = *TransformGetMatrix(transform);
+		Matrix2D offset;
+		const Vector2D* theTranslation = TransformGetTranslation(transform);
+		Vector2D temp = *theTranslation;
+		Matrix2DTranslate(&offset, temp.x, 0);
+
+		// This variable will be used to “walk” through the string without modifying.
+		const char* text = sprite->text;
+
+		// While the local text pointer points at a non-zero character,
+		while (text != NULL && *text != '\0') {
+
+			unsigned frameIndex = *text - ' ';
+			SpriteSourceSetTextureOffset(sprite->spriteSource, frameIndex);
+			DGL_Graphics_SetCB_TransformMatrix(&matrix);
+			MeshRender(sprite->mesh);
+			text++;
+
+			// Concatenate the translation matrix and transformation matrix.
+			Matrix2DConcat(&matrix, &offset, &matrix);
+		}
+	}
 }
 
 // Get a Sprite's alpha value.
