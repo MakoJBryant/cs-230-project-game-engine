@@ -113,11 +113,17 @@ void SceneSystemRestart(void)
 //   scene	Pointer to the new scene.
 void SceneSystemSetNext(const Scene* scene)
 {
-	if (scene)
-	{
-		assert(SceneIsValid(scene) && "SceneSystemSetNext Error: A scene is missing one or more functions.");
+	if (scene == instance.activeScene) {
+		// If the scene is the same as the active scene, restart the scene.
+		SceneSystemRestart();
 	}
-	instance.nextScene = scene;
+	else {
+		// If it's a different scene, set the nextScene as usual.
+		if (scene) {
+			assert(SceneIsValid(scene) && "SceneSystemSetNext Error: A scene is missing one or more functions.");
+		}
+		instance.nextScene = scene;
+	}
 }
 
 //------------------------------------------------------------------------------
