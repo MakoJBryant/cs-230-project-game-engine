@@ -94,7 +94,6 @@ Entity* EntityCreate(void)
 // Free the memory associated with an Entity.
 void EntityFree(Entity** entity)
 {
-	// Verify that arguments are valid.
 	if (entity == NULL || *entity == NULL) {
 		TraceMessage("Error: EntityFree received NULL argument(s).");
 		return;
@@ -105,21 +104,24 @@ void EntityFree(Entity** entity)
 		PhysicsFree(&(*entity)->physics);
 	}
 	if ((*entity)->sprite != NULL) {
-		SpriteFree(&(*entity)->sprite); 
+		SpriteFree(&(*entity)->sprite);
 	}
 	if ((*entity)->transform != NULL) {
 		TransformFree(&(*entity)->transform);
 	}
+	if ((*entity)->animation != NULL) {
+		AnimationFree(&(*entity)->animation);
+	}
 
-	// Free the entity object and nullify dangling pointer.
 	free(*entity);
 	*entity = NULL;
 }
 
+
 // Read (and construct) the components associated with an entity.
+// NEVER NEST THIS FUNCTION FOR READABILITY LATER!!!!!
 void EntityRead(Entity* entity, Stream stream)
 {
-	// If the Entity and Stream pointers are not NULL.
 	if (entity == NULL || stream == NULL) {
 		TraceMessage("Error: EntityRead received NULL argument(s).");
 	}
@@ -135,9 +137,7 @@ void EntityRead(Entity* entity, Stream stream)
 		return;
 	}
 
-	// While (true),
 	while (true) {
-
 		// Read a token from the stream.
 		token = StreamReadToken(stream);
 		if (token == NULL || token[0] == '\0') {
@@ -205,7 +205,6 @@ void EntityRead(Entity* entity, Stream stream)
 		}
 	}
 }
-
 
 // Attach an Animation component to an Entity.
 void EntityAddAnimation(Entity* entity, Animation* animation)
