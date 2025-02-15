@@ -269,26 +269,33 @@ static void Level1SceneUpdate(float dt)
 // Render any objects associated with the scene.
 void Level1SceneRender(void)
 {
+	// Call EntityRender() to draw the “Monkey”, “Planet” and “LivesText” Entities.
+	EntityRender(instance.monkeyEntity);
 	EntityRender(instance.planetEntity);
+	EntityRender(instance.livesTextEntity);
 }
 
 // Free any objects associated with the scene.
 static void Level1SceneExit()
 {
+	// Free the “Monkey”, “Planet” and “LivesText” Entities.
 	EntityFree(&instance.planetEntity);
 	EntityFree(&instance.monkeyEntity);
+	EntityFree(&instance.livesTextEntity);
 
 }
 
 // Unload any resources used by the scene.
 static void Level1SceneUnload(void)
 {
+	// Free all SpriteSource objects using SpriteSourceFree.
 	SpriteSourceFree(&instance.planetSpriteSource);
 	SpriteSourceFree(&instance.monkeyIdleSpriteSource);
 	SpriteSourceFree(&instance.monkeyJumpSpriteSource);
 	SpriteSourceFree(&instance.monkeyWalkSpriteSource);
 	SpriteSourceFree(&instance.robotoMonoBlackSpriteSource);
 
+	// Free all Mesh objects using MeshFree.
 	MeshFree(&instance.planetMesh);
 	MeshFree(&instance.myMesh3x3);
 	MeshFree(&instance.myMesh16x8);
