@@ -9,15 +9,25 @@
 //
 //------------------------------------------------------------------------------
 
-#include "stdafx.h"
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
 
+// essential
+#include "stdafx.h"
+#include "Stream.h"
+
+// Scenes
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
 #include "SandboxScene.h"
+
+//other
+#include "Vector2D.h"
+
 #include "DemoScene.h"
-#include "Stream.h"
 #include "Trace.h"
 #include "Mesh.h"
 #include "Entity.h"
@@ -25,8 +35,9 @@
 #include "DGL.h"
 #include "Sprite.h"
 #include "Transform.h"
-#include "Vector2D.h"
 #include "Physics.h"
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:

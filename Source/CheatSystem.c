@@ -86,7 +86,7 @@ static const CheatSystemKeyBinding keyBindings[] = {
 	{ '1', Level1SceneGetInstance },
 	{ '2', Level2SceneGetInstance },
 	{ '9', SandboxSceneGetInstance },
-	{ '0', SceneSystemRestart }
+	{ '0', DemoSceneGetInstance }
 };
 //------------------------------------------------------------------------------
 // Public Functions:
