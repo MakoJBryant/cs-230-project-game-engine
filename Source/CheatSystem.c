@@ -86,7 +86,7 @@ static const CheatSystemKeyBinding keyBindings[] = {
 	{ '1', Level1SceneGetInstance },
 	{ '2', Level2SceneGetInstance },
 	{ '9', SandboxSceneGetInstance },
-	{ '0', DemoSceneGetInstance }
+	{ '0', SceneSystemRestart }
 };
 //------------------------------------------------------------------------------
 // Public Functions:
@@ -126,19 +126,17 @@ static void CheatSystemUpdate(float dt)
 	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	//		SceneSystemRestart();
-
 	if (DGL_Input_KeyTriggered('1')) {
 		SceneSystemSetNext(Level1SceneGetInstance());
 	}
-	if (DGL_Input_KeyTriggered('2')) {
+	else if (DGL_Input_KeyTriggered('2')) {
 		SceneSystemSetNext(Level2SceneGetInstance());
 	}
-	if (DGL_Input_KeyTriggered('9')) {
+	else if (DGL_Input_KeyTriggered('9')) {
 		SceneSystemSetNext(SandboxSceneGetInstance());
 	}
-	if (DGL_Input_KeyTriggered('0')) {
-		SceneSystemSetNext(DemoSceneGetInstance());
+	else if (DGL_Input_KeyTriggered('0')) {
+		SceneSystemRestart();
 	}
 }
 
