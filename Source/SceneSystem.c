@@ -14,7 +14,7 @@
 #include <assert.h>
 
 #include "BaseSystem.h"
-#include "DemoScene.h"
+#include "Level1Scene.h"
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "StubScene.h"
@@ -136,7 +136,7 @@ void SceneSystemSetNext(const Scene* scene)
 static bool SceneSystemInit(void)
 {
 	// Set the starting (Default) scene.
-	SceneSystemSetNext(DemoSceneGetInstance());
+	SceneSystemSetNext(Level1SceneGetInstance());
 
 	return true;
 }
