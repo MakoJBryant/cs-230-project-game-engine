@@ -149,10 +149,9 @@ void SpriteRender(const Sprite* sprite, Transform* transform)
 	else {
 
 		Matrix2D matrix = *TransformGetMatrix(transform);
+		Vector2D scale = *TransformGetScale(transform);
 		Matrix2D offset;
-		const Vector2D* theTranslation = TransformGetScale(transform);
-		Vector2D temp = *theTranslation;
-		Matrix2DTranslate(&offset, temp.x, 0.0f);
+		Matrix2DTranslate(&offset, scale.x, 0.0f);
 
 		// This variable will be used to “walk” through the string without modifying.
 		const char* text = sprite->text;
