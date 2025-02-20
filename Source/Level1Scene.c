@@ -177,6 +177,9 @@ static void Level1SceneLoad(void)
 	MeshBuildQuad(instance.planetMesh, 0.5f, 0.5f, 1.0f, 1.0f, "Mesh1x1");
 	instance.planetSpriteSource = SpriteSourceCreate(); // planet sprite source
 	SpriteSourceLoadTexture(instance.planetSpriteSource, 1, 1, "PlanetTexture.png");
+	if (!instance.planetSpriteSource) {
+		TraceMessage("Error: Level1SceneLoad planet sprite source not created.");
+	}
 
 	// Create the monkey meshes.
 	instance.myMesh3x3 = MeshCreate(); // 3x3 mesh
@@ -203,6 +206,14 @@ static void Level1SceneInit()
 	instance.planetEntity = EntityFactoryBuild("./Data/PlanetBounce.txt");
 	if (instance.planetEntity == NULL) {
 		return;
+	}
+	Sprite* planetSprite = EntityGetSprite(instance.planetEntity);
+	if (planetSprite) {
+		SpriteSetMesh(planetSprite, instance.planetMesh);
+		SpriteSetSpriteSource(planetSprite, instance.planetSpriteSource);
+	}
+	else {
+		TraceMessage("Error: planetEntity sprite is NULL.");
 	}
 
 	// Create a “Monkey” Entity.
