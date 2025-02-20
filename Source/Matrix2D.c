@@ -199,7 +199,7 @@ void Matrix2DMultVec(Vector2D* pResult, const Matrix2D* pMtx, const Vector2D* pV
 		TraceMessage("Error: Matrix2DMultVec received NULL argument(s).");
 		return;
 	}
-
+	
 	// Create a temporary vector to hold the original vector values
 	Vector2D tempVec = *pVec;
 
