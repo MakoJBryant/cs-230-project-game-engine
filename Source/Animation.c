@@ -19,6 +19,10 @@
 #include "Stream.h"
 #include "Trace.h"
 
+// Components
+#include "Sprite.h"
+#include "Entity.h"
+
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
@@ -68,6 +72,8 @@ typedef struct Animation
 //------------------------------------------------------------------------------
 // Private Function Declarations:
 //------------------------------------------------------------------------------
+
+static void AnimationAdvanceFrame(Animation* animation);
 
 //------------------------------------------------------------------------------
 // Public Functions:
@@ -151,46 +157,19 @@ void AnimationPlay(Animation* animation, int frameCount, float frameDuration, bo
 // Update the animation.
 void AnimationUpdate(Animation* animation, float dt)
 {
-	if (animation == NULL) {
-		TraceMessage("Error: AnimationUpdate received NULL argument(s).");
-		return;
+	if (!animation) {
+		return; // Valid pointer?
 	}
 
-	// If the animation is not running, do nothing.
+	animation->isDone = false;
+
 	if (!animation->isRunning) {
-		return;
+		return; // isRunning false?
 	}
 
-	// Decrease the frame delay by dt.
 	animation->frameDelay -= dt;
-
-	// If the frame delay has elapsed, move to the next frame.
-	while (animation->frameDelay <= 0.0f)
-	{
-		// Advance to the next frame.
-		animation->frameIndex++;
-
-		// Reset frame delay for the next frame.
-		animation->frameDelay += animation->frameDuration;
-
-		// Check if the animation has reached the end.
-		if (animation->frameIndex >= animation->frameCount)
-		{
-			if (animation->isLooping)
-			{
-				// Loop back to the first frame.
-				animation->frameIndex = 0;
-			}
-			else
-			{
-				// Stop the animation at the last frame.
-				animation->frameIndex = animation->frameCount - 1;
-				animation->isRunning = false;
-				animation->isDone = true;
-				break;
-			}
-		}
-	}
+	AnimationAdvanceFrame(animation);
+	return;
 }
 
 // Determine if the animation has reached the end of its sequence.
@@ -207,3 +186,36 @@ bool AnimationIsDone(const Animation* animation)
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
+
+static void AnimationAdvanceFrame(Animation* animation) 
+{
+	// Advancing the frame.
+	while (animation->frameDelay <= 0) {
+
+		animation->frameIndex++;
+
+		// Index >= frameCount?
+		if (animation->frameIndex >= animation->frameCount) {
+
+			// isLooping?
+			if (animation->isLooping) {
+				animation->frameIndex = 0;
+			}
+			else {
+				animation->frameIndex = animation->frameCount - 1;
+				animation->isRunning = false;
+			}
+			animation->isDone = true;
+		}
+
+		// isRunning?
+		if (!animation->isRunning) {
+			animation->frameDelay = 0;
+		}
+		else {
+			SpriteSetFrame(EntityGetSprite(animation->parent), animation->frameIndex);
+			animation->frameDelay += animation->frameDuration;
+		}
+		return;
+	}
+}
