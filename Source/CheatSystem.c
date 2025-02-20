@@ -123,20 +123,16 @@ static bool CheatSystemInit(void)
 //	 dt = Change in time (in seconds) since the last game loop.
 static void CheatSystemUpdate(float dt)
 {
-	// Tell the compiler that the 'dt' variable is unused.
 	UNREFERENCED_PARAMETER(dt);
 
-	if (DGL_Input_KeyTriggered('1')) {
-		SceneSystemSetNext(Level1SceneGetInstance());
-	}
-	else if (DGL_Input_KeyTriggered('2')) {
-		SceneSystemSetNext(Level2SceneGetInstance());
-	}
-	else if (DGL_Input_KeyTriggered('9')) {
-		SceneSystemSetNext(SandboxSceneGetInstance());
-	}
-	else if (DGL_Input_KeyTriggered('0')) {
-		SceneSystemRestart();
+	// Iterate over keyBindings to check for pressed keys.
+	for (size_t i = 0; i < sizeof(keyBindings) / sizeof(keyBindings[0]); ++i)
+	{
+		if (DGL_Input_KeyTriggered(keyBindings[i].key))
+		{
+			SceneSystemSetNext(keyBindings[i].getInstance());
+			return; // Exit after setting scene.
+		}
 	}
 }
 
