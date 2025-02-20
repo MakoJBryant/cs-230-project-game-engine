@@ -151,12 +151,12 @@ void SpriteSourceGetUV(const SpriteSource* spriteSource, unsigned int frameIndex
 	}
 
 	// Convert values to find the position in terms of rows and columns.
-	unsigned col = frameIndex % spriteSource->numCols;
-	unsigned row = frameIndex / spriteSource->numCols;
+	float col = 1.0f / spriteSource->numCols;
+	float row = 1.0f / spriteSource->numRows;
 
 	// Assign pointers to the UV coordinates of the specified frame.
-	*u = (float)col / spriteSource->numCols;
-	*v = (float)row / spriteSource->numRows;
+	*u = col * (frameIndex % spriteSource->numCols);
+	*v = row * (frameIndex / spriteSource->numCols);
 }
 
 // Sets a SpriteSource texture for rendering.

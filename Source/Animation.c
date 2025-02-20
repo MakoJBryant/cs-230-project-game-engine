@@ -166,7 +166,11 @@ void AnimationUpdate(Animation* animation, float dt)
 	}
 
 	animation->frameDelay -= dt;
-	AnimationAdvanceFrame(animation);
+
+	// Advancing the frame.
+	if (animation->frameDelay <= 0) {
+		AnimationAdvanceFrame(animation);
+	}
 	return;
 }
 
@@ -185,35 +189,33 @@ bool AnimationIsDone(const Animation* animation)
 // Private Functions:
 //------------------------------------------------------------------------------
 
-static void AnimationAdvanceFrame(Animation* animation) 
+static void AnimationAdvanceFrame(Animation* animation)
 {
-	// Advancing the frame.
-	while (animation->frameDelay <= 0) {
 
-		animation->frameIndex++;
+	animation->frameIndex++;
 
-		// Index >= frameCount?
-		if (animation->frameIndex >= animation->frameCount) {
+	// Index >= frameCount?
+	if (animation->frameIndex >= animation->frameCount) {
 
-			// isLooping?
-			if (animation->isLooping) {
-				animation->frameIndex = 0;
-			}
-			else {
-				animation->frameIndex = animation->frameCount - 1;
-				animation->isRunning = false;
-			}
-			animation->isDone = true;
-		}
-
-		// isRunning?
-		if (!animation->isRunning) {
-			animation->frameDelay = 0;
+		// isLooping?
+		if (animation->isLooping) {
+			animation->frameIndex = 0;
 		}
 		else {
-			SpriteSetFrame(EntityGetSprite(animation->parent), animation->frameIndex);
-			animation->frameDelay += animation->frameDuration;
+			animation->frameIndex = animation->frameCount - 1;
+			animation->isRunning = false;
 		}
-		return;
+		animation->isDone = true;
 	}
+
+	// isRunning?
+	if (!animation->isRunning) {
+		animation->frameDelay = 0;
+	}
+	else {
+		SpriteSetFrame(EntityGetSprite(animation->parent), animation->frameIndex);
+		animation->frameDelay += animation->frameDuration;
+	}
+	return;
+
 }
