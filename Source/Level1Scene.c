@@ -74,16 +74,15 @@ typedef struct Level1Scene
 
 	// Add any scene-specific variables second.
 	int numLives;
+	char livesBuffer[16];
 	Mesh* planetMesh;
 	Mesh* myMesh3x3;
 	Mesh* myMesh16x8;
-	Mesh* livesTextMesh;
 	SpriteSource* planetSpriteSource;
 	SpriteSource* monkeyIdleSpriteSource;
 	SpriteSource* monkeyJumpSpriteSource;
 	SpriteSource* monkeyWalkSpriteSource;
 	SpriteSource* robotoMonoBlackSpriteSource;
-	SpriteSource* livesTextSpriteSource;
 	Entity* planetEntity;
 	Entity* monkeyEntity;
 	Entity* livesTextEntity;
@@ -98,8 +97,7 @@ typedef struct Level1Scene
 // Private Variables:
 //------------------------------------------------------------------------------
 
-char livesBuffer[16];
-char name[32];
+//char name[32];
 
 //------------------------------------------------------------------------------
 // Private Function Declarations:
@@ -126,17 +124,16 @@ static Level1Scene instance =
 	{ "Level1", Level1SceneLoad, Level1SceneInit, Level1SceneUpdate, Level1SceneRender, Level1SceneExit, Level1SceneUnload },
 
 	// Initialize any scene-specific variables:
-	0		// numLives
+	 0		// numLives
+	,""		// livesBuffer
 	,NULL	// planetMesh
 	,NULL	// myMesh3x3
 	,NULL	// myMesh16x8
-	,NULL	// livesTextMesh
 	,NULL	// planetSpriteSource
 	,NULL	// monkeyIdleSpriteSource
 	,NULL	// monkeyJumpSpriteSource
 	,NULL	// monkeyWalkSpriteSource
 	,NULL	// robotoMonoBlackSpriteSource
-	,NULL	// livesTextSpriteSource
 	,NULL	// planetEntity
 	,NULL	// monkeyEntity
 	,NULL	// livesTextEntity
@@ -181,7 +178,7 @@ static void Level1SceneLoad(void)
 		TraceMessage("Error: Level1SceneLoad planet sprite source not created.");
 	}
 
-	// Create the monkey meshes.
+	// Create the meshes.
 	instance.myMesh3x3 = MeshCreate(); // 3x3 mesh
 	MeshBuildQuad(instance.myMesh3x3, 0.5f, 0.5f, 1.0f / 3, 1.0f / 3, "Mesh3x3");
 	instance.myMesh16x8 = MeshCreate(); // 16x8 mesh
@@ -212,9 +209,6 @@ static void Level1SceneInit()
 		SpriteSetMesh(planetSprite, instance.planetMesh);
 		SpriteSetSpriteSource(planetSprite, instance.planetSpriteSource);
 	}
-	else {
-		TraceMessage("Error: planetEntity sprite is NULL.");
-	}
 
 	// Create a “Monkey” Entity.
 	instance.monkeyEntity = EntityFactoryBuild("./Data/Monkey.txt");
@@ -226,17 +220,17 @@ static void Level1SceneInit()
 
 	// Create a “LivesText” Entity.
 	instance.livesTextEntity = EntityFactoryBuild("./Data/MonkeyLivesText.txt");
-	if (instance.livesTextEntity == NULL) {
-		return;
-	}
 	Sprite* livesSprite = EntityGetSprite(instance.livesTextEntity); // Get the Entity’s Sprite.
-	if (livesSprite == NULL) {
-		return;
+	SpriteSetMesh(livesSprite, instance.myMesh16x8); // Set the Sprite’s Mesh
+	SpriteSetSpriteSource(livesSprite, instance.robotoMonoBlackSpriteSource); // and SpriteSource
+	if (instance.robotoMonoBlackSpriteSource == NULL) {
+		TraceMessage("Error: robotoMonoBlackSpriteSource is NULL");
 	}
-	SpriteSetMesh(livesSprite, instance.livesTextMesh); // Set the Sprite’s Mesh
-	SpriteSetSpriteSource(livesSprite, instance.livesTextSpriteSource); // and SpriteSource
-	sprintf_s(livesBuffer, sizeof(livesBuffer), "Lives: %d", instance.numLives); // write text to livesBuffer
-	SpriteSetText(livesSprite, livesBuffer); // Call SpriteSetText(), passing the livesBuffer.
+
+	// Handle data for livesText display.
+	sprintf_s(instance.livesBuffer, sizeof(instance.livesBuffer), "Lives: %d", instance.numLives); // write text to livesBuffer
+	SpriteSetText(livesSprite, instance.livesBuffer); // Call SpriteSetText(), passing the livesBuffer.
+	TraceMessage("Lives buffer: %s", instance.livesBuffer);
 
 	// General settings.
 	DGL_Graphics_SetBackgroundColor(&(DGL_Color) { 1.0f, 1.0f, 1.0f, 1.0f }); // white
@@ -269,7 +263,7 @@ static void Level1SceneUpdate(float dt)
 		}
 		// Otherwise, restart the current level.
 		else {
-			SceneSystemRestart();
+			SceneRestart();
 		}
 	}
 }
@@ -292,7 +286,6 @@ static void Level1SceneExit()
 	EntityFree(&instance.planetEntity);
 	EntityFree(&instance.monkeyEntity);
 	EntityFree(&instance.livesTextEntity);
-
 }
 
 // Unload any resources used by the scene.
@@ -309,7 +302,6 @@ static void Level1SceneUnload(void)
 	MeshFree(&instance.planetMesh);
 	MeshFree(&instance.myMesh3x3);
 	MeshFree(&instance.myMesh16x8);
-
 }
 
 // Allows entities to move.

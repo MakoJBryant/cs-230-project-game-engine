@@ -208,7 +208,7 @@ void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 
 	// Verify frameIndex does not exceed total number of frames.
 	unsigned totalFrames = SpriteSourceGetFrameCount(sprite->spriteSource);
-	if (frameIndex >= totalFrames || frameIndex < 0) {
+	if (frameIndex <= totalFrames - 1 && frameIndex >= 0) {
 		TraceMessage("Error: SpriteSetFrame received an invalid frame index = %d", frameIndex);
 		return;
 	}
@@ -252,13 +252,6 @@ void SpriteSetText(Sprite* sprite, const char* text)
 		return;
 	}
 
-	// If text is NULL, clear the existing text and display the sprite normally.
-	if (text == NULL) {
-		sprite->text = NULL;
-		return;
-	}
-
-	// Assign the text string to the sprite if it's not NULL.
 	sprite->text = text;
 }
 

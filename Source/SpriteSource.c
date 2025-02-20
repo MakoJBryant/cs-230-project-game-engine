@@ -184,7 +184,7 @@ void SpriteSourceSetTextureOffset(const SpriteSource* spriteSource, unsigned fra
 	// Validate frameIndex isn't bigger than the total number of frames.
 	unsigned totalFrames = spriteSource->numCols * spriteSource->numRows;
 	if (frameIndex >= totalFrames) {
-		TraceMessage("Error: SpriteSourceSetTextureOffset received NULL argument(s).");
+		TraceMessage("Error: SpriteSourceSetTextureOffset frameIndex >= totalFrames.");
 		return;
 	}
 
