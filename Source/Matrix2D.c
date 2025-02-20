@@ -200,16 +200,21 @@ void Matrix2DMultVec(Vector2D* pResult, const Matrix2D* pMtx, const Vector2D* pV
 		return;
 	}
 
+	// Create a temporary vector to hold the original vector values
+	Vector2D tempVec = *pVec;
+
+	// Perform the matrix-vector multiplication
 	pResult->x =
-		  Matrix2DRowCol(pMtx, 0, 0) * pVec->x	// scales the x-component of the vector
-		+ Matrix2DRowCol(pMtx, 0, 1) * pVec->y	// scales the y-component of the vector
-		+ Matrix2DRowCol(pMtx, 0, 3);			// adds translation in the x-direction
+		  Matrix2DRowCol(pMtx, 0, 0) * tempVec.x    // scales the x-component of the vector
+		+ Matrix2DRowCol(pMtx, 0, 1) * tempVec.y    // scales the y-component of the vector
+		+ Matrix2DRowCol(pMtx, 0, 3);               // adds translation in the x-direction
 
 	pResult->y =
-		  Matrix2DRowCol(pMtx, 1, 0) * pVec->x	// scales the x-component of the vector
-		+ Matrix2DRowCol(pMtx, 1, 1) * pVec->y	// scales the y-component of the vector
-		+ Matrix2DRowCol(pMtx, 1, 3);			// adds translation in the y-direction
+		  Matrix2DRowCol(pMtx, 1, 0) * tempVec.x    // scales the x-component of the vector
+		+ Matrix2DRowCol(pMtx, 1, 1) * tempVec.y    // scales the y-component of the vector
+		+ Matrix2DRowCol(pMtx, 1, 3);               // adds translation in the y-direction
 }
+
 
 //------------------------------------------------------------------------------
 // Private Functions:
