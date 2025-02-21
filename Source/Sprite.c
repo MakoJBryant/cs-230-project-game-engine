@@ -207,7 +207,7 @@ void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 
 	// Verify frameIndex does not exceed total number of frames.
 	unsigned totalFrames = SpriteSourceGetFrameCount(sprite->spriteSource);
-	if (frameIndex >= totalFrames - 1 && frameIndex <= 0) {
+	if (frameIndex >= totalFrames - 1 && frameIndex < 0) {
 		TraceMessage("Error: SpriteSetFrame received an invalid frame index = %d", frameIndex);
 		return;
 	}

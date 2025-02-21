@@ -150,6 +150,7 @@ void AnimationPlay(Animation* animation, int frameCount, float frameDuration, bo
 	animation->isLooping = isLooping;
 	animation->isRunning = true;
 	animation->isDone = false;
+	SpriteSetFrame(EntityGetSprite(animation->parent), animation->frameIndex);
 }
 
 // Update the animation.
