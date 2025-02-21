@@ -25,3 +25,10 @@ o	To implement your own Matrix2D module.
 o	To calculate transformations for sprite positioning, scaling, and rotation.  
 o	To implement displaying of sprite text.  
 o	Implement a “cheat” system for controlling transitions between scenes.  
+  
+## Project_4_Behaviors  
+The objectives for this project are four-fold:  
+o	To implement a container for storing entities.  
+o	To implement a simple mesh “library”.  
+o	To implement cloning of entities.  
+o	To implement two unique behaviors.  
