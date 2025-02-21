@@ -1,5 +1,5 @@
 Entity
-Planet
+PlanetBounce
 Transform
 0 300
 0
@@ -10,3 +10,4 @@ Physics
 Sprite
 0
 1
+None

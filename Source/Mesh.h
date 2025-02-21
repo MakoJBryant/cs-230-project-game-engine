@@ -2,7 +2,7 @@
 //
 // File Name:	Mesh.h
 // Author(s):	Doug Schilling (dschilling)
-// Project:		Project 2
+// Project:		Project 4
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
@@ -27,6 +27,7 @@ extern "C" {
 //------------------------------------------------------------------------------
 
 typedef struct Mesh Mesh;
+typedef FILE* Stream;
 
 //------------------------------------------------------------------------------
 // Public Constants:
@@ -69,10 +70,9 @@ typedef struct Mesh
 //	   else return NULL.
 Mesh* MeshCreate();
 
-// Build a quadrilateral mesh and store it in the specified Mesh object.
-// (NOTE: The DGL_Mesh object must be created using DGL_Graphics_StartMesh,
-//    DGL_Graphics_AddTriangle, and DGL_Graphics_EndMesh.)
-// (NOTE: The Mesh name can be stored using strcpy_s(). For example:
+// Dynamically allocate a new Mesh object and create a quadrilateral mesh.
+// (Hint: Use calloc() to ensure that all member variables are initialized to 0.)
+// (Hint: The Mesh name can be stored using strcpy_s(). For example:
 //    strcpy_s(mesh->name, _countof(mesh->name), name); )
 // (NOTE: The drawMode should be set to DGL_DM_TRIANGLELIST.)
 // Params:
@@ -94,6 +94,28 @@ void MeshBuildQuad(Mesh* mesh, float xHalfSize, float yHalfSize, float uSize, fl
 // Params:
 //   mesh = Pointer to an existing, empty Mesh object.
 void MeshBuildSpaceship(Mesh* mesh);
+
+// Read the properties of a Mesh object from a file.
+// (NOTE: First, read a token from the file and verify that it is "Mesh".)
+// (NOTE: Second, read a token and store it in the Mesh's name variable.)
+// (NOTE: Third, read an integer indicating the number of vertices to be read.)
+// (NOTE: For each vertex, read a Vector2D (position), a DGL_Color (color), and a Vector2D (UV).)
+// (HINT: Call DGL_Graphics_AddVertex() to add a single vertex to the mesh.)
+// Params:
+//   mesh = Pointer to the Mesh.
+//	 stream = The data stream used for reading.
+void MeshRead(Mesh* mesh, Stream stream);
+
+// Determines if a Mesh has the specified name.
+// (HINT: This function is similar to one in Entity.c.)
+// Params:
+//	 mesh = Pointer to the Mesh object.
+//	 name = Pointer to the name to be compared.
+// Returns:
+//	 If the mesh and name pointers are valid,
+//		then perform a string comparison and return the result (match = true),
+//		else return false.
+bool MeshIsNamed(const Mesh* mesh, const char* name);
 
 // Render a mesh.
 // (NOTE: This is done using DGL_Graphics_DrawMesh().)

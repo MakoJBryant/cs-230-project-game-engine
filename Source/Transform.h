@@ -2,7 +2,7 @@
 //
 // File Name:	Transform.h
 // Author(s):	Doug Schilling (dschilling)
-// Project:		Project 2
+// Project:		Project 4
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
@@ -84,6 +84,16 @@ typedef struct Transform
 //	   then return a pointer to the allocated memory,
 //	   else return NULL.
 Transform* TransformCreate(void);
+
+// Dynamically allocate a clone of an existing Transform.
+// (Hint: Perform a shallow copy of the member variables.)
+// Params:
+//	 other = Pointer to the component to be cloned.
+// Returns:
+//	 If 'other' is valid and the memory allocation was successful,
+//	   then return a pointer to the cloned component,
+//	   else return NULL.
+Transform* TransformClone(const Transform* other);
 
 // Free the memory associated with a Transform component.
 // (NOTE: The Transform pointer must be set to NULL.)

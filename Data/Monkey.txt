@@ -10,6 +10,7 @@ Physics
 Sprite
 0
 1
+None
 Animation
 0
 0

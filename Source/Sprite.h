@@ -2,7 +2,7 @@
 //
 // File Name:	Sprite.h
 // Author(s):	Doug Schilling (dschilling)
-// Project:		Project 2
+// Project:		Project 4
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
@@ -80,6 +80,16 @@ typedef struct Sprite
 //	   then return a pointer to the allocated memory,
 //	   else return NULL.
 Sprite* SpriteCreate(void);
+
+// Dynamically allocate a clone of an existing Sprite.
+// (Hint: Perform a shallow copy of the member variables.)
+// Params:
+//	 other = Pointer to the component to be cloned.
+// Returns:
+//	 If 'other' is valid and the memory allocation was successful,
+//	   then return a pointer to the cloned component,
+//	   else return NULL.
+Sprite* SpriteClone(const Sprite* other);
 
 // Free the memory associated with a Sprite component.
 // (NOTE: The Sprite pointer must be set to NULL.)

@@ -2,7 +2,7 @@
 //
 // File Name:	Entity.h
 // Author(s):	Doug Schilling (dschilling)
-// Project:		Project 2
+// Project:		Project 4
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
@@ -27,6 +27,7 @@ extern "C" {
 //------------------------------------------------------------------------------
 
 typedef struct Animation Animation;
+typedef struct Behavior Behavior;
 typedef struct Entity Entity;
 typedef struct Physics Physics;
 typedef struct Sprite Sprite;
@@ -60,8 +61,14 @@ typedef struct Entity
 	//	 size of the "name" array.]
 	char name[32];
 
+	// Flag to indicate that the Entity should be destroyed after it has been updated.
+	bool isDestroyed;
+
 	// Pointer to an attached Animation component.
 	Animation* animation;
+
+	// Pointer to an attached Behavior component.
+	Behavior* behavior;
 
 	// Pointer to an attached Physics component.
 	Physics* physics;
@@ -91,6 +98,19 @@ typedef struct Entity
 //	   else return NULL.
 Entity* EntityCreate(void);
 
+// Dynamically allocate a clone of an existing Entity.
+// (Hint: Make sure to perform a shallow copy or deep copy, as appropriate.)
+// (WARNING: You should use the EntityAdd* functions when attaching cloned
+//    components to the cloned Entity.  This will ensure that the 'parent'
+//    variable is set properly.)
+// Params:
+//	 other = Pointer to the Entity to be cloned.
+// Returns:
+//	 If 'other' is valid and the memory allocation was successful,
+//	   then return a pointer to the cloned Entity,
+//	   else return NULL.
+Entity* EntityClone(const Entity* other);
+
 // Free the memory associated with an Entity.
 // (NOTE: All attached components must be freed using the corresponding Free() functions.)
 // (NOTE: The Entity pointer must be set to NULL.)
@@ -105,13 +125,40 @@ void EntityFree(Entity** entity);
 //	 stream = The data stream used for reading.
 void EntityRead(Entity* entity, Stream stream);
 
+// Flag an Entity for destruction.
+// (Note: This is to avoid Entities being destroyed while they are being processed.)
+// Params:
+//	 entity = Pointer to the Entity to be flagged for destruction.
+// Returns:
+//	 If 'entity' is valid,
+//	   then set the 'isDestroyed' flag,
+//	   else do nothing.
+void EntityDestroy(Entity* entity);
+
+// Check whether an Entity has been flagged for destruction.
+// Params:
+//	 entity = Pointer to the Entity.
+// Returns:
+//	 If the Entity pointer is valid,
+//		then return the value in the "isDestroyed" flag,
+//		else return false.
+bool EntityIsDestroyed(const Entity* entity);
+
 // Attach an Animation component to an Entity.
-// (NOTE: This function must set the animation component's parent pointer by
-//	  calling the AnimationSetParent() function.)
+// (NOTE: This function must also set the animation component's parent pointer
+//	  by calling the AnimationSetParent() function.)
 // Params:
 //	 entity = Pointer to the Entity.
 //   animation = Pointer to the Animation component to be attached.
 void EntityAddAnimation(Entity* entity, Animation* animation);
+
+// Attach a Behavior component to an Entity.
+// (NOTE: This function must also set the Behavior component's parent pointer
+//	  by calling the BehaviorSetParent() function.)
+// Params:
+//	 entity = Pointer to the Entity.
+//   behavior = Pointer to the Behavior component to be attached.
+void EntityAddBehavior(Entity* entity, Behavior* behavior);
 
 // Attach a Physics component to an Entity.
 // Params:
@@ -151,6 +198,16 @@ void EntitySetName(Entity* entity, const char * name);
 //		else return NULL.
 const char * EntityGetName(const Entity* entity);
 
+// Compare the Entity's name with the specified name.
+// Params:
+//	 entity = Pointer to the Entity.
+//   name = Pointer to the name to be checked.
+// Returns:
+//	 If the Entity pointer is valid and the two names match,
+//		then return true,
+//		else return false.
+bool EntityIsNamed(const Entity* entity, const char* name);
+
 // Get the Animation component attached to an Entity.
 // Params:
 //	 entity = Pointer to the Entity.
@@ -159,6 +216,15 @@ const char * EntityGetName(const Entity* entity);
 //		then return a pointer to the attached Animation component,
 //		else return NULL.
 Animation* EntityGetAnimation(const Entity* entity);
+
+// Get the Behavior component attached to an Entity.
+// Params:
+//	 entity = Pointer to the Entity.
+// Returns:
+//	 If the Entity pointer is valid,
+//		then return a pointer to the attached Behavior component,
+//		else return NULL.
+Behavior* EntityGetBehavior(const Entity* entity);
 
 // Get the Physics component attached to an Entity.
 // Params:
@@ -188,8 +254,10 @@ Sprite* EntityGetSprite(const Entity* entity);
 Transform* EntityGetTransform(const Entity* entity);
 
 // Update any components attached to the Entity.
-// (Hint: You will need to call PhysicsUpdate().)
 // (NOTE: You must first check for a valid pointer before calling this function.)
+// (HINT: Update the Animation first, as it might affect Behavior.)
+// (HINT: Update the Behavior second, as it might affect Physics.)
+// (HINT: Update the Physics last, before checking for collisions.)
 // Params:
 //	 entity = Pointer to the Entity.
 //	 dt = Change in time (in seconds) since the last game loop.

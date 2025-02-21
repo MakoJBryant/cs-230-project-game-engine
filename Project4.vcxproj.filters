@@ -39,11 +39,14 @@
     <Filter Include="Engine\Entities\Components\Physics">
       <UniqueIdentifier>{6e2eed11-ee6f-4196-bf98-c00c7335610f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Systems">
-      <UniqueIdentifier>{274ba566-daa6-49dd-aa0f-5a57be868621}</UniqueIdentifier>
+    <Filter Include="Engine\Entities\Components\Behavior">
+      <UniqueIdentifier>{7ccddf5d-ed22-43b0-bde1-bc0328471b5c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game\Systems\Cheat">
-      <UniqueIdentifier>{5164e65e-c394-4023-8126-355ee7465fb5}</UniqueIdentifier>
+    <Filter Include="Game\Behaviors">
+      <UniqueIdentifier>{d0dac776-fdb6-4140-9c64-126958b038d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Systems">
+      <UniqueIdentifier>{ac406db9-30f9-40ec-9b4b-fe75d3cbab11}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -122,8 +125,26 @@
     <ClCompile Include="Source\Animation.c">
       <Filter>Engine\Entities\Components\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Source\BehaviorBullet.c">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\BehaviorSpaceship.c">
+      <Filter>Game\Behaviors</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Behavior.c">
+      <Filter>Engine\Entities\Components\Behavior</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EntityContainer.c">
+      <Filter>Engine\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\AsteroidsScene.c">
+      <Filter>Game\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshLibrary.c">
+      <Filter>Engine\Entities\Components\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="Source\CheatSystem.c">
-      <Filter>Game\Systems\Cheat</Filter>
+      <Filter>Game\Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -205,8 +226,26 @@
     <ClInclude Include="Source\Animation.h">
       <Filter>Engine\Entities\Components\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Source\BehaviorBullet.h">
+      <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\BehaviorSpaceship.h">
+      <Filter>Game\Behaviors</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Behavior.h">
+      <Filter>Engine\Entities\Components\Behavior</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EntityContainer.h">
+      <Filter>Engine\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\AsteroidsScene.h">
+      <Filter>Game\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshLibrary.h">
+      <Filter>Engine\Entities\Components\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="Source\CheatSystem.h">
-      <Filter>Game\Systems\Cheat</Filter>
+      <Filter>Game\Systems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

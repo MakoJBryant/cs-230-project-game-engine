@@ -2,7 +2,7 @@
 //
 // File Name:	PlatformSystem.c
 // Author(s):	Doug Schilling (dschilling)
-// Project:		Project 2
+// Project:		Project 4
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
@@ -104,7 +104,7 @@ BaseSystem* PlatformSystemGetInstance(HINSTANCE hInstance, int show)
 	DGL_SysInitInfo initInfo;
 	initInfo.mAppInstance = instance.mAppInstance;
 	initInfo.mShow = instance.mCreateWindow;
-	initInfo.mWindowTitle = "CS230S25 Project 3 - Transformations";
+	initInfo.mWindowTitle = "CS230S25 Project 4 - Spaceship";
 	initInfo.mWindowWidth = 1024;
 	initInfo.mWindowHeight = 768;
 	initInfo.mMaxFrameRate = 60;

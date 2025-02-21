@@ -1,0 +1,17 @@
+Entity
+Spaceship
+Transform
+0 0
+0
+50 40
+Physics
+0 0
+0 0
+Sprite
+0
+1
+MeshSpaceship
+BehaviorSpaceship
+-1
+0
+0.0
