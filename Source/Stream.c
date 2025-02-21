@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	Stream.c
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 1
 // Course:		CS230S25
 //
@@ -21,8 +21,6 @@
 #include <stdbool.h> // bool
 #include "Trace.h"
 #include "DGL.h" // Vector2D
-
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:

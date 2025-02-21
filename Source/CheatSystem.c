@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	CheatSystem.c
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 0
 // Course:		CS230S25
 //
@@ -31,8 +31,6 @@
 #include "Level2Scene.h"
 #include "SandboxScene.h"
 #include "DemoScene.h"
-
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:

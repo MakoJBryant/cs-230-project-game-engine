@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	Level2Scene.c
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 1
 // Course:		CS230S25
 //
@@ -13,31 +13,30 @@
 // Include Files:
 //------------------------------------------------------------------------------
 
-// essential
+// Essential
 #include "stdafx.h"
 #include "Stream.h"
+#include "Trace.h"
+#include "DGL.h"
 
 // Scenes
 #include "Scene.h"
 #include "SceneSystem.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
+#include "DemoScene.h"
 #include "SandboxScene.h"
 
-//other
+// Systems
 #include "Vector2D.h"
 
-#include "DemoScene.h"
-#include "Trace.h"
+// Components.
 #include "Mesh.h"
 #include "Entity.h"
 #include "EntityFactory.h"
-#include "DGL.h"
 #include "Sprite.h"
 #include "Transform.h"
 #include "Physics.h"
-
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:

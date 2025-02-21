@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	SpriteSource.c
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 2
 // Course:		CS230S25
 //
@@ -18,8 +18,6 @@
 #include "SpriteSource.h"
 #include "Trace.h"
 #include "DGL.h"
-
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:

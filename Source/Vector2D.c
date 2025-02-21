@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	Vector2D.c
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 1
 // Course:		CS230S25
 //
@@ -18,8 +18,6 @@
 #include "Vector2D.h"
 #define _USE_MATH_DEFINES // For M_PI
 #include <math.h> // For sqrt(), cos, sin, atan2f
-
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:

@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	Level2Scene.h
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 1
 // Course:		CS230S25
 //

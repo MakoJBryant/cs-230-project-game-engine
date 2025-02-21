@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	SandboxScene.c
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 1
 // Course:		CS230S25
 //
@@ -9,14 +9,22 @@
 //
 //------------------------------------------------------------------------------
 
-#include "stdafx.h"
-#include "Scene.h"
+//------------------------------------------------------------------------------
+// Include Files:
+//------------------------------------------------------------------------------
 
-#include "SceneSystem.h"
+// Essential.
+#include "stdafx.h"
 #include "SandboxScene.h"
-#include "Vector2D.h"
 #include "Stream.h"
 #include "Trace.h"
+
+// Systems.
+#include "SceneSystem.h"
+#include "Vector2D.h"
+
+// Components.
+#include "Scene.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:

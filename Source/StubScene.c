@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	StubScene.c
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 0
 // Course:		CS230S25
 //
@@ -20,8 +20,6 @@
 // Scenes.
 #include "SceneSystem.h"
 #include "StubScene.h"
-
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:

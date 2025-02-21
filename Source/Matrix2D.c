@@ -1,7 +1,7 @@
 //------------------------------------------------------------------------------
 //
 // File Name:	Matrix2D.c
-// Author(s):	Mako J. Bryant (0068410)
+// Author(s):	Mako J. Bryant (mako.bryant)
 // Project:		Project 3
 // Course:		CS230S25
 //
@@ -20,8 +20,6 @@
 #include "Trace.h"
 #define _USE_MATH_DEFINES // For M_PI, must be before math.h
 #include <math.h>  // For trig functions
-
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // Private Constants:
