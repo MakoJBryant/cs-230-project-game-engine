@@ -2,7 +2,7 @@
 //
 // File Name:	Stub.h
 // Author(s):	Mako J. Bryant (mako.bryant)
-// Project:		Project 2
+// Project:		Project 4
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
