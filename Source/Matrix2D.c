@@ -207,13 +207,13 @@ void Matrix2DMultVec(Vector2D* pResult, const Matrix2D* pMtx, const Vector2D* pV
 	pResult->x =
 		Matrix2DRowCol(pMtx, 0, 0) * tempVec.x		// scales the x-component of the vector
 		+ Matrix2DRowCol(pMtx, 0, 1) * tempVec.y    // scales the y-component of the vector
-		+ Matrix2DRowCol(pMtx, 0, 2)				// adds translation in the x-direction
+		+ Matrix2DRowCol(pMtx, 0, 2) * 0			// adds translation in the x-direction
 		+ Matrix2DRowCol(pMtx, 0, 3);				// homogenous vector
 
 	pResult->y =
 		Matrix2DRowCol(pMtx, 1, 0) * tempVec.x		// scales the x-component of the vector
 		+ Matrix2DRowCol(pMtx, 1, 1) * tempVec.y    // scales the y-component of the vector
-		+ Matrix2DRowCol(pMtx, 1, 2)				// adds translation in the y-direction
+		+ Matrix2DRowCol(pMtx, 1, 2) * 0			// adds translation in the y-direction
 		+ Matrix2DRowCol(pMtx, 1, 3);				// homogenous vector
 }
 
