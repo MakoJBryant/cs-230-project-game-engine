@@ -89,6 +89,15 @@ Entity* EntityFactoryBuild(const char* filename)
     return newEntity;
 }
 
+// Free all archetype Entities.
+// (Hint: If the "archetypes" container exists, then the EntityContainerFreeAll
+//    function must be called.)
+void EntityFactoryFreeAll()
+{
+    TraceMessage("Error: EntityFactoryFreeAll empty.");
+    return;
+}
+
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------

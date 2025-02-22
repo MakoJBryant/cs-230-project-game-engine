@@ -16,6 +16,8 @@
 #include "SceneSystem.h"
 
 #include "Trace.h"
+#include "EntityContainer.h"
+#include "EntityFactory.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -32,7 +34,7 @@
 //------------------------------------------------------------------------------
 // Public Variables:
 //------------------------------------------------------------------------------
-
+static EntityContainer* entities = NULL;
 //------------------------------------------------------------------------------
 // Private Variables:
 //------------------------------------------------------------------------------
@@ -67,8 +69,11 @@ void SceneLoad(const Scene* scene)
 	// Verify that the function pointer is valid.
 	if (scene && (scene->load != NULL))
 	{
-		// TODO: Call TraceMessage, passing the format string "%s: Load" and the name of the scene.
+		// Call TraceMessage, passing the format string "%s: Load" and the name of the scene.
 		TraceMessage("%s: Load", scene->name);
+
+		// Initialize the entities variable by calling EntityContainerCreate.
+		EntityContainerCreate();
 
 		// Execute the Load function.
 		(*scene->load)();
@@ -95,11 +100,14 @@ void SceneUpdate(const Scene* scene, float dt)
 	// Verify that the function pointer is valid.
 	if (scene && (scene->update != NULL))
 	{
-		// TODO: Call TraceMessage, passing the format string "%s: Update" and the name of the scene.
+		// Call TraceMessage, passing the format string "%s: Update" and the name of the scene.
 		TraceMessage("%s: Update", scene->name);
 
 		// Execute the Update function.
 		(*scene->update)(dt);
+
+		// Update any existing entities by calling EntityContainerUpdateAll.
+		EntityContainerUpdateAll(entities, dt);
 	}
 }
 
@@ -109,11 +117,14 @@ void SceneRender(const Scene* scene)
 	// Verify that the function pointer is valid.
 	if (scene && (scene->render != NULL))
 	{
-		// TODO: Call TraceMessage, passing the format string "%s: Render" and the name of the scene.
+		// Call TraceMessage, passing the format string "%s: Render" and the name of the scene.
 		TraceMessage("%s: Render", scene->name);
 
 		// Execute the Render function.
 		(*scene->render)();
+
+		// Render all entities within the scene by calling EntityContainerRenderAll.
+		EntityContainerRenderAll(entities);
 	}
 }
 
@@ -128,6 +139,10 @@ void SceneExit(const Scene* scene)
 
 		// Execute the Exit function.
 		(*scene->exit)();
+
+		// Free any existing entities by calling EntityContainerFreeAll and EntityFactoryFreeAll.
+		EntityContainerFreeAll(entities);
+		EntityFactoryFreeAll();
 	}
 }
 
@@ -137,11 +152,14 @@ void SceneUnload(const Scene* scene)
 	// Verify that the function pointer is valid.
 	if (scene && (scene->unload != NULL))
 	{
-		// TODO: Call TraceMessage, passing the format string "%s: Unload" and the name of the scene.
+		// Call TraceMessage, passing the format string "%s: Unload" and the name of the scene.
 		TraceMessage("%s: Unload", scene->name);
 
 		// Execute the Unload function.
 		(*scene->unload)();
+
+		// Free the EntityContainer by calling EntityContainerFree.
+		EntityContainerFree(&entities);
 	}
 }
 
@@ -150,6 +168,16 @@ void SceneRestart(void)
 {
 	// Tell the Scene System to restart the active scene.
 	SceneSystemRestart();
+}
+
+// Add an Entity to the Scene.
+// (NOTE: This is done by storing the Entity within an EntityContainer.)
+// Params:
+//   entity = Pointer to the Entity to be added.
+void SceneAddEntity(Entity* entity)
+{
+	/// This new function should add an Entity to the EntityContainer’s list.
+	EntityContainerAddEntity(entities, entity);
 }
 
 //------------------------------------------------------------------------------
