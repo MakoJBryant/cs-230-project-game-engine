@@ -147,6 +147,21 @@ void StreamReadVector2D(Stream stream, Vector2D* vector)
 	vector->y = StreamReadFloat(stream);
 }
 
+// Read the data for a Color from a stream.
+void StreamReadColor(Stream stream, DGL_Color* color)
+{
+	if (stream == NULL || color == NULL) {
+		TraceMessage("Error: StreamReadColor received NULL argument(s).");
+		return;
+	}
+
+	// Read the RGBA components using StreamReadFloat
+	color->r = StreamReadFloat(stream);
+	color->g = StreamReadFloat(stream);
+	color->b = StreamReadFloat(stream);
+	color->a = StreamReadFloat(stream);
+}
+
 // Read a token (a single word) from a file.
 const char* StreamReadToken(Stream stream)
 {
