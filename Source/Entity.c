@@ -35,20 +35,13 @@
 
 typedef struct Entity
 {
-	// The name of the entity.
-	char name[32];
+	char name[32];				// The name of the entity.
+	bool isDestroyed;			// Flag to indicate if the entity is destroyed.
 
-	// Pointer to an attached physics component.
-	Physics* physics;
-
-	// Pointer to an attached sprite component.
-	Sprite* sprite;
-
-	// Pointer to an attached transform component.
-	Transform* transform;
-
-	// Pointer to an attached transform component.
-	Animation* animation;
+	Physics* physics;			// Pointer to an attached physics component.
+	Sprite* sprite;				// Pointer to an attached sprite component.
+	Transform* transform;		// Pointer to an attached transform component.
+	Animation* animation;		// Pointer to an attached transform component.
 
 } Entity;
 
@@ -82,6 +75,7 @@ Entity* EntityCreate(void)
 
 	// Set default values.
 	strcpy_s(newEntity->name, _countof(newEntity->name), "");
+	newEntity->isDestroyed = false;
 	newEntity->physics = 0;
 	newEntity->sprite = 0;
 	newEntity->transform = 0;
@@ -232,9 +226,12 @@ void EntityRead(Entity* entity, Stream stream)
 //	   else do nothing.
 void EntityDestroy(Entity* entity)
 {
-	TraceMessage("Error: EntityDestory empty.");
-	UNREFERENCED_PARAMETER(entity);
-	return;
+	if (entity == NULL) {
+		TraceMessage("Error: EntityDestroy received NULL argument(s).");
+		return;
+	}
+
+	entity->isDestroyed = true;
 }
 
 // Check whether an Entity has been flagged for destruction.
@@ -246,9 +243,12 @@ void EntityDestroy(Entity* entity)
 //		else return false.
 bool EntityIsDestroyed(const Entity* entity)
 {
-	TraceMessage("Error: EntityIsDestroyed empty.");
-	UNREFERENCED_PARAMETER(entity);
-	return 0;
+	if (entity == NULL) {
+		TraceMessage("Error: EntityIsDestroyed received NULL argument(s).");
+		return false;
+	}
+
+	return entity->isDestroyed;
 }
 
 // Attach an Animation component to an Entity.
