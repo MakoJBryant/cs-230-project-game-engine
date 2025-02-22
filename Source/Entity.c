@@ -24,6 +24,7 @@
 #include "Sprite.h"
 #include "Transform.h"
 #include "Animation.h"
+#include "Behavior.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -42,6 +43,7 @@ typedef struct Entity
 	Sprite* sprite;				// Pointer to an attached sprite component.
 	Transform* transform;		// Pointer to an attached transform component.
 	Animation* animation;		// Pointer to an attached transform component.
+	Behavior* behavior;			// Pointer to an attached behavior component.
 
 } Entity;
 
@@ -76,9 +78,11 @@ Entity* EntityCreate(void)
 	// Set default values.
 	strcpy_s(newEntity->name, _countof(newEntity->name), "");
 	newEntity->isDestroyed = false;
-	newEntity->physics = 0;
-	newEntity->sprite = 0;
-	newEntity->transform = 0;
+
+	newEntity->physics = NULL;
+	newEntity->sprite = NULL;
+	newEntity->transform = NULL;
+	newEntity->behavior = NULL;
 
 	return newEntity;
 }
@@ -96,10 +100,61 @@ Entity* EntityCreate(void)
 //	   else return NULL.
 Entity* EntityClone(const Entity* other)
 {
-	TraceMessage("Error: EntityClone empty.");
-	UNREFERENCED_PARAMETER(other);
-	return NULL;
+	if (other == NULL) {
+		TraceMessage("Error: EntityClone received NULL argument(s).");
+		return NULL;
+	}
+
+	// Allocate memory for the new entity.
+	Entity* newEntity = EntityCreate();
+	if (newEntity == NULL) {
+		TraceMessage("Error: EntityClone failed to allocate memory.");
+		return NULL;
+	}
+
+	// Shallow copy of the data.
+	strcpy_s(newEntity->name, _countof(newEntity->name), other->name);
+	newEntity->isDestroyed = other->isDestroyed;
+
+	// Deep copy of any attached components.
+	if (other->transform != NULL) {
+		Transform* newTransform = TransformClone(other->transform);
+		if (newTransform != NULL) {
+			EntityAddTransform(newEntity, newTransform);
+		}
+	}
+
+	if (other->physics != NULL) {
+		Physics* newPhysics = PhysicsClone(other->physics);
+		if (newPhysics != NULL) {
+			EntityAddPhysics(newEntity, newPhysics);
+		}
+	}
+
+	if (other->sprite != NULL) {
+		Sprite* newSprite = SpriteClone(other->sprite);
+		if (newSprite != NULL) {
+			EntityAddSprite(newEntity, newSprite);
+		}
+	}
+
+	if (other->animation != NULL) {
+		Animation* newAnimation = AnimationClone(other->animation);
+		if (newAnimation != NULL) {
+			EntityAddAnimation(newEntity, newAnimation);
+		}
+	}
+
+	if (other->behavior != NULL) {
+		Behavior* newBehavior = BehaviorClone(other->behavior);
+		if (newBehavior != NULL) {
+			EntityAddBehavior(newEntity, newBehavior);
+		}
+	}
+
+	return newEntity;
 }
+
 
 // Free the memory associated with an Entity.
 void EntityFree(Entity** entity)
@@ -126,7 +181,6 @@ void EntityFree(Entity** entity)
 	free(*entity);
 	*entity = NULL;
 }
-
 
 // Read (and construct) the components associated with an entity.
 // NEVER NEST THIS FUNCTION FOR READABILITY LATER!!!!!
@@ -217,13 +271,6 @@ void EntityRead(Entity* entity, Stream stream)
 }
 
 // Flag an Entity for destruction.
-// (Note: This is to avoid Entities being destroyed while they are being processed.)
-// Params:
-//	 entity = Pointer to the Entity to be flagged for destruction.
-// Returns:
-//	 If 'entity' is valid,
-//	   then set the 'isDestroyed' flag,
-//	   else do nothing.
 void EntityDestroy(Entity* entity)
 {
 	if (entity == NULL) {
@@ -235,12 +282,6 @@ void EntityDestroy(Entity* entity)
 }
 
 // Check whether an Entity has been flagged for destruction.
-// Params:
-//	 entity = Pointer to the Entity.
-// Returns:
-//	 If the Entity pointer is valid,
-//		then return the value in the "isDestroyed" flag,
-//		else return false.
 bool EntityIsDestroyed(const Entity* entity)
 {
 	if (entity == NULL) {
@@ -261,17 +302,15 @@ void EntityAddAnimation(Entity* entity, Animation* animation)
 }
 
 // Attach a Behavior component to an Entity.
-// (NOTE: This function must also set the Behavior component's parent pointer
-//	  by calling the BehaviorSetParent() function.)
-// Params:
-//	 entity = Pointer to the Entity.
-//   behavior = Pointer to the Behavior component to be attached.
 void EntityAddBehavior(Entity* entity, Behavior* behavior)
 {
-	TraceMessage("Error: EntityAddBehavior empty.");
-	UNREFERENCED_PARAMETER(entity);
-	UNREFERENCED_PARAMETER(behavior);
-	return;
+	if (entity == NULL || behavior == NULL) {
+		TraceMessage("Error: EntityAddBehavior received NULL argument(s).");
+		return;
+	}
+
+	BehaviorSetParent(behavior, entity);
+	entity->behavior = behavior;
 }
 
 // Attach a Physics component to an Entity.
@@ -316,13 +355,6 @@ const char* EntityGetName(const Entity* entity)
 }
 
 // Compare the Entity's name with the specified name.
-// Params:
-//	 entity = Pointer to the Entity.
-//   name = Pointer to the name to be checked.
-// Returns:
-//	 If the Entity pointer is valid and the two names match,
-//		then return true,
-//		else return false.
 bool EntityIsNamed(const Entity* entity, const char* name)
 {
 	if (entity == NULL || name == NULL) {
@@ -341,35 +373,47 @@ Animation* EntityGetAnimation(const Entity* entity)
 }
 
 // Get the Behavior component attached to an Entity.
-// Params:
-//	 entity = Pointer to the Entity.
-// Returns:
-//	 If the Entity pointer is valid,
-//		then return a pointer to the attached Behavior component,
-//		else return NULL.
 Behavior* EntityGetBehavior(const Entity* entity)
 {
-	TraceMessage("Error: EntityGetBehavior empty.");
-	UNREFERENCED_PARAMETER(entity);
-	return NULL;
+	if (entity == NULL) {
+		TraceMessage("Error: EntityGetBehavior received NULL argument(s).");
+		return NULL;
+	}
+
+	return entity->behavior;
 }
 
 // Get the Physics component attached to an Entity.
 Physics* EntityGetPhysics(const Entity* entity)
 {
-	return entity ? entity->physics : NULL;
+	if (entity == NULL) {
+		TraceMessage("Error: EntityGetPhysics received NULL argument(s).");
+		return NULL;
+	}
+
+	return entity->physics;
 }
 
 // Get the Sprite component attached to a Entity.
 Sprite* EntityGetSprite(const Entity* entity)
 {
-	return entity ? entity->sprite : NULL;
+	if (entity == NULL) {
+		TraceMessage("Error: EntityGetSprite received NULL argument(s).");
+		return NULL;
+	}
+
+	return entity->sprite;
 }
 
 // Get the Transform component attached to a Entity.
 Transform* EntityGetTransform(const Entity* entity)
 {
-	return entity ? entity->transform : NULL;
+	if (entity == NULL) {
+		TraceMessage("Error: EntityGetTransform received NULL argument(s).");
+		return NULL;
+	}
+
+	return entity->transform;
 }
 
 // Update any components attached to the Entity.
