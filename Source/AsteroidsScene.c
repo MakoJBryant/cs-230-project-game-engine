@@ -17,6 +17,7 @@
 #include "stdafx.h"
 #include "Scene.h"
 #include "Trace.h"
+#include "DGL.h"
 
 // Scenes.
 #include "SceneSystem.h"
@@ -94,6 +95,10 @@ static void AsteroidsSceneLoad(void)
 // Initialize the entities and variables used by the scene.
 static void AsteroidsSceneInit()
 {
+	// General settings.
+	DGL_Color black = { 0.0f, 0.0f, 0.0f, 1.0f };
+	DGL_Graphics_SetBackgroundColor(&black);
+	DGL_Graphics_SetBlendMode(DGL_BM_BLEND);
 }
 
 // Update the the variables used by the scene.
