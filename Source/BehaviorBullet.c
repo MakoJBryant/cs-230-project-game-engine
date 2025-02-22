@@ -1,8 +1,8 @@
 //------------------------------------------------------------------------------
 //
-// File Name:	Stub.c
+// File Name:	BehaviorBullet.c
 // Author(s):	Mako J. Bryant (mako.bryant)
-// Project:		Project 2
+// Project:		Project 4
 // Course:		CS230S25
 //
 // Copyright © 2025 DigiPen (USA) Corporation.
@@ -15,7 +15,11 @@
 
 // Essentials.
 #include "stdafx.h"
-#include "Stub.h"
+#include "BehaviorBullet.h"
+#include "Trace.h"
+
+// Components.
+#include "Behavior.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -41,23 +45,12 @@
 // Public Functions:
 //------------------------------------------------------------------------------
 
-// Initialize the ...
-void StubInit()
+// Dynamically allocate a new (Bullet) behavior component.
+// (Hint: Use calloc() to ensure that all member variables are initialized to 0.)
+Behavior* BehaviorBulletCreate(void)
 {
-}
-
-// Update the ...
-// Params:
-//	 dt = Change in time (in seconds) since the last game loop.
-void StubUpdate(float dt)
-{
-	/* Tell the compiler that the 'dt' variable is unused. */
-	UNREFERENCED_PARAMETER(dt);
-}
-
-// Shutdown the ...
-void StubExit()
-{
+	TraceMessage("Error: BehaviorBulletCreate empty.");
+	return NULL;
 }
 
 //------------------------------------------------------------------------------

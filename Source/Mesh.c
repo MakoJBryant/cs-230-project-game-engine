@@ -129,7 +129,40 @@ void MeshBuildSpaceship(Mesh* mesh)
 	// Save the mesh (list of triangles).
 	mesh->meshResource = DGL_Graphics_EndMesh();
 	assert(mesh && "MeshBuildSpaceship: failed to create mesh!");
+}
 
+// Read the properties of a Mesh object from a file.
+// (NOTE: First, read a token from the file and verify that it is "Mesh".)
+// (NOTE: Second, read a token and store it in the Mesh's name variable.)
+// (NOTE: Third, read an integer indicating the number of vertices to be read.)
+// (NOTE: For each vertex, read a Vector2D (position), a DGL_Color (color), and a Vector2D (UV).)
+// (HINT: Call DGL_Graphics_AddVertex() to add a single vertex to the mesh.)
+// Params:
+//   mesh = Pointer to the Mesh.
+//	 stream = The data stream used for reading.
+void MeshRead(Mesh* mesh, Stream stream)
+{
+	TraceMessage("Error: MeshRead empty.");
+	UNREFERENCED_PARAMETER(mesh);
+	UNREFERENCED_PARAMETER(stream);
+	return;
+}
+
+// Determines if a Mesh has the specified name.
+// (HINT: This function is similar to one in Entity.c.)
+// Params:
+//	 mesh = Pointer to the Mesh object.
+//	 name = Pointer to the name to be compared.
+// Returns:
+//	 If the mesh and name pointers are valid,
+//		then perform a string comparison and return the result (match = true),
+//		else return false.
+bool MeshIsNamed(const Mesh* mesh, const char* name)
+{
+	TraceMessage("Error: MeshIsNamed empty.");
+	UNREFERENCED_PARAMETER(mesh);
+	UNREFERENCED_PARAMETER(name);
+	return 0;
 }
 
 // Render a mesh.
