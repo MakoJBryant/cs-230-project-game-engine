@@ -86,6 +86,21 @@ Physics* PhysicsCreate(void)
 	return newPhysics;
 }
 
+// Dynamically allocate a clone of an existing Physics component.
+// (Hint: Perform a shallow copy of the member variables.)
+// Params:
+//	 other = Pointer to the component to be cloned.
+// Returns:
+//	 If 'other' is valid and the memory allocation was successful,
+//	   then return a pointer to the cloned component,
+//	   else return NULL.
+Physics* PhysicsClone(const Physics* other)
+{
+	TraceMessage("Error: PhysicsClone empty.");
+	UNREFERENCED_PARAMETER(other);
+	return NULL;
+}
+
 // Free the memory associated with a Physics component.
 void PhysicsFree(Physics** physics)
 {
