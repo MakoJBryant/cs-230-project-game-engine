@@ -91,6 +91,21 @@ Transform* TransformCreate(void)
 	return newTransform;
 }
 
+// Dynamically allocate a clone of an existing Transform.
+// (Hint: Perform a shallow copy of the member variables.)
+// Params:
+//	 other = Pointer to the component to be cloned.
+// Returns:
+//	 If 'other' is valid and the memory allocation was successful,
+//	   then return a pointer to the cloned component,
+//	   else return NULL.
+Transform* TransformClone(const Transform* other)
+{
+	TraceMessage("Error: TransformClone empty.");
+	UNREFERENCED_PARAMETER(other);
+	return NULL;
+}
+
 // Free the memory associated with a Transform component.
 void TransformFree(Transform** transform)
 {
