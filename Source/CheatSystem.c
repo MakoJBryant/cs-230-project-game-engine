@@ -27,10 +27,11 @@
 #include "Scene.h"
 
 // Scenes.
+#include "DemoScene.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
+#include "AsteroidsScene.h"
 #include "SandboxScene.h"
-#include "DemoScene.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -83,6 +84,7 @@ static CheatSystem instance =
 static const CheatSystemKeyBinding keyBindings[] = {
 	{ '1', Level1SceneGetInstance },
 	{ '2', Level2SceneGetInstance },
+	{ '3', AsteroidsSceneGetInstance },
 	{ '9', SandboxSceneGetInstance },
 	{ '0', DemoSceneGetInstance }
 };
