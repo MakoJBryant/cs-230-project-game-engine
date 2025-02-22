@@ -198,7 +198,7 @@ static void Level1SceneLoad(void)
 static void Level1SceneInit()
 {
 	// Create a “Planet” Entity.
-	instance.planetEntity = EntityFactoryBuild("./Data/PlanetBounce.txt");
+	instance.planetEntity = EntityFactoryBuild("PlanetBounce");
 	if (instance.planetEntity == NULL) {
 		return;
 	}
@@ -209,7 +209,7 @@ static void Level1SceneInit()
 	}
 
 	// Create a “Monkey” Entity.
-	instance.monkeyEntity = EntityFactoryBuild("./Data/Monkey.txt");
+	instance.monkeyEntity = EntityFactoryBuild("Monkey");
 	if (instance.monkeyEntity == NULL) {
 		return;
 	}
@@ -217,7 +217,7 @@ static void Level1SceneInit()
 	Level1SceneSetMonkeyState(instance.monkeyEntity, MonkeyIdle);
 
 	// Create a “LivesText” Entity.
-	instance.livesTextEntity = EntityFactoryBuild("./Data/MonkeyLivesText.txt");
+	instance.livesTextEntity = EntityFactoryBuild("MonkeyLivesText");
 	Sprite* livesSprite = EntityGetSprite(instance.livesTextEntity); // Get the Entity’s Sprite.
 	SpriteSetMesh(livesSprite, instance.myMesh16x8); // Set the Sprite’s Mesh
 	SpriteSetSpriteSource(livesSprite, instance.robotoMonoBlackSpriteSource); // and SpriteSource

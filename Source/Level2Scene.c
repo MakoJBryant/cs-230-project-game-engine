@@ -123,7 +123,7 @@ static void Level2SceneLoad(void)
 static void Level2SceneInit()
 {
 	// Initialize spaceship entity.
-	instance.spaceshipEntity = EntityFactoryBuild("./Data/SpaceshipHoming.txt");
+	instance.spaceshipEntity = EntityFactoryBuild("SpaceshipHoming");
 	if (instance.spaceshipEntity == NULL) {
 		return;
 	}
