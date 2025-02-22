@@ -182,14 +182,6 @@ bool EntityContainerIsEmpty(const EntityContainer* entities)
 }
 
 // Update all Entities in the EntityContainer.
-// (HINT: You must call EntityUpdate for all Entities.)
-// (NOTE: After an Entity has been updated, if it has been flagged as
-//    destroyed, then it must be removed from the list and freed properly.
-//    Additionally, the entityCount should be decremented by 1.)
-// Params:
-//   entities = Pointer to the EntityContainer.
-//	 dt = Change in time (in seconds) since the last game loop.
-// Update all Entities in the EntityContainer.
 void EntityContainerUpdateAll(EntityContainer* entities, float dt)
 {
 	if (entities == NULL) {
@@ -214,16 +206,21 @@ void EntityContainerUpdateAll(EntityContainer* entities, float dt)
 	}
 }
 
-
 // Render all Entities in the EntityContainer.
-// (HINT: You must call EntityRender for all Entities.)
-// Params:
-//   entities = Pointer to the EntityContainer.
 void EntityContainerRenderAll(const EntityContainer* entities)
 {
-	TraceMessage("Error: EntityContainerRenderAll empty.");
-	UNREFERENCED_PARAMETER(entities);
-	return;
+	if (entities == NULL) {
+		TraceMessage("Error: EntityContainerRenderAll received NULL argument(s).");
+		return;
+	}
+
+	// Iterate through all the entities in the container.
+	for (unsigned i = 0; i < 100; i++) {
+		if (entities->entities[i] != NULL) {
+			// Render the entity.
+			EntityRender(entities->entities[i]);
+		}
+	}
 }
 
 // Free all Entities in the EntityContainer.
