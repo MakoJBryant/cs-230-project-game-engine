@@ -91,10 +91,6 @@ EntityContainer* EntityContainerCreate()
 }
 
 // Free the memory associated with an EntityContainer.
-// (NOTE: If necessary, call EntityContainerFreeAll to free any existing Entities.)
-// (NOTE: The EntityContainer pointer must be set to NULL.)
-// Params:
-//	 entities = Pointer to the EntityContainer pointer.
 void EntityContainerFree(EntityContainer** entities)
 {
 	if (entities == NULL || *entities == NULL) {
@@ -124,11 +120,31 @@ void EntityContainerFree(EntityContainer** entities)
 //		else return false.
 bool EntityContainerAddEntity(EntityContainer* entities, Entity* entity)
 {
-	TraceMessage("Error: EntityContainerAddEntity empty.");
-	UNREFERENCED_PARAMETER(entities);
-	UNREFERENCED_PARAMETER(entity);
-	return 0;
+	if (entities == NULL || entity == NULL) {
+		TraceMessage("Error: EntityContainerAddEntity recieved NULL argument(s).");
+		return false;
+	}
+
+	if (entities->entityCount >= 100) {
+		TraceMessage("Error: EntityContainer is full. Cannot add more entities.");
+		return false;
+	}
+
+	// Find the first available slot
+	for (unsigned i = 0; i < 100; i++) {
+		// If empty slot is found,
+		if (entities->entities[i] == NULL) {
+			entities->entities[i] = entity;
+			entities->entityCount++;
+			TraceMessage("Entity successfully added to EntityContainer.");
+			return true;
+		}
+	}
+
+	TraceMessage("Error: Unable to find an available slot in EntityContainer.");
+	return false;
 }
+
 
 // Find an Entity in the EntityContainer that has a matching name.
 // (HINT: Use the new function, EntityIsNamed, to compare names.)
