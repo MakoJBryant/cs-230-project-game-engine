@@ -69,13 +69,6 @@ typedef struct EntityContainer
 //------------------------------------------------------------------------------
 
 // Dynamically allocate a new EntityContainer.
-// (Hint: Use calloc() to ensure that all member variables are initialized to 0.)
-// (Hint: If your implementation requires any variables to be initialized to
-//    non-zero values, then do so here.)
-// Returns:
-//	 If the memory allocation was successful,
-//	   then return a pointer to the allocated memory,
-//	   else return NULL.
 EntityContainer* EntityContainerCreate()
 {
 	// Allocate memory for the container and initialize to zero
@@ -97,7 +90,6 @@ EntityContainer* EntityContainerCreate()
 	return container;
 }
 
-
 // Free the memory associated with an EntityContainer.
 // (NOTE: If necessary, call EntityContainerFreeAll to free any existing Entities.)
 // (NOTE: The EntityContainer pointer must be set to NULL.)
@@ -105,10 +97,21 @@ EntityContainer* EntityContainerCreate()
 //	 entities = Pointer to the EntityContainer pointer.
 void EntityContainerFree(EntityContainer** entities)
 {
-	TraceMessage("Error: EntityContainerFree empty.");
-	UNREFERENCED_PARAMETER(entities);
-	return;
+	if (entities == NULL || *entities == NULL) {
+		TraceMessage("Warning: Attempted to free a NULL EntityContainer.");
+		return;
+	}
+
+	// Free all entities in the container.
+	EntityContainerFreeAll(*entities);
+
+	// Free the container itself.
+	free(*entities);
+	*entities = NULL; // Prevent dangling pointer.
+
+	TraceMessage("EntityContainer successfully freed.");
 }
+
 
 // Add an Entity to the EntityContainer.
 // (NOTE: If the container is not full, then the Entity should be added to the list
