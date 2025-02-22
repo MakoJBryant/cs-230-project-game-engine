@@ -78,9 +78,25 @@ typedef struct EntityContainer
 //	   else return NULL.
 EntityContainer* EntityContainerCreate()
 {
-	TraceMessage("Error: EntityContainerCreate empty.");
-	return NULL;
+	// Allocate memory for the container and initialize to zero
+	EntityContainer* container = calloc(1, sizeof(EntityContainer));
+	if (container == NULL) {
+		TraceMessage("Error: Failed to allocate memory for EntityContainer.");
+		return NULL;
+	}
+
+	// Set initial values.
+	container->entityCount = 0;
+	container->entityMax = 100;
+
+	// Initialize entity list to NULL
+	for (unsigned i = 0; i < container->entityMax; i++) {
+		container->entities[i] = NULL;
+	}
+
+	return container;
 }
+
 
 // Free the memory associated with an EntityContainer.
 // (NOTE: If necessary, call EntityContainerFreeAll to free any existing Entities.)
