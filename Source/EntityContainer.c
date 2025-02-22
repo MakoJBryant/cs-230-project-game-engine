@@ -163,19 +163,24 @@ Entity* EntityContainerFindByName(const EntityContainer* entities, const char* e
 	return NULL;
 }
 
-
 // Determines if the EntityContainer is empty (no Entities exist).
-// Params:
-//   entities = Pointer to the EntityContainer.
-// Returns:
-//	 If the EntityContainer pointer is valid and no Entities exist,
-//		then return true,
-//		else return false.
 bool EntityContainerIsEmpty(const EntityContainer* entities)
 {
-	TraceMessage("Error: EntityContainerIsEmpty empty.");
-	UNREFERENCED_PARAMETER(entities);
-	return 0;
+	if (entities == NULL) {
+		TraceMessage("Error: EntityContainerIsEmpty received NULL argument(s).");
+		return false;
+	}
+
+	// Loop through the entire list of entities.
+	for (unsigned i = 0; i < 100; i++) {
+		// If Entity is found, the container is not empty.
+		if (entities->entities[i] != NULL) {
+			return false;
+		}
+	}
+
+	// No Entities found.
+	return true;
 }
 
 // Update all Entities in the EntityContainer.
