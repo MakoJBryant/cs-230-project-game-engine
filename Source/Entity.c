@@ -89,6 +89,24 @@ Entity* EntityCreate(void)
 	return newEntity;
 }
 
+// Dynamically allocate a clone of an existing Entity.
+// (Hint: Make sure to perform a shallow copy or deep copy, as appropriate.)
+// (WARNING: You should use the EntityAdd* functions when attaching cloned
+//    components to the cloned Entity.  This will ensure that the 'parent'
+//    variable is set properly.)
+// Params:
+//	 other = Pointer to the Entity to be cloned.
+// Returns:
+//	 If 'other' is valid and the memory allocation was successful,
+//	   then return a pointer to the cloned Entity,
+//	   else return NULL.
+Entity* EntityClone(const Entity* other)
+{
+	TraceMessage("Error: EntityClone empty.");
+	UNREFERENCED_PARAMETER(other);
+	return NULL;
+}
+
 // Free the memory associated with an Entity.
 void EntityFree(Entity** entity)
 {
@@ -204,6 +222,35 @@ void EntityRead(Entity* entity, Stream stream)
 	}
 }
 
+// Flag an Entity for destruction.
+// (Note: This is to avoid Entities being destroyed while they are being processed.)
+// Params:
+//	 entity = Pointer to the Entity to be flagged for destruction.
+// Returns:
+//	 If 'entity' is valid,
+//	   then set the 'isDestroyed' flag,
+//	   else do nothing.
+void EntityDestroy(Entity* entity)
+{
+	TraceMessage("Error: EntityDestory empty.");
+	UNREFERENCED_PARAMETER(entity);
+	return;
+}
+
+// Check whether an Entity has been flagged for destruction.
+// Params:
+//	 entity = Pointer to the Entity.
+// Returns:
+//	 If the Entity pointer is valid,
+//		then return the value in the "isDestroyed" flag,
+//		else return false.
+bool EntityIsDestroyed(const Entity* entity)
+{
+	TraceMessage("Error: EntityIsDestroyed empty.");
+	UNREFERENCED_PARAMETER(entity);
+	return 0;
+}
+
 // Attach an Animation component to an Entity.
 void EntityAddAnimation(Entity* entity, Animation* animation)
 {
@@ -211,6 +258,20 @@ void EntityAddAnimation(Entity* entity, Animation* animation)
 		AnimationSetParent(animation, entity);
 		entity->animation = animation;
 	}
+}
+
+// Attach a Behavior component to an Entity.
+// (NOTE: This function must also set the Behavior component's parent pointer
+//	  by calling the BehaviorSetParent() function.)
+// Params:
+//	 entity = Pointer to the Entity.
+//   behavior = Pointer to the Behavior component to be attached.
+void EntityAddBehavior(Entity* entity, Behavior* behavior)
+{
+	TraceMessage("Error: EntityAddBehavior empty.");
+	UNREFERENCED_PARAMETER(entity);
+	UNREFERENCED_PARAMETER(behavior);
+	return;
 }
 
 // Attach a Physics component to an Entity.
@@ -254,10 +315,40 @@ const char* EntityGetName(const Entity* entity)
 	return entity ? entity->name : NULL;
 }
 
+// Compare the Entity's name with the specified name.
+// Params:
+//	 entity = Pointer to the Entity.
+//   name = Pointer to the name to be checked.
+// Returns:
+//	 If the Entity pointer is valid and the two names match,
+//		then return true,
+//		else return false.
+bool EntityIsNamed(const Entity* entity, const char* name)
+{
+	TraceMessage("Error: EntityIsNamed empty.");
+	UNREFERENCED_PARAMETER(entity);
+	UNREFERENCED_PARAMETER(name);
+	return 0;
+}
+
 // Get the Animation component attached to an Entity.
 Animation* EntityGetAnimation(const Entity* entity)
 {
 	return entity ? entity->animation : NULL;
+}
+
+// Get the Behavior component attached to an Entity.
+// Params:
+//	 entity = Pointer to the Entity.
+// Returns:
+//	 If the Entity pointer is valid,
+//		then return a pointer to the attached Behavior component,
+//		else return NULL.
+Behavior* EntityGetBehavior(const Entity* entity)
+{
+	TraceMessage("Error: EntityGetBehavior empty.");
+	UNREFERENCED_PARAMETER(entity);
+	return NULL;
 }
 
 // Get the Physics component attached to an Entity.
