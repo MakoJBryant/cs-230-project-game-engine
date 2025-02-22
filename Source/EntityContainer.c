@@ -224,16 +224,25 @@ void EntityContainerRenderAll(const EntityContainer* entities)
 }
 
 // Free all Entities in the EntityContainer.
-// (NOTE: You must call EntityFree for all Entities.)
-// (HINT: The container must be completely empty after this function is called.)
-// (HINT: The entityCount should be 0 after all of the Entities have been freed.)
-// Params:
-//   entities = Pointer to the EntityContainer.
 void EntityContainerFreeAll(EntityContainer* entities)
 {
-	TraceMessage("Error: EntityContainerFreeAll empty.");
-	UNREFERENCED_PARAMETER(entities);
-	return;
+	if (entities == NULL) {
+		TraceMessage("Error: EntityContainerFreeAll received NULL argument(s).");
+		return;
+	}
+
+	// Iterate through all the entities in the container.
+	for (unsigned i = 0; i < 100; i++) {
+		if (entities->entities[i] != NULL) {
+			// Free the entity.
+			EntityFree(&entities->entities[i]);
+
+			// Set the slot to NULL after freeing.
+			entities->entities[i] = NULL;
+		}
+	}
+
+	entities->entityCount = 0;
 }
 
 //------------------------------------------------------------------------------
