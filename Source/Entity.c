@@ -325,10 +325,13 @@ const char* EntityGetName(const Entity* entity)
 //		else return false.
 bool EntityIsNamed(const Entity* entity, const char* name)
 {
-	TraceMessage("Error: EntityIsNamed empty.");
-	UNREFERENCED_PARAMETER(entity);
-	UNREFERENCED_PARAMETER(name);
-	return 0;
+	if (entity == NULL || name == NULL) {
+		TraceMessage("Error: EntityIsNamed received NULL argument(s).");
+		return false;
+	}
+
+	// Returns true if they match (strcmp() == 0).
+	return strcmp(entity->name, name) == 0;
 }
 
 // Get the Animation component attached to an Entity.
