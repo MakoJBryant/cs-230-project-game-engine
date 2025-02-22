@@ -86,6 +86,21 @@ Sprite* SpriteCreate(void)
 	return newSprite;
 }
 
+// Dynamically allocate a clone of an existing Sprite.
+// (Hint: Perform a shallow copy of the member variables.)
+// Params:
+//	 other = Pointer to the component to be cloned.
+// Returns:
+//	 If 'other' is valid and the memory allocation was successful,
+//	   then return a pointer to the cloned component,
+//	   else return NULL.
+Sprite* SpriteClone(const Sprite* other)
+{
+	TraceMessage("Error: SpriteClone empty.");
+	UNREFERENCED_PARAMETER(other);
+	return NULL;
+}
+
 // Free the memory associated with a Sprite component.
 void SpriteFree(Sprite** sprite)
 {
