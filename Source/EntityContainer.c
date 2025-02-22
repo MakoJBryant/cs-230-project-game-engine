@@ -108,7 +108,6 @@ void EntityContainerFree(EntityContainer** entities)
 	TraceMessage("EntityContainer successfully freed.");
 }
 
-
 // Add an Entity to the EntityContainer.
 bool EntityContainerAddEntity(EntityContainer* entities, Entity* entity)
 {
@@ -136,7 +135,6 @@ bool EntityContainerAddEntity(EntityContainer* entities, Entity* entity)
 	TraceMessage("Error: Unable to find an available slot in EntityContainer.");
 	return false;
 }
-
 
 // Find an Entity in the EntityContainer that has a matching name.
 Entity* EntityContainerFindByName(const EntityContainer* entities, const char* entityName)
@@ -191,13 +189,31 @@ bool EntityContainerIsEmpty(const EntityContainer* entities)
 // Params:
 //   entities = Pointer to the EntityContainer.
 //	 dt = Change in time (in seconds) since the last game loop.
+// Update all Entities in the EntityContainer.
 void EntityContainerUpdateAll(EntityContainer* entities, float dt)
 {
-	TraceMessage("Error: EntityContainerUpdateAll empty.");
-	UNREFERENCED_PARAMETER(entities);
-	UNREFERENCED_PARAMETER(dt);
-	return;
+	if (entities == NULL) {
+		TraceMessage("Error: EntityContainerUpdateAll received NULL argument(s).");
+		return;
+	}
+
+	// Iterate through all the entities in the container.
+	for (unsigned i = 0; i < 100; i++) {
+		if (entities->entities[i] != NULL) {
+
+			EntityUpdate(entities->entities[i], dt);
+
+			if (EntityIsDestroyed(entities->entities[i])) {
+
+				// Destroy and free the Entity.
+				EntityFree(&entities->entities[i]);
+				entities->entities[i] = NULL;
+				entities->entityCount--;
+			}
+		}
+	}
 }
+
 
 // Render all Entities in the EntityContainer.
 // (HINT: You must call EntityRender for all Entities.)
