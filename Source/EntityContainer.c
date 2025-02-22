@@ -110,14 +110,6 @@ void EntityContainerFree(EntityContainer** entities)
 
 
 // Add an Entity to the EntityContainer.
-// (NOTE: If the container is not full, then the Entity should be added to the list
-//    and the entityCount incremented by 1.)
-// Params:
-//   entities = Pointer to the EntityContainer.
-// Returns:
-//	 If the EntityContainer pointer is valid and the Entity was added successfully,
-//		then return true,
-//		else return false.
 bool EntityContainerAddEntity(EntityContainer* entities, Entity* entity)
 {
 	if (entities == NULL || entity == NULL) {
@@ -130,7 +122,7 @@ bool EntityContainerAddEntity(EntityContainer* entities, Entity* entity)
 		return false;
 	}
 
-	// Find the first available slot
+	// Loop to find the first available slot.
 	for (unsigned i = 0; i < 100; i++) {
 		// If empty slot is found,
 		if (entities->entities[i] == NULL) {
@@ -147,21 +139,30 @@ bool EntityContainerAddEntity(EntityContainer* entities, Entity* entity)
 
 
 // Find an Entity in the EntityContainer that has a matching name.
-// (HINT: Use the new function, EntityIsNamed, to compare names.)
-// Params:
-//   entities = Pointer to the EntityContainer.
-//   entityName = The name of the Entity to be returned.
-// Returns:
-//	 If the EntityContainer pointer is valid and the Entity was located successfully,
-//		then return a pointer to the Entity,
-//		else return NULL.
 Entity* EntityContainerFindByName(const EntityContainer* entities, const char* entityName)
 {
-	TraceMessage("Error: EntityContainerFindByName empty.");
-	UNREFERENCED_PARAMETER(entities);
-	UNREFERENCED_PARAMETER(entityName);
+	if (entities == NULL || entityName == NULL) {
+		TraceMessage("Error: EntityContainerFindByName received NULL argument(s).");
+		return NULL;
+	}
+
+	// Loop through the entire list of entities.
+	for (unsigned i = 0; i < 100; i++)
+	{
+		// If current Entity not NULL and name matches.
+		if (entities->entities[i] != NULL 
+			&& EntityIsNamed(entities->entities[i], entityName)) {
+			
+			TraceMessage("Entity found in EntityContainer.");
+			return entities->entities[i];
+		}
+	}
+
+	// Entity not found
+	TraceMessage("Warning: Entity not found in EntityContainer.");
 	return NULL;
 }
+
 
 // Determines if the EntityContainer is empty (no Entities exist).
 // Params:
