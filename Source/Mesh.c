@@ -132,38 +132,65 @@ void MeshBuildSpaceship(Mesh* mesh)
 }
 
 // Read the properties of a Mesh object from a file.
-// (NOTE: First, read a token from the file and verify that it is "Mesh".)
-// (NOTE: Second, read a token and store it in the Mesh's name variable.)
-// (NOTE: Third, read an integer indicating the number of vertices to be read.)
-// (NOTE: For each vertex, read a Vector2D (position), a DGL_Color (color), and a Vector2D (UV).)
-// (HINT: Call DGL_Graphics_AddVertex() to add a single vertex to the mesh.)
-// Params:
-//   mesh = Pointer to the Mesh.
-//	 stream = The data stream used for reading.
 void MeshRead(Mesh* mesh, Stream stream)
 {
-	TraceMessage("Error: MeshRead empty.");
-	UNREFERENCED_PARAMETER(mesh);
-	UNREFERENCED_PARAMETER(stream);
-	return;
+	if (mesh == NULL || stream == NULL) {
+		TraceMessage("Error: MeshRead received NULL argument(s).");
+		return;
+	}
+
+	// (NOTE: First, read a token from the file and verify that it is "Mesh".)
+	const char* token = StreamReadToken(stream);
+	if (token == NULL || strcmp(token, "Mesh") != 0) {
+		TraceMessage("Error: MeshRead failed to read 'Mesh' token.");
+		return;
+	}
+
+	// (NOTE: Second, read a token and store it in the Mesh's name variable.)
+	token = StreamReadToken(stream);
+	if (token == NULL) {
+		TraceMessage("Error: MeshRead failed to read mesh name.");
+		return;
+	}
+	strcpy_s(mesh->name, _countof(mesh->name), token);
+
+	// (NOTE: Third, read an integer indicating the number of vertices to be read.)
+	int numVertices = StreamReadInt(stream);
+	if (numVertices <= 0) {
+		TraceMessage("Error: MeshRead received invalid vertex count.");
+		return;
+	}
+
+	// (NOTE: For each vertex, read a Vector2D (position), a DGL_Color (color), and a Vector2D (UV).)
+	for (int i = 0; i < numVertices; ++i) {
+
+		DGL_Vec2 position;
+		DGL_Color color;
+		DGL_Vec2 uv;
+
+		StreamReadVector2D(stream, &position);
+		StreamReadColor(stream, &color);
+		StreamReadVector2D(stream, &uv);
+
+		// (HINT: Call DGL_Graphics_AddVertex() to add a single vertex to the mesh.)
+		DGL_Graphics_AddVertex(&position, &color, &uv);
+	}
+
+	mesh->meshResource = DGL_Graphics_EndMesh();
 }
 
 // Determines if a Mesh has the specified name.
-// (HINT: This function is similar to one in Entity.c.)
-// Params:
-//	 mesh = Pointer to the Mesh object.
-//	 name = Pointer to the name to be compared.
-// Returns:
-//	 If the mesh and name pointers are valid,
-//		then perform a string comparison and return the result (match = true),
-//		else return false.
 bool MeshIsNamed(const Mesh* mesh, const char* name)
 {
-	TraceMessage("Error: MeshIsNamed empty.");
-	UNREFERENCED_PARAMETER(mesh);
-	UNREFERENCED_PARAMETER(name);
-	return 0;
+	if (mesh == NULL || name == NULL) {
+		TraceMessage("Error: MeshIsNamed received NULL argument(s).");
+		return false;
+	}
+
+	// Perform a string comparison and return the result (match = true).
+	return strcmp(mesh->name, name) == 0;
 }
+
 
 // Render a mesh.
 void MeshRender(const Mesh* mesh)
