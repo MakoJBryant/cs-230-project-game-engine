@@ -153,6 +153,19 @@ const Vector2D* PhysicsGetVelocity(const Physics* physics)
 	return &physics->velocity;
 }
 
+// Get the rotational velocity of a physics component.
+// Params:
+//	 physics = Pointer to the physics component.
+// Returns:
+//	 If the physics pointer is valid,
+//		then return the component's rotational velocity value,
+//		else return 0.0f.
+float PhysicsGetRotationalVelocity(const Physics* physics)
+{
+	UNREFERENCED_PARAMETER(physics);
+	return 0.0f;
+}
+
 // Get the old translation (position) of a Physics component.
 const Vector2D* PhysicsGetOldTranslation(Physics* physics)
 {
@@ -187,6 +200,17 @@ void PhysicsSetVelocity(Physics* physics, const Vector2D* velocity)
 	}
 
 	physics->velocity = *velocity;
+}
+
+// Set the rotational velocity of a physics component.
+// Params:
+//	 physics = Pointer to the physics component.
+//	 rotationalVelocity = The new rotational velocity.
+void PhysicsSetRotationalVelocity(Physics* physics, float rotationalVelocity)
+{
+	UNREFERENCED_PARAMETER(physics);
+	UNREFERENCED_PARAMETER(rotationalVelocity);
+	return;
 }
 
 // Update the state of a Physics component using the Semi-Implicit Euler method,
