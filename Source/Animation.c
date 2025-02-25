@@ -70,7 +70,6 @@ typedef struct Animation
 //------------------------------------------------------------------------------
 // Private Function Declarations:
 //------------------------------------------------------------------------------
-
 static void AnimationAdvanceFrame(Animation* animation);
 
 //------------------------------------------------------------------------------
@@ -90,18 +89,38 @@ Animation* AnimationCreate(void)
 }
 
 // Dynamically allocate a clone of an existing Animation component.
-// (Hint: Perform a shallow copy of the member variables.)
-// Params:
-//	 other = Pointer to the component to be cloned.
-// Returns:
-//	 If 'other' is valid and the memory allocation was successful,
-//	   then return a pointer to the cloned component,
-//	   else return NULL.
 Animation* AnimationClone(const Animation* other)
 {
-	TraceMessage("Error: AnimationClone empty.");
-	UNREFERENCED_PARAMETER(other);
-	return NULL;
+	if (other == NULL) {
+		TraceMessage("Error: AnimationClone received NULL argument.");
+		return NULL;
+	}
+
+	// Allocate memory for the new Animation.
+	Animation* clonedAnimation = (Animation*)calloc(1, sizeof(Animation));
+	if (!clonedAnimation) {
+		TraceMessage("Error: AnimationClone failed to allocate memory.");
+		return NULL;
+	}
+
+	// Shallow copy of all member variables.
+	*clonedAnimation = *other;
+
+	// Clone the parent Entity by creating a new one (or duplicating it) if necessary.
+	Entity* clonedEntity = EntityClone(other->parent);
+	if (!clonedEntity) {
+		TraceMessage("Error: EntityClone failed.");
+		free(clonedAnimation);
+		return NULL;
+	}
+
+	// Update the 'parent' pointer to the new cloned Entity.
+	clonedAnimation->parent = clonedEntity;
+
+	// Add the cloned Animation to the newly cloned Entity.
+	EntityAddAnimation(clonedEntity, clonedAnimation);
+
+	return clonedAnimation;
 }
 
 // Read the properties of an Animation component from a file.
