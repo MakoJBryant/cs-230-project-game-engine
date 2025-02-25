@@ -96,9 +96,24 @@ Physics* PhysicsCreate(void)
 //	   else return NULL.
 Physics* PhysicsClone(const Physics* other)
 {
-	TraceMessage("Error: PhysicsClone empty.");
-	UNREFERENCED_PARAMETER(other);
-	return NULL;
+	if (other == NULL) {
+		TraceMessage("Error: PhysicsClone received NULL argument.");
+		return NULL;
+	}
+
+	// Create new Physics object.
+	Physics* newPhysics = PhysicsCreate();
+	if (newPhysics == NULL) {
+		TraceMessage("Error: PhysicsClone failed to allocate memory.");
+		return NULL;
+	}
+
+	// Perform shallow copy of needed fields.
+	newPhysics->oldTranslation = other->oldTranslation;
+	newPhysics->acceleration = other->acceleration;
+	newPhysics->velocity = other->velocity;
+
+	return newPhysics;
 }
 
 // Free the memory associated with a Physics component.
