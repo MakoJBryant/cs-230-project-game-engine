@@ -25,6 +25,8 @@
 #include "Transform.h"
 #include "Animation.h"
 #include "Behavior.h"
+#include "BehaviorSpaceship.h"
+#include "BehaviorBullet.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -88,16 +90,6 @@ Entity* EntityCreate(void)
 }
 
 // Dynamically allocate a clone of an existing Entity.
-// (Hint: Make sure to perform a shallow copy or deep copy, as appropriate.)
-// (WARNING: You should use the EntityAdd* functions when attaching cloned
-//    components to the cloned Entity.  This will ensure that the 'parent'
-//    variable is set properly.)
-// Params:
-//	 other = Pointer to the Entity to be cloned.
-// Returns:
-//	 If 'other' is valid and the memory allocation was successful,
-//	   then return a pointer to the cloned Entity,
-//	   else return NULL.
 Entity* EntityClone(const Entity* other)
 {
 	if (other == NULL) {
@@ -155,7 +147,6 @@ Entity* EntityClone(const Entity* other)
 	return newEntity;
 }
 
-
 // Free the memory associated with an Entity.
 void EntityFree(Entity** entity)
 {
@@ -177,23 +168,25 @@ void EntityFree(Entity** entity)
 	if ((*entity)->animation != NULL) {
 		AnimationFree(&(*entity)->animation);
 	}
+	if ((*entity)->behavior != NULL) {
+		BehaviorFree(&(*entity)->behavior);
+	}
 
 	free(*entity);
 	*entity = NULL;
 }
 
 // Read (and construct) the components associated with an entity.
-// NEVER NEST THIS FUNCTION FOR READABILITY LATER!!!!!
 void EntityRead(Entity* entity, Stream stream)
 {
 	if (entity == NULL || stream == NULL) {
 		TraceMessage("Error: EntityRead received NULL argument(s).");
+		return;
 	}
 
 	// Read a token from the stream.
 	const char* token = StreamReadToken(stream);
 	if (token != NULL && token[0] != '\0') {
-		// Use the token to set the Entity's name.
 		EntitySetName(entity, token);
 	}
 	else {
@@ -202,29 +195,22 @@ void EntityRead(Entity* entity, Stream stream)
 	}
 
 	while (true) {
-		// Read a token from the stream.
 		token = StreamReadToken(stream);
 		if (token == NULL || token[0] == '\0') {
 			break;
 		}
 
-		// If “token” contains “Transform”,
 		if (strstr(token, "Transform") != NULL) {
-			// 1) Create a new transform component using TransformCreate().
 			Transform* newTransform = TransformCreate();
 			if (newTransform != NULL) {
-				// 2) Call TransformRead(), passing the created transform.
 				TransformRead(newTransform, stream);
-				// 3) Add the transform to the entity.
 				EntityAddTransform(entity, newTransform);
 			}
 			else {
 				TraceMessage("Error: EntityRead failed to create Transform component.");
 			}
 		}
-		// Else if “token” contains “Physics”,
 		else if (strstr(token, "Physics") != NULL) {
-			// Repeat steps 1-3 above, replacing “Transform” with “Physics”.
 			Physics* newPhysics = PhysicsCreate();
 			if (newPhysics != NULL) {
 				PhysicsRead(newPhysics, stream);
@@ -234,9 +220,7 @@ void EntityRead(Entity* entity, Stream stream)
 				TraceMessage("Error: EntityRead failed to create Physics component.");
 			}
 		}
-		// Else if “token” contains “Sprite”,
 		else if (strstr(token, "Sprite") != NULL) {
-			// Repeat steps 1-3 above, replacing “Transform” with “Sprite”.
 			Sprite* newSprite = SpriteCreate();
 			if (newSprite != NULL) {
 				SpriteRead(newSprite, stream);
@@ -246,9 +230,7 @@ void EntityRead(Entity* entity, Stream stream)
 				TraceMessage("Error: EntityRead failed to create Sprite component.");
 			}
 		}
-		// Else if “token” contains “Animation”,
 		else if (strstr(token, "Animation") != NULL) {
-			// Create a new animation component and attach it to the entity.
 			Animation* newAnimation = AnimationCreate();
 			if (newAnimation != NULL) {
 				AnimationRead(newAnimation, stream);
@@ -258,11 +240,29 @@ void EntityRead(Entity* entity, Stream stream)
 				TraceMessage("Error: EntityRead failed to create Animation component.");
 			}
 		}
-		// Else if “token” is empty (zero-length string), break out of the loop.
+		else if (strstr(token, "BehaviorSpaceship") != NULL) {
+			Behavior* newBehavior = BehaviorSpaceshipCreate();
+			if (newBehavior != NULL) {
+				BehaviorRead(newBehavior, stream);
+				EntityAddBehavior(entity, newBehavior);
+			}
+			else {
+				TraceMessage("Error: EntityRead failed to create BehaviorSpaceship.");
+			}
+		}
+		else if (strstr(token, "BehaviorBullet") != NULL) {
+			Behavior* newBehavior = BehaviorBulletCreate();
+			if (newBehavior != NULL) {
+				BehaviorRead(newBehavior, stream);
+				EntityAddBehavior(entity, newBehavior);
+			}
+			else {
+				TraceMessage("Error: EntityRead failed to create BehaviorBullet.");
+			}
+		}
 		else if (token[0] == '\0') {
 			break;
 		}
-		// Else log a warning for unrecognized token(s).
 		else {
 			TraceMessage("Warning: EntityRead has unrecognized token '%s' in stream.", token);
 			break;
@@ -309,7 +309,10 @@ void EntityAddBehavior(Entity* entity, Behavior* behavior)
 		return;
 	}
 
+	// Set the behavior's parent to the current entity
 	BehaviorSetParent(behavior, entity);
+
+	// Assign the behavior to the entity
 	entity->behavior = behavior;
 }
 
@@ -432,6 +435,11 @@ void EntityUpdate(Entity* entity, float dt)
 	// Update the entity's animation component if not NULL.
 	if (entity->animation != NULL) {
 		AnimationUpdate(entity->animation, dt);
+	}
+
+	// Update the entity's behavior if not NULL.
+	if (entity->behavior != NULL) {
+		BehaviorUpdate(entity->behavior, dt);
 	}
 }
 
