@@ -18,6 +18,7 @@
 #include "Mesh.h"
 #include "DGL.h"
 #include "Trace.h"
+#include "Stream.h"
 #include <Assert.h>
 
 //------------------------------------------------------------------------------

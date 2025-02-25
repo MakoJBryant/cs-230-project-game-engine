@@ -17,6 +17,7 @@
 #include "stdafx.h"
 #include "MeshLibrary.h"
 #include "Trace.h"
+#include "Stream.h"
 
 // Components.
 #include "Mesh.h"
@@ -48,6 +49,7 @@ typedef struct MeshLibrary
 //------------------------------------------------------------------------------
 // Public Variables:
 //------------------------------------------------------------------------------
+static MeshLibrary meshes;
 
 //------------------------------------------------------------------------------
 // Private Variables:
@@ -56,55 +58,88 @@ typedef struct MeshLibrary
 //------------------------------------------------------------------------------
 // Private Function Declarations:
 //------------------------------------------------------------------------------
+static void MeshLibraryAdd(const Mesh* mesh);
+static const Mesh* MeshLibraryFind(const char* meshName);
 
 //------------------------------------------------------------------------------
 // Public Functions:
 //------------------------------------------------------------------------------
 
 // Initialize the Mesh Library.
-// (NOTE: Make sure to initialize all memory to zero.)
 void MeshLibraryInit()
 {
-	TraceMessage("Error: MeshLibraryInit empty.");
-	return;
+	// https://www.geeksforgeeks.org/memset-c-example/
+	memset(&meshes, 0, sizeof(MeshLibrary));
 }
 
 // Build a mesh and add it to the mesh library, if it doesn't already exist.
-//   1: Verify that a valid name was specified (not NULL).
-//   2: Search for an existing mesh with a matching name.
-//   3: If an existing mesh was NOT found, then create a new one from the data file:
-//      a: Use sprintf_s() to construct a path name using meshName.
-//	       (HINT: The correct path name should be constructed using "Data/%s.txt".)
-//      b: Call StreamOpen(), passing the pathname.
-//      c: If the stream was opened successfully,
-//	       1: Call MeshCreate() to create an empty Mesh object.
-//         2: Call MeshRead() to read the contents of the mesh from the file.
-//	       3: Call MeshLibraryAdd(), passing the created mesh.
-//	       4: Close the stream.
-//   4: Return the mesh (either existed, created, or NULL).
-// Params:
-//	 meshName = The name of the mesh to be created.
-// Returns:
-//	 If the mesh already existed or was created successfully,
-//	   then return a pointer to the mesh,
-//	   else return NULL.
 const Mesh* MeshLibraryBuild(const char* meshName)
 {
-	TraceMessage("Error: MeshLibraryBuild empty.");
-	UNREFERENCED_PARAMETER(meshName);
-	return NULL;
+	if (!meshName) {
+		TraceMessage("Error: MeshLibraryBuild received NULL argument.");
+		return NULL;
+	}
+
+	const Mesh* existingMesh = MeshLibraryFind(meshName);
+	if (existingMesh) {
+		return existingMesh;
+	}
+
+	char filePath[64];
+	sprintf_s(filePath, sizeof(filePath), "Data/%s.txt", meshName);
+
+	Stream stream = StreamOpen(filePath);
+	if (!stream) {
+		TraceMessage("Error: MeshLibraryBuild failed to open file: %s.", filePath);
+		return NULL;
+	}
+
+	Mesh* newMesh = MeshCreate();
+	if (!newMesh) {
+		StreamClose(&stream);
+		return NULL;
+	}
+
+	MeshRead(newMesh, stream);
+	MeshLibraryAdd(newMesh);
+	StreamClose(&stream);
+
+	return newMesh;
 }
 
 // Free all Mesh objects in the Mesh Library.
-// (NOTE: You must call MeshFree() to free each Mesh object.)
-// (HINT: The list should contain nothing but NULL pointers once this function is done.)
 void MeshLibraryFreeAll()
 {
-	TraceMessage("Error: MeshLibraryFreeAll empty.");
-	return;
+	for (unsigned int i = 0; i < meshes.meshCount; ++i) {
+		if (meshes.meshList[i]) {
+			MeshFree(&meshes.meshList[i]);
+		}
+	}
+	memset(&meshes, 0, sizeof(MeshLibrary));
 }
 
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
 
+// Find a mesh by name in the mesh library.
+static const Mesh* MeshLibraryFind(const char* meshName)
+{
+	for (unsigned int i = 0; i < meshes.meshCount; ++i) {
+		if (MeshIsNamed(meshes.meshList[i], meshName)) {
+			return meshes.meshList[i];
+		}
+	}
+	return NULL;
+}
+
+// Add a mesh to the mesh library.
+static void MeshLibraryAdd(const Mesh* mesh)
+{
+	if (meshes.meshCount < 10) {
+		meshes.meshList[meshes.meshCount++] = (Mesh*)mesh;
+	}
+	else {
+		TraceMessage("Warning: MeshLibrary is full. Consider expanding capacity.");
+	}
+}
