@@ -79,70 +79,109 @@ typedef struct Behavior
 // Public Functions:
 //------------------------------------------------------------------------------
 
-
 // Dynamically allocate a clone of an existing behavior.
-// (Hint: Perform a shallow copy of the member variables.)
 // Params:
-//	 other = Pointer to the component to be cloned.
+//   other = Pointer to the component to be cloned.
 // Returns:
-//	 If 'other' is valid and the memory allocation was successful,
-//	   then return a pointer to the cloned component,
-//	   else return NULL.
+//   If 'other' is valid and the memory allocation was successful,
+//   return a pointer to the cloned component, else return NULL.
 Behavior* BehaviorClone(Behavior* other)
 {
-	TraceMessage("Error: BehaviorClone empty.");
-	UNREFERENCED_PARAMETER(other);
-	return NULL;
+	if (other == NULL) {
+		TraceMessage("Error: BehaviorClone received NULL argument(s).");
+		return NULL;
+	}
+
+	// Allocate memory for the new Behavior.
+	Behavior* newBehavior = (Behavior*)calloc(1, sizeof(Behavior));
+	if (!newBehavior) {
+		TraceMessage("Error: BehaviorClone failed to allocate memory.");
+		return NULL;
+	}
+
+	// Perform a shallow copy of all member variables.
+	*newBehavior = *other;
+
+	// Set the parent Entity for the new behavior.
+	if (newBehavior->parent) {
+		EntityAddBehavior(newBehavior->parent, newBehavior);
+	}
+
+	return newBehavior;
 }
 
 // Free the memory associated with a Behavior component.
-// (Also, set the behavior pointer to NULL.)
-// Params:
-//	 behavior = Pointer to the Behavior component.
 void BehaviorFree(Behavior** behavior)
 {
-	TraceMessage("Error: BehaviorFree empty.");
-	UNREFERENCED_PARAMETER(behavior);
-	return;
+	if (behavior == NULL || *behavior == NULL) {
+		TraceMessage("Error: BehaviorFree received NULL argument(s).");
+		return;
+	}
+
+	// Free the memory allocated for the behavior.
+	free(*behavior);
+	*behavior = NULL;
 }
 
 // Read the properties of a Behavior component from a file.
-// [NOTE: Read the stateCurr and stateNext values using StreamReadInt.]
-// [NOTE: Read the timer value using StreamReadFloat.]
-// Params:
-//	 behavior = Pointer to the Behavior component.
-//	 stream = Pointer to the data stream used for reading.
 void BehaviorRead(Behavior* behavior, Stream stream)
 {
-	TraceMessage("Error: BehaviorRead empty.");
-	UNREFERENCED_PARAMETER(behavior);
-	UNREFERENCED_PARAMETER(stream);
-	return;
+	if (behavior == NULL || stream == NULL) {
+		TraceMessage("Error: BehaviorRead received NULL argument(s).");
+		return;
+	}
+
+	// Read the state values.
+	behavior->stateCurr = StreamReadInt(stream);
+	behavior->stateNext = StreamReadInt(stream);
+
+	// Read the timer value.
+	behavior->timer = StreamReadFloat(stream);
 }
 
 // Set the parent Entity for a Behavior component.
-// Params:
-//	 behavior = Pointer to the Behavior component.
-//	 parent = Pointer to the parent Entity.
 void BehaviorSetParent(Behavior* behavior, Entity* parent)
 {
-	TraceMessage("Error: BehaviorSetParent empty.");
-	UNREFERENCED_PARAMETER(behavior);
-	UNREFERENCED_PARAMETER(parent);
-	return;
+	if (behavior == NULL) {
+		TraceMessage("Error: BehaviorSetParent received NULL argument(s).");
+		return;
+	}
+
+	// Set the parent of the behavior.
+	behavior->parent = parent;
+
+	// Add this behavior to the entity.
+	if (parent != NULL) {
+		EntityAddBehavior(parent, behavior);
+	}
 }
 
 // Update the Behavior component.
-// (Hint: Refer to the Word document for detailed instructions regarding this function.)
-// Params:
-//	 behavior = Pointer to the Behavior component.
-//	 dt = Change in time (in seconds) since the last game loop.
 void BehaviorUpdate(Behavior* behavior, float dt)
 {
-	TraceMessage("Error: BehaviorUpdate empty.");
-	UNREFERENCED_PARAMETER(behavior);
-	UNREFERENCED_PARAMETER(dt);
-	return;
+	if (behavior == NULL) {
+		TraceMessage("Error: BehaviorUpdate received NULL argument(s).");
+		return;
+	}
+
+	// Check if state is changing.
+	if (behavior->stateCurr != behavior->stateNext) {
+
+		if (behavior->onExit != NULL) {
+			behavior->onExit(behavior);
+		}
+
+		// Update the current state to the next state.
+		behavior->stateCurr = behavior->stateNext;
+
+		if (behavior->onInit != NULL) {
+			behavior->onInit(behavior);
+		}
+	}
+
+	if (behavior->onUpdate != NULL) {
+		behavior->onUpdate(behavior, dt);
+	}
 }
 
 //------------------------------------------------------------------------------
