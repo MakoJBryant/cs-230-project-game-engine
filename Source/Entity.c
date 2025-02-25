@@ -44,7 +44,7 @@ typedef struct Entity
 	Physics* physics;			// Pointer to an attached physics component.
 	Sprite* sprite;				// Pointer to an attached sprite component.
 	Transform* transform;		// Pointer to an attached transform component.
-	Animation* animation;		// Pointer to an attached transform component.
+	Animation* animation;		// Pointer to an attached animation component.
 	Behavior* behavior;			// Pointer to an attached behavior component.
 
 } Entity;
