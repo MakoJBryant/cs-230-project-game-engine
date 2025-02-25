@@ -43,6 +43,9 @@ typedef struct Physics
 	// Velocity may be stored as a direction vector and speed scalar, instead.
 	Vector2D	velocity;
 
+	// Rotational velocity (added to handle rotational physics).
+	float rotationalVelocity;
+
 	// Used when calculating acceleration due to forces.
 	// Used when resolving collision between two dynamic objects.
 	//float		inverseMass;
@@ -112,6 +115,7 @@ Physics* PhysicsClone(const Physics* other)
 	newPhysics->oldTranslation = other->oldTranslation;
 	newPhysics->acceleration = other->acceleration;
 	newPhysics->velocity = other->velocity;
+	newPhysics->rotationalVelocity = other->rotationalVelocity;
 
 	return newPhysics;
 }
@@ -169,17 +173,16 @@ const Vector2D* PhysicsGetVelocity(const Physics* physics)
 }
 
 // Get the rotational velocity of a physics component.
-// Params:
-//	 physics = Pointer to the physics component.
-// Returns:
-//	 If the physics pointer is valid,
-//		then return the component's rotational velocity value,
-//		else return 0.0f.
 float PhysicsGetRotationalVelocity(const Physics* physics)
 {
-	UNREFERENCED_PARAMETER(physics);
-	return 0.0f;
+	if (physics == NULL) {
+		TraceMessage("Error: PhysicsGetRotationalVelocity received NULL argument.");
+		return 0.0f;
+	}
+
+	return physics->rotationalVelocity;
 }
+
 
 // Get the old translation (position) of a Physics component.
 const Vector2D* PhysicsGetOldTranslation(Physics* physics)
@@ -218,15 +221,16 @@ void PhysicsSetVelocity(Physics* physics, const Vector2D* velocity)
 }
 
 // Set the rotational velocity of a physics component.
-// Params:
-//	 physics = Pointer to the physics component.
-//	 rotationalVelocity = The new rotational velocity.
 void PhysicsSetRotationalVelocity(Physics* physics, float rotationalVelocity)
 {
-	UNREFERENCED_PARAMETER(physics);
-	UNREFERENCED_PARAMETER(rotationalVelocity);
-	return;
+	if (physics == NULL) {
+		TraceMessage("Error: PhysicsSetRotationalVelocity received NULL argument.");
+		return;
+	}
+
+	physics->rotationalVelocity = rotationalVelocity;
 }
+
 
 // Update the state of a Physics component using the Semi-Implicit Euler method,
 void PhysicsUpdate(Physics* physics, Transform* transform, float dt)
@@ -256,6 +260,15 @@ void PhysicsUpdate(Physics* physics, Transform* transform, float dt)
 
 	// Set translation on the transform component.
 	TransformSetTranslation(transform, &newTranslation);
+
+	// Get the current rotation value.
+	float currentRotation = TransformGetRotation(transform);
+
+	// Apply rotational velocity to the transform's rotation.
+	float newRotation = currentRotation + physics->rotationalVelocity * dt;
+
+	// Set the updated rotation.
+	TransformSetRotation(transform, newRotation);
 }
 
 //------------------------------------------------------------------------------
