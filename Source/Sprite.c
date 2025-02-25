@@ -87,18 +87,28 @@ Sprite* SpriteCreate(void)
 }
 
 // Dynamically allocate a clone of an existing Sprite.
-// (Hint: Perform a shallow copy of the member variables.)
-// Params:
-//	 other = Pointer to the component to be cloned.
-// Returns:
-//	 If 'other' is valid and the memory allocation was successful,
-//	   then return a pointer to the cloned component,
-//	   else return NULL.
 Sprite* SpriteClone(const Sprite* other)
 {
-	TraceMessage("Error: SpriteClone empty.");
-	UNREFERENCED_PARAMETER(other);
-	return NULL;
+	if (other == NULL) {
+		TraceMessage("Error: SpriteClone received NULL argument.");
+		return NULL;
+	}
+
+	// Allocate memory for the new Sprite.
+	Sprite* clonedSprite = (Sprite*)malloc(sizeof(Sprite));
+	if (clonedSprite == NULL) {
+		TraceMessage("Error: SpriteClone failed to allocate memory.");
+		return NULL;
+	}
+
+	// Perform a shallow copy of the member variables.
+	clonedSprite->frameIndex = other->frameIndex;
+	clonedSprite->alpha = other->alpha;
+	clonedSprite->spriteSource = other->spriteSource;
+	clonedSprite->mesh = other->mesh;
+	clonedSprite->text = other->text;
+
+	return clonedSprite;
 }
 
 // Free the memory associated with a Sprite component.
@@ -212,7 +222,6 @@ void SpriteSetAlpha(Sprite* sprite, float alpha)
 // Set a Sprite's current frame.
 void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 {
-	// Verify that arguments are valid.
 	if (sprite == NULL) {
 		TraceMessage("Error: SpriteSetFrame received NULL argument(s).");
 		return;
@@ -220,7 +229,7 @@ void SpriteSetFrame(Sprite* sprite, unsigned int frameIndex)
 
 	// Verify frameIndex does not exceed total number of frames.
 	unsigned totalFrames = SpriteSourceGetFrameCount(sprite->spriteSource);
-	if (frameIndex >= totalFrames - 1 && frameIndex < 0) {
+	if (frameIndex >= totalFrames || frameIndex < 0) {  // Frame index should be within bounds.
 		TraceMessage("Error: SpriteSetFrame received an invalid frame index = %d", frameIndex);
 		return;
 	}
@@ -267,8 +276,6 @@ void SpriteSetText(Sprite* sprite, const char* text)
 	sprite->text = text;
 }
 
-
 //------------------------------------------------------------------------------
 // Private Functions:
 //------------------------------------------------------------------------------
-
