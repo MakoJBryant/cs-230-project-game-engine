@@ -18,6 +18,7 @@
 #include "Trace.h"
 #include "EntityContainer.h"
 #include "EntityFactory.h"
+#include "MeshLibrary.h"
 
 //------------------------------------------------------------------------------
 // Private Constants:
@@ -35,6 +36,7 @@
 // Public Variables:
 //------------------------------------------------------------------------------
 static EntityContainer* entities = NULL;
+
 //------------------------------------------------------------------------------
 // Private Variables:
 //------------------------------------------------------------------------------
@@ -48,8 +50,6 @@ static EntityContainer* entities = NULL;
 //------------------------------------------------------------------------------
 
 // Verify that a scene is valid (no NULL pointers).
-// Params:
-//   scene	Pointer to the scene to be checked.
 bool SceneIsValid(const Scene* scene)
 {
 	// This function should never be called with a "NULL" scene.
@@ -74,6 +74,9 @@ void SceneLoad(const Scene* scene)
 
 		// Initialize the entities variable by calling EntityContainerCreate.
 		EntityContainerCreate();
+
+		// Initialize the library of meshes by calling MeshLibraryInit.
+		MeshLibraryInit();
 
 		// Execute the Load function.
 		(*scene->load)();
@@ -157,6 +160,9 @@ void SceneUnload(const Scene* scene)
 
 		// Execute the Unload function.
 		(*scene->unload)();
+
+		// Free the MeshLibrary by calling MeshLibraryFree.
+		MeshLibraryFreeAll();
 
 		// Free the EntityContainer by calling EntityContainerFree.
 		EntityContainerFree(&entities);
